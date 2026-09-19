@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dar Lella — Restaurant traditionnel algérois</title>
+<meta name="description" content="Dar Lella, restaurant traditionnel au cœur d'Alger. Cuisine algéroise authentique, couscous, chorba, pâtisseries orientales. Réservez votre table.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1c1410;
+    --paper:#faf6ef;
+    --cream:#f3ecdf;
+    --gold:#c8952f;
+    --gold-deep:#a97a1f;
+    --terra:#a4432a;
+    --green:#3e5c46;
+    --muted:#6f6357;
+    --radius:14px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.65;font-size:16px}
+  h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2}
+  img{max-width:100%}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+  .eyebrow{display:inline-block;letter-spacing:.22em;text-transform:uppercase;font-size:.72rem;font-weight:600;color:var(--gold-deep);margin-bottom:14px}
+  .ar{font-size:1.05em;letter-spacing:0}
+
+  /* NAV */
+  nav{position:sticky;top:0;z-index:50;background:rgba(250,246,239,.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(28,20,16,.08)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .logo{font-family:'Playfair Display',serif;font-weight:700;font-size:1.3rem}
+  .logo span{color:var(--gold-deep)}
+  .nav-links{display:flex;gap:26px;align-items:center;font-size:.9rem;font-weight:500}
+  .nav-links a{color:var(--ink);text-decoration:none;opacity:.75;transition:opacity .2s}
+  .nav-links a:hover{opacity:1}
+  .btn{display:inline-block;background:var(--terra);color:#fff;text-decoration:none;padding:11px 22px;border-radius:999px;font-weight:600;font-size:.9rem;transition:transform .15s,box-shadow .15s;box-shadow:0 4px 14px rgba(164,67,42,.28)}
+  .btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(164,67,42,.36)}
+  .btn.ghost{background:transparent;color:var(--ink);border:1.5px solid rgba(28,20,16,.25);box-shadow:none}
+
+  /* HERO */
+  header{position:relative;overflow:hidden;background:
+    radial-gradient(1100px 500px at 85% -10%, rgba(200,149,47,.28), transparent 60%),
+    radial-gradient(800px 420px at -10% 110%, rgba(62,92,70,.22), transparent 55%),
+    linear-gradient(165deg,#231a12 0%,#2e2115 55%,#3a2a18 100%);
+    color:#f7f1e6}
+  .hero{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;padding:88px 0 96px}
+  .hero h1{font-size:clamp(2.05rem,5.5vw,3.9rem);font-weight:700;margin-bottom:18px}
+  .hero h1 em{font-style:normal;color:var(--gold)}
+  .hero p.lead{font-size:1.08rem;color:rgba(247,241,230,.82);max-width:46ch;margin-bottom:30px}
+  .hero .eyebrow{color:var(--gold)}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap}
+  .hero .btn.ghost{color:#f7f1e6;border-color:rgba(247,241,230,.4)}
+  .hero-card{position:relative;border-radius:20px;padding:34px 30px;background:linear-gradient(160deg,rgba(200,149,47,.16),rgba(200,149,47,.05));border:1px solid rgba(200,149,47,.35)}
+  .hero-card .dish{display:flex;gap:16px;align-items:center;padding:13px 0;border-bottom:1px dashed rgba(247,241,230,.18)}
+  .hero-card .dish:last-child{border-bottom:none}
+  .dish .ico{font-size:1.7rem;width:52px;height:52px;display:grid;place-items:center;background:rgba(247,241,230,.08);border-radius:12px;flex-shrink:0}
+  .dish b{display:block;font-size:.98rem}
+  .dish small{color:rgba(247,241,230,.65)}
+  .zellige{position:absolute;inset:auto 0 0 0;height:10px;background:repeating-linear-gradient(90deg,var(--gold) 0 22px,var(--terra) 22px 44px,var(--green) 44px 66px);opacity:.85}
+
+  /* SECTIONS */
+  section{padding:84px 0}
+  .sec-head{max-width:60ch;margin-bottom:44px}
+  .sec-head h2{font-size:clamp(1.7rem,3.4vw,2.4rem);margin-bottom:12px}
+  .sec-head p{color:var(--muted)}
+
+  /* ABOUT */
+  .about{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center}
+  .about-visual{aspect-ratio:4/3.2;border-radius:var(--radius);position:relative;overflow:hidden;background:
+    radial-gradient(300px 200px at 30% 25%, rgba(200,149,47,.5), transparent 65%),
+    radial-gradient(340px 240px at 75% 80%, rgba(164,67,42,.45), transparent 60%),
+    linear-gradient(150deg,#2e2115,#4a3520)}
+  .about-visual::after{content:"🫖";position:absolute;inset:0;display:grid;place-items:center;font-size:5.5rem;filter:drop-shadow(0 12px 24px rgba(0,0,0,.35))}
+  .about h2{margin-bottom:16px}
+  .about p{margin-bottom:14px;color:#41372e}
+  .stats{display:flex;gap:34px;margin-top:26px}
+  .stats b{display:block;font-family:'Playfair Display',serif;font-size:1.9rem;color:var(--terra)}
+  .stats small{color:var(--muted)}
+
+  /* MENU */
+  .menu-sec{background:var(--cream)}
+  .menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .mcard{background:#fff;border-radius:var(--radius);padding:28px 24px;border:1px solid rgba(28,20,16,.07);box-shadow:0 2px 10px rgba(28,20,16,.04)}
+  .mcard h3{font-size:1.15rem;margin:0 0 4px}
+  .mcard .cat-ico{font-size:2rem;margin-bottom:14px;display:block}
+  .mcard ul{list-style:none;margin-top:16px}
+  .mcard li{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px dashed rgba(28,20,16,.12);font-size:.93rem}
+  .mcard li:last-child{border-bottom:none}
+  .mcard li span:last-child{font-weight:600;color:var(--gold-deep);white-space:nowrap}
+
+  /* GALLERY */
+  .gal{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .gal .ph{aspect-ratio:1;border-radius:12px;display:grid;place-items:center;font-size:2.6rem;color:#fff;position:relative;overflow:hidden}
+  .gal .ph:nth-child(1){background:linear-gradient(140deg,#a4432a,#7c2f1c)}
+  .gal .ph:nth-child(2){background:linear-gradient(140deg,#c8952f,#96690f)}
+  .gal .ph:nth-child(3){background:linear-gradient(140deg,#3e5c46,#27402f)}
+  .gal .ph:nth-child(4){background:linear-gradient(140deg,#2e2115,#553d22)}
+  .gal .ph::after{content:"";position:absolute;inset:0;background:radial-gradient(220px 160px at 70% 20%,rgba(255,255,255,.18),transparent 60%)}
+
+  /* REVIEWS */
+  .rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .rcard{background:#fff;border-radius:var(--radius);padding:26px 24px;border:1px solid rgba(28,20,16,.07)}
+  .rcard .stars{color:var(--gold);letter-spacing:2px;margin-bottom:12px}
+  .rcard p{font-size:.94rem;color:#41372e;margin-bottom:14px}
+  .rcard b{font-size:.88rem}
+  .rcard small{color:var(--muted);display:block}
+
+  /* INFO / CTA */
+  .info-sec{background:linear-gradient(165deg,#231a12,#33251506),linear-gradient(165deg,#231a12,#3a2a18);color:#f7f1e6}
+  .info{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+  .info h2{font-size:clamp(1.7rem,3.4vw,2.3rem);margin-bottom:14px}
+  .info p{color:rgba(247,241,230,.78);margin-bottom:24px}
+  .info-list{list-style:none;display:grid;gap:16px}
+  .info-list li{display:flex;gap:14px;align-items:flex-start;background:rgba(247,241,230,.06);border:1px solid rgba(247,241,230,.12);border-radius:12px;padding:15px 18px}
+  .info-list .ico{font-size:1.25rem}
+  .info-list b{display:block;font-size:.92rem}
+  .info-list small{color:rgba(247,241,230,.65)}
+  .wa{background:#1faa54;box-shadow:0 4px 14px rgba(31,170,84,.35)}
+
+  footer{background:#191209;color:rgba(247,241,230,.6);padding:30px 0;font-size:.85rem}
+  .foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
+  .foot a{color:var(--gold);text-decoration:none;font-weight:600}
+
+  @media(max-width:840px){
+    .nav-links a:not(.btn){display:none}
+    .hero{grid-template-columns:1fr;padding:64px 0 76px;gap:36px}
+    .about,.info{grid-template-columns:1fr;gap:34px}
+    .menu-grid,.rev-grid{grid-template-columns:1fr}
+    .gal{grid-template-columns:repeat(2,1fr)}
+    section{padding:64px 0}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-in">
+    <div class="logo">Dar <span>Lella</span></div>
+    <div class="nav-links">
+      <a href="#apropos">À propos</a>
+      <a href="#menu">Menu</a>
+      <a href="#galerie">Galerie</a>
+      <a href="#infos">Infos</a>
+      <a class="btn" href="#infos">Réserver une table</a>
+    </div>
+  </div>
+</nav>
+
+<header>
+  <div class="wrap hero">
+    <div>
+      <span class="eyebrow">Restaurant traditionnel — Alger centre</span>
+      <h1>La cuisine de nos grands-mères, <em>servie avec fierté</em></h1>
+      <p class="lead">Couscous du vendredi, chorba frik, rechta et pâtisseries maison. Chez Dar Lella, chaque plat raconte une histoire algéroise. <span class="ar">مرحبا بيكم في داركم</span></p>
+      <div class="hero-cta">
+        <a class="btn" href="#infos">Réserver une table</a>
+        <a class="btn ghost" href="#menu">Voir le menu</a>
+      </div>
+    </div>
+    <div class="hero-card">
+      <div class="dish"><div class="ico">🍲</div><div><b>Chorba frik</b><small>La soupe signature de la maison</small></div></div>
+      <div class="dish"><div class="ico">🥘</div><div><b>Couscous royal</b><small>Servi tous les vendredis</small></div></div>
+      <div class="dish"><div class="ico">🍯</div><div><b>Qalb el louz</b><small>Pâtisserie maison au miel</small></div></div>
+    </div>
+  </div>
+  <div class="zellige"></div>
+</header>
+
+<section id="apropos">
+  <div class="wrap about">
+    <div class="about-visual" role="img" aria-label="Ambiance de la maison Dar Lella"></div>
+    <div>
+      <span class="eyebrow">Notre histoire</span>
+      <h2>Une maison de famille depuis 1987</h2>
+      <p>Dar Lella est née dans la Casbah, autour des recettes de Lella Fatma. Trois générations plus tard, nous servons la même cuisine : généreuse, faite maison, avec des produits du marché du jour.</p>
+      <p>Notre salle voûtée en pierre accueille vos repas de famille, vos déjeuners d'affaires et vos soirées ramadanesques.</p>
+      <div class="stats">
+        <div><b>37</b><small>ans de tradition</small></div>
+        <div><b>80</b><small>couverts en salle</small></div>
+        <div><b>4,8★</b><small>note moyenne clients</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="menu-sec" id="menu">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Le menu</span>
+      <h2>Nos incontournables</h2>
+      <p>Une carte courte qui change avec les saisons. Tout est préparé le matin même, rien ne vient du surgelé.</p>
+    </div>
+    <div class="menu-grid">
+      <div class="mcard">
+        <span class="cat-ico">🍲</span>
+        <h3>Entrées</h3>
+        <ul>
+          <li><span>Chorba frik</span><span>450 DA</span></li>
+          <li><span>Bourek viande hachée (x3)</span><span>400 DA</span></li>
+          <li><span>Hmiss maison</span><span>350 DA</span></li>
+          <li><span>Salade variée</span><span>380 DA</span></li>
+        </ul>
+      </div>
+      <div class="mcard">
+        <span class="cat-ico">🥘</span>
+        <h3>Plats</h3>
+        <ul>
+          <li><span>Couscous royal (vendredi)</span><span>1 400 DA</span></li>
+          <li><span>Rechta algéroise</span><span>1 200 DA</span></li>
+          <li><span>Tajine zitoune</span><span>1 100 DA</span></li>
+          <li><span>Mtewem</span><span>1 150 DA</span></li>
+        </ul>
+      </div>
+      <div class="mcard">
+        <span class="cat-ico">🍯</span>
+        <h3>Desserts & boissons</h3>
+        <ul>
+          <li><span>Qalb el louz</span><span>300 DA</span></li>
+          <li><span>Baklawa maison (x2)</span><span>350 DA</span></li>
+          <li><span>Thé à la menthe & pignons</span><span>250 DA</span></li>
+          <li><span>Citronnade fraîche</span><span>280 DA</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="galerie">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Galerie</span>
+      <h2>L'ambiance Dar Lella</h2>
+      <p>Vos photos remplaceront ces visuels : plats, salle voûtée, équipe en cuisine, terrasse.</p>
+    </div>
+    <div class="gal">
+      <div class="ph">🥘</div>
+      <div class="ph">🫖</div>
+      <div class="ph">🏮</div>
+      <div class="ph">🍯</div>
+    </div>
+  </div>
+</section>
+
+<section class="menu-sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Avis clients</span>
+      <h2>Ils sont venus, ils ont goûté</h2>
+    </div>
+    <div class="rev-grid">
+      <div class="rcard">
+        <div class="stars">★★★★★</div>
+        <p>« Le couscous du vendredi vaut le déplacement depuis Oran. On se croirait chez sa grand-mère, en mieux servi. »</p>
+        <b>Amine B.</b><small>Alger</small>
+      </div>
+      <div class="rcard">
+        <div class="stars">★★★★★</div>
+        <p>« Salle magnifique, service chaleureux. Nous avons organisé un repas d'entreprise de 30 personnes, tout était parfait. »</p>
+        <b>Lynda K.</b><small>Hydra</small>
+      </div>
+      <div class="rcard">
+        <div class="stars">★★★★☆</div>
+        <p>« La chorba frik est la meilleure que j'ai mangée à Alger. Pensez à réserver le week-end, c'est complet vite. »</p>
+        <b>Sofiane M.</b><small>Bab El Oued</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="info-sec" id="infos">
+  <div class="wrap info">
+    <div>
+      <span class="eyebrow" style="color:var(--gold)">Réservation</span>
+      <h2>Réservez votre table en 30 secondes</h2>
+      <p>Envoyez-nous un message WhatsApp avec la date, l'heure et le nombre de personnes. Nous confirmons dans l'heure.</p>
+      <a class="btn wa" href="https://wa.me/213540462143?text=Bonjour%2C%20je%20souhaite%20r%C3%A9server%20une%20table" target="_blank" rel="noopener">💬 Réserver sur WhatsApp</a>
+    </div>
+    <ul class="info-list">
+      <li><span class="ico">📍</span><div><b>Adresse</b><small>12 rue Didouche Mourad, Alger centre</small></div></li>
+      <li><span class="ico">🕐</span><div><b>Horaires</b><small>Tous les jours 11h30 – 23h00 · Vendredi à partir de 12h30</small></div></li>
+      <li><span class="ico">📞</span><div><b>Téléphone</b><small>+213 (0) 00 00 00 00</small></div></li>
+      <li><span class="ico">📸</span><div><b>Instagram</b><small>@dar.lella.alger</small></div></li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <div>© 2026 Dar Lella — Site de démonstration</div>
+    <div>Site réalisé par <a href="https://www.instagram.com/fennec.web" target="_blank" rel="noopener">Fennec Web</a></div>
+  </div>
+</footer>
+
+</body>
+</html>

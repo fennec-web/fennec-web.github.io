@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atlas Power Gym — Salle de musculation & fitness, Alger</title>
+<meta name="description" content="Atlas Power Gym à Bab Ezzouar : musculation, cardio, cours collectifs, coaching personnalisé. Créneaux hommes et femmes. Séance d'essai gratuite.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,500;0,700;0,800;0,900;1,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#101214;
+    --panel:#181b1e;
+    --line:rgba(255,255,255,.09);
+    --txt:#eef1f3;
+    --muted:#98a0a8;
+    --volt:#c9f24b;
+    --volt-deep:#a8d426;
+    --red:#e8452c;
+    --radius:16px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--txt);line-height:1.65;font-size:16px}
+  h1,h2,h3{font-family:'Archivo',sans-serif;line-height:1.05;text-transform:uppercase;letter-spacing:.01em}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+  .eyebrow{display:inline-block;letter-spacing:.24em;text-transform:uppercase;font-size:.72rem;font-weight:600;color:var(--volt);margin-bottom:14px}
+  .btn{display:inline-block;background:var(--volt);color:#101214;text-decoration:none;padding:14px 30px;border-radius:10px;font-weight:800;font-size:.9rem;text-transform:uppercase;letter-spacing:.06em;font-family:'Archivo',sans-serif;transition:transform .15s;box-shadow:0 6px 22px rgba(201,242,75,.25)}
+  .btn:hover{transform:translateY(-2px)}
+  .btn.ghost{background:transparent;color:var(--txt);border:2px solid rgba(255,255,255,.25);box-shadow:none}
+  .btn.wa{background:#1faa54;color:#fff;box-shadow:0 6px 22px rgba(31,170,84,.3)}
+
+  nav{position:sticky;top:0;z-index:50;background:rgba(16,18,20,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:66px}
+  .logo{font-family:'Archivo',sans-serif;font-weight:900;font-size:1.25rem;text-transform:uppercase}
+  .logo span{color:var(--volt)}
+  .nav-links{display:flex;gap:26px;align-items:center;font-size:.88rem;font-weight:500}
+  .nav-links a:not(.btn){color:var(--txt);text-decoration:none;opacity:.7}
+  .nav-links a:hover{opacity:1}
+  .nav-links .btn{padding:10px 20px;font-size:.78rem}
+
+  header{position:relative;overflow:hidden;background:
+    radial-gradient(900px 500px at 85% -15%, rgba(201,242,75,.13), transparent 55%),
+    radial-gradient(700px 420px at -10% 110%, rgba(232,69,44,.12), transparent 55%),
+    var(--bg)}
+  header::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,transparent 0 48px,rgba(255,255,255,.018) 48px 96px)}
+  .hero{position:relative;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;padding:92px 0 100px}
+  .hero h1{font-size:clamp(2.5rem,6.2vw,4.4rem);font-weight:900;margin-bottom:20px}
+  .hero h1 em{font-style:normal;color:var(--volt)}
+  .hero p.lead{font-size:1.05rem;color:var(--muted);max-width:46ch;margin-bottom:32px}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:34px}
+  .hero-stats{display:flex;gap:36px}
+  .hero-stats b{display:block;font-family:'Archivo',sans-serif;font-size:1.7rem;font-weight:900;color:var(--volt)}
+  .hero-stats small{color:var(--muted);font-size:.8rem}
+  .hero-visual{aspect-ratio:4/4.6;border-radius:var(--radius);position:relative;overflow:hidden;background:
+    radial-gradient(300px 220px at 30% 25%, rgba(201,242,75,.32), transparent 60%),
+    radial-gradient(320px 260px at 75% 85%, rgba(232,69,44,.35), transparent 60%),
+    linear-gradient(155deg,#22262b,#15181b)}
+  .hero-visual::after{content:"🏋️";position:absolute;inset:0;display:grid;place-items:center;font-size:5.5rem;filter:drop-shadow(0 16px 30px rgba(0,0,0,.5))}
+  .hero-tag{position:absolute;top:18px;left:18px;background:var(--volt);color:#101214;font-family:'Archivo',sans-serif;font-weight:800;font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;padding:7px 14px;border-radius:8px}
+
+  section{padding:88px 0}
+  .sec-head{max-width:62ch;margin-bottom:46px}
+  .sec-head h2{font-size:clamp(1.8rem,3.8vw,2.6rem);font-weight:900;margin-bottom:12px}
+  .sec-head h2 span{color:var(--volt)}
+  .sec-head p{color:var(--muted)}
+
+  .prog-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .prog{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:26px 22px;transition:border-color .2s}
+  .prog:hover{border-color:rgba(201,242,75,.4)}
+  .prog .ico{font-size:2rem;display:block;margin-bottom:14px}
+  .prog h3{font-size:1rem;margin-bottom:8px}
+  .prog p{font-size:.86rem;color:var(--muted)}
+
+  .plan-sec{background:linear-gradient(180deg,var(--panel) 0%,var(--bg) 100%);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:stretch}
+  .plan{background:var(--bg);border:1px solid var(--line);border-radius:18px;padding:32px 28px;display:flex;flex-direction:column;position:relative}
+  .plan.hot{border-color:var(--volt);box-shadow:0 0 0 1px var(--volt),0 18px 44px rgba(201,242,75,.1)}
+  .plan .flag{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--volt);color:#101214;font-family:'Archivo',sans-serif;font-weight:800;font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;padding:5px 14px;border-radius:999px;white-space:nowrap}
+  .plan h3{font-size:1.05rem;color:var(--muted);margin-bottom:14px}
+  .plan .price{font-family:'Archivo',sans-serif;font-weight:900;font-size:2.2rem;margin-bottom:2px}
+  .plan .price small{font-size:.95rem;font-weight:700;color:var(--volt)}
+  .plan .per{color:var(--muted);font-size:.82rem;margin-bottom:20px}
+  .plan ul{list-style:none;display:grid;gap:10px;margin-bottom:26px;flex:1}
+  .plan li{font-size:.88rem;color:#c6ccd2;padding-left:24px;position:relative}
+  .plan li::before{content:"✓";position:absolute;left:0;color:var(--volt);font-weight:700}
+  .plan .btn{text-align:center}
+  .plan.ghosted .btn{background:transparent;color:var(--txt);border:2px solid rgba(255,255,255,.22);box-shadow:none}
+
+  .sched{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .sch-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:28px 26px}
+  .sch-card h3{font-size:1.05rem;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+  .sch-card table{width:100%;border-collapse:collapse;font-size:.88rem}
+  .sch-card td{padding:9px 0;border-bottom:1px dashed rgba(255,255,255,.1)}
+  .sch-card tr:last-child td{border-bottom:none}
+  .sch-card td:last-child{text-align:right;color:var(--volt);font-weight:600;font-family:'Archivo',sans-serif}
+  .sch-note{grid-column:1/-1;background:rgba(201,242,75,.07);border:1px solid rgba(201,242,75,.25);border-radius:12px;padding:14px 18px;font-size:.88rem;color:#d7dde2}
+
+  .rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .rcard{background:var(--panel);border-radius:var(--radius);padding:26px 24px;border:1px solid var(--line)}
+  .rcard .stars{color:var(--volt);letter-spacing:2px;margin-bottom:12px}
+  .rcard p{font-size:.92rem;color:#c6ccd2;margin-bottom:14px}
+  .rcard b{font-size:.88rem}
+  .rcard small{color:var(--muted);display:block}
+
+  .cta-sec{background:
+    radial-gradient(700px 380px at 50% -20%, rgba(201,242,75,.15), transparent 60%),
+    var(--panel)}
+  .cta-box{text-align:center;max-width:60ch;margin:0 auto}
+  .cta-box h2{font-size:clamp(1.9rem,4.2vw,2.8rem);font-weight:900;margin-bottom:14px}
+  .cta-box h2 span{color:var(--volt)}
+  .cta-box p{color:var(--muted);margin-bottom:30px}
+  .cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:38px}
+  .info-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;text-align:left}
+  .info-strip div{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:16px 18px;font-size:.85rem}
+  .info-strip b{display:block;color:var(--volt);font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;font-family:'Archivo',sans-serif}
+  .info-strip span{color:#c6ccd2}
+
+  footer{border-top:1px solid var(--line);color:var(--muted);padding:30px 0;font-size:.84rem}
+  .foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
+  .foot a{color:var(--volt);text-decoration:none;font-weight:600}
+
+  @media(max-width:900px){
+    .prog-grid{grid-template-columns:repeat(2,1fr)}
+  }
+  @media(max-width:840px){
+    .nav-links a:not(.btn){display:none}
+    .hero{grid-template-columns:1fr;padding:60px 0 72px;gap:36px}
+    .plans,.rev-grid{grid-template-columns:1fr}
+    .plan.hot{transform:none}
+    .sched{grid-template-columns:1fr}
+    .info-strip{grid-template-columns:1fr}
+    section{padding:64px 0}
+    .hero-stats{gap:24px}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-in">
+    <div class="logo">Atlas <span>Power</span> Gym</div>
+    <div class="nav-links">
+      <a href="#programmes">Programmes</a>
+      <a href="#abonnements">Abonnements</a>
+      <a href="#horaires">Horaires</a>
+      <a href="#contact">Contact</a>
+      <a class="btn" href="#contact">Essai gratuit</a>
+    </div>
+  </div>
+</nav>
+
+<header>
+  <div class="wrap hero">
+    <div>
+      <span class="eyebrow">Bab Ezzouar · Alger</span>
+      <h1>Ta meilleure version <em>commence ici</em></h1>
+      <p class="lead">1 200 m² de musculation, cardio et cours collectifs. Coachs diplômés, matériel récent, créneaux dédiés hommes et femmes. Première séance offerte, sans engagement.</p>
+      <div class="hero-cta">
+        <a class="btn" href="#contact">🔥 Séance d'essai gratuite</a>
+        <a class="btn ghost" href="#abonnements">Voir les abonnements</a>
+      </div>
+      <div class="hero-stats">
+        <div><b>1 200 m²</b><small>d'espace training</small></div>
+        <div><b>6</b><small>coachs diplômés</small></div>
+        <div><b>7j/7</b><small>ouvert toute l'année</small></div>
+      </div>
+    </div>
+    <div class="hero-visual" role="img" aria-label="Espace musculation Atlas Power Gym">
+      <span class="hero-tag">Nouveau matériel 2026</span>
+    </div>
+  </div>
+</header>
+
+<section id="programmes">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Nos espaces</span>
+      <h2>Un programme pour <span>chaque objectif</span></h2>
+      <p>Que tu vises la prise de masse, la perte de poids ou juste la forme, tu trouveras ton espace et ton coach.</p>
+    </div>
+    <div class="prog-grid">
+      <div class="prog"><span class="ico">🏋️</span><h3>Musculation</h3><p>Zone poids libres et machines guidées, du débutant au confirmé.</p></div>
+      <div class="prog"><span class="ico">🏃</span><h3>Cardio</h3><p>Tapis, vélos, rameurs et escaliers, avec programmes de perte de poids.</p></div>
+      <div class="prog"><span class="ico">🥊</span><h3>Cours collectifs</h3><p>Cross training, boxe fitness, HIIT. Planning affiché chaque semaine.</p></div>
+      <div class="prog"><span class="ico">🎯</span><h3>Coaching perso</h3><p>Programme et suivi nutrition individualisés avec un coach dédié.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="plan-sec" id="abonnements">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Abonnements</span>
+      <h2>Des prix clairs, <span>zéro frais caché</span></h2>
+      <p>Accès à tous les espaces inclus dans chaque formule. Paiement en espèces ou par CCP.</p>
+    </div>
+    <div class="plans">
+      <div class="plan ghosted">
+        <h3>1 mois</h3>
+        <div class="price">3 500 <small>DA</small></div>
+        <div class="per">par mois</div>
+        <ul>
+          <li>Accès musculation + cardio</li>
+          <li>Cours collectifs inclus</li>
+          <li>Programme de départ offert</li>
+        </ul>
+        <a class="btn" href="#contact">Commencer</a>
+      </div>
+      <div class="plan hot">
+        <span class="flag">Le plus choisi</span>
+        <h3>3 mois</h3>
+        <div class="price">9 000 <small>DA</small></div>
+        <div class="per">soit 3 000 DA / mois</div>
+        <ul>
+          <li>Tout le forfait 1 mois</li>
+          <li>1 séance coaching offerte</li>
+          <li>Suivi mensuel des mesures</li>
+          <li>Gel de l'abonnement possible (15 j)</li>
+        </ul>
+        <a class="btn" href="#contact">Commencer</a>
+      </div>
+      <div class="plan ghosted">
+        <h3>12 mois</h3>
+        <div class="price">30 000 <small>DA</small></div>
+        <div class="per">soit 2 500 DA / mois</div>
+        <ul>
+          <li>Tout le forfait 3 mois</li>
+          <li>3 séances coaching offertes</li>
+          <li>T-shirt Atlas offert</li>
+          <li>Invité gratuit 1×/mois</li>
+        </ul>
+        <a class="btn" href="#contact">Commencer</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="horaires">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Horaires</span>
+      <h2>Créneaux <span>hommes & femmes</span></h2>
+      <p>Des créneaux séparés pour que chacun s'entraîne à l'aise. Les cours collectifs suivent le même découpage.</p>
+    </div>
+    <div class="sched">
+      <div class="sch-card">
+        <h3>🚹 Hommes</h3>
+        <table>
+          <tr><td>Samedi – Jeudi</td><td>6h – 12h & 17h – 23h</td></tr>
+          <tr><td>Vendredi</td><td>15h – 23h</td></tr>
+        </table>
+      </div>
+      <div class="sch-card">
+        <h3>🚺 Femmes</h3>
+        <table>
+          <tr><td>Samedi – Jeudi</td><td>12h – 17h</td></tr>
+          <tr><td>Vendredi</td><td>9h – 14h</td></tr>
+        </table>
+      </div>
+      <div class="sch-note">💡 Coachs femmes présentes sur tous les créneaux femmes. Vestiaires et douches séparés, casiers sécurisés.</div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Ils s'entraînent chez nous</span>
+      <h2>Résultats <span>réels</span></h2>
+    </div>
+    <div class="rev-grid">
+      <div class="rcard">
+        <div class="stars">★★★★★</div>
+        <p>« Moins 12 kg en 6 mois avec le programme du coach Karim. La salle est propre et le matériel jamais en panne, ça change. »</p>
+        <b>Walid H.</b><small>Membre depuis 2024</small>
+      </div>
+      <div class="rcard">
+        <div class="stars">★★★★★</div>
+        <p>« Le créneau femmes de midi est parfait avec mon travail. Ambiance motivante, coach à l'écoute, je recommande à toutes. »</p>
+        <b>Amel Z.</b><small>Membre depuis 2025</small>
+      </div>
+      <div class="rcard">
+        <div class="stars">★★★★★</div>
+        <p>« J'ai testé 3 salles à Alger avant celle-là. La différence : ici les coachs viennent te corriger sans que tu demandes. »</p>
+        <b>Riad M.</b><small>Membre depuis 2023</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-sec" id="contact">
+  <div class="wrap">
+    <div class="cta-box">
+      <span class="eyebrow">Première séance offerte</span>
+      <h2>Viens tester, <span>décide après</span></h2>
+      <p>Envoie "ESSAI" sur WhatsApp avec ton créneau préféré. On te réserve ta séance découverte avec un coach, sans aucun engagement.</p>
+      <div class="cta-row">
+        <a class="btn wa" href="https://wa.me/213540462143?text=ESSAI%20-%20je%20veux%20r%C3%A9server%20ma%20s%C3%A9ance%20d%C3%A9couverte" target="_blank" rel="noopener">💬 Réserver mon essai gratuit</a>
+      </div>
+      <div class="info-strip">
+        <div><b>Adresse</b><span>Cité USTHB, Bab Ezzouar, Alger — parking gratuit</span></div>
+        <div><b>Téléphone</b><span>+213 (0) 00 00 00 00</span></div>
+        <div><b>Instagram</b><span>@atlas.power.gym</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <div>© 2026 Atlas Power Gym — Site de démonstration</div>
+    <div>Site réalisé par <a href="https://www.instagram.com/fennec.web" target="_blank" rel="noopener">Fennec Web</a></div>
+  </div>
+</footer>
+
+</body>
+</html>

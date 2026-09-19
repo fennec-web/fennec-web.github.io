@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nour Beauté — Salon de coiffure & institut, Alger</title>
+<meta name="description" content="Nour Beauté, salon de coiffure et institut de beauté pour femmes à Hydra, Alger. Coiffure, soins, onglerie, forfaits mariée. Sur rendez-vous.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#3d2e33;
+    --paper:#fdf9f7;
+    --blush:#f7e8e4;
+    --rose:#c98a8e;
+    --rose-deep:#a95e66;
+    --plum:#5d3a44;
+    --gold:#b99668;
+    --muted:#8d7b80;
+    --radius:16px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Jost',system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;font-size:16px;font-weight:300}
+  h1,h2,h3{font-family:'Cormorant Garamond',serif;line-height:1.15;font-weight:600}
+  .wrap{max-width:1060px;margin:0 auto;padding:0 22px}
+  .eyebrow{display:inline-block;letter-spacing:.28em;text-transform:uppercase;font-size:.7rem;font-weight:500;color:var(--rose-deep);margin-bottom:14px}
+  .btn{display:inline-block;background:var(--plum);color:#fff;text-decoration:none;padding:13px 30px;border-radius:999px;font-weight:500;font-size:.9rem;letter-spacing:.04em;transition:transform .15s,box-shadow .15s;box-shadow:0 6px 18px rgba(93,58,68,.25)}
+  .btn:hover{transform:translateY(-1px)}
+  .btn.ghost{background:transparent;color:var(--plum);border:1.5px solid var(--plum);box-shadow:none}
+  .btn.wa{background:#1faa54;box-shadow:0 6px 18px rgba(31,170,84,.3)}
+
+  nav{position:sticky;top:0;z-index:50;background:rgba(253,249,247,.93);backdrop-filter:blur(8px);border-bottom:1px solid rgba(61,46,51,.08)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:66px}
+  .logo{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.5rem;letter-spacing:.02em}
+  .logo span{color:var(--rose-deep);font-style:italic}
+  .nav-links{display:flex;gap:28px;align-items:center;font-size:.88rem;font-weight:400}
+  .nav-links a:not(.btn){color:var(--ink);text-decoration:none;opacity:.7}
+  .nav-links a:hover{opacity:1}
+  .nav-links .btn{padding:10px 22px}
+
+  header{position:relative;overflow:hidden;background:
+    radial-gradient(900px 480px at 90% -20%, rgba(201,138,142,.35), transparent 60%),
+    radial-gradient(700px 400px at -5% 115%, rgba(185,150,104,.22), transparent 55%),
+    var(--blush)}
+  .hero{display:grid;grid-template-columns:1.05fr .95fr;gap:52px;align-items:center;padding:92px 0 100px}
+  .hero h1{font-size:clamp(2.3rem,5.6vw,4rem);margin-bottom:20px}
+  .hero h1 em{color:var(--rose-deep)}
+  .hero p.lead{font-size:1.06rem;color:#6e5a60;max-width:44ch;margin-bottom:32px}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap}
+  .hero-visual{position:relative;aspect-ratio:4/4.4;border-radius:200px 200px var(--radius) var(--radius);overflow:hidden;background:
+    radial-gradient(280px 220px at 35% 30%, rgba(255,255,255,.5), transparent 60%),
+    linear-gradient(160deg,#e9c6c0,#c98a8e 55%,#8d5560)}
+  .hero-visual::after{content:"💐";position:absolute;inset:0;display:grid;place-items:center;font-size:5rem;filter:drop-shadow(0 14px 28px rgba(0,0,0,.25))}
+  .hero-note{position:absolute;bottom:22px;left:22px;right:22px;background:rgba(253,249,247,.92);border-radius:12px;padding:13px 18px;font-size:.84rem;display:flex;gap:10px;align-items:center}
+  .hero-note b{font-weight:600}
+
+  section{padding:88px 0}
+  .sec-head{text-align:center;max-width:56ch;margin:0 auto 48px}
+  .sec-head h2{font-size:clamp(1.8rem,3.6vw,2.5rem);margin-bottom:12px}
+  .sec-head p{color:var(--muted)}
+
+  .svc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+  .svc{background:#fff;border:1px solid rgba(61,46,51,.08);border-radius:var(--radius);padding:30px 28px;box-shadow:0 3px 14px rgba(93,58,68,.05)}
+  .svc .ico{font-size:1.9rem;display:block;margin-bottom:12px}
+  .svc h3{font-size:1.35rem;margin-bottom:4px}
+  .svc>small{color:var(--muted);display:block;margin-bottom:16px}
+  .svc ul{list-style:none}
+  .svc li{display:flex;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px dashed rgba(61,46,51,.14);font-size:.93rem;font-weight:400}
+  .svc li:last-child{border-bottom:none}
+  .svc li span:last-child{font-weight:500;color:var(--rose-deep);white-space:nowrap}
+
+  .mariee{background:linear-gradient(150deg,var(--plum),#7a4d59);color:#fdf4f0;border-radius:22px;padding:48px 44px;display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:center}
+  .mariee h2{font-size:clamp(1.7rem,3.2vw,2.3rem);margin-bottom:12px}
+  .mariee p{color:rgba(253,244,240,.82);margin-bottom:24px}
+  .mariee .eyebrow{color:var(--gold)}
+  .mariee ul{list-style:none;display:grid;gap:12px}
+  .mariee li{display:flex;gap:12px;align-items:center;background:rgba(253,244,240,.08);border:1px solid rgba(253,244,240,.15);border-radius:12px;padding:12px 16px;font-size:.9rem}
+  .mariee .btn{background:var(--gold);box-shadow:0 6px 18px rgba(185,150,104,.35)}
+
+  .gal{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .gal .ph{aspect-ratio:.85;border-radius:14px;display:grid;place-items:center;font-size:2.4rem;position:relative;overflow:hidden}
+  .gal .ph:nth-child(1){background:linear-gradient(150deg,#e9c6c0,#c98a8e)}
+  .gal .ph:nth-child(2){background:linear-gradient(150deg,#5d3a44,#8d5560)}
+  .gal .ph:nth-child(3){background:linear-gradient(150deg,#d9b98f,#b99668)}
+  .gal .ph:nth-child(4){background:linear-gradient(150deg,#c98a8e,#a95e66)}
+  .gal .ph::after{content:"";position:absolute;inset:0;background:radial-gradient(200px 150px at 70% 15%,rgba(255,255,255,.28),transparent 60%)}
+
+  .rev-sec{background:var(--blush)}
+  .rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .rcard{background:#fff;border-radius:var(--radius);padding:28px 26px;border:1px solid rgba(61,46,51,.07)}
+  .rcard .stars{color:var(--gold);letter-spacing:3px;margin-bottom:12px}
+  .rcard p{font-size:.93rem;color:#6e5a60;margin-bottom:16px;font-style:italic;font-family:'Cormorant Garamond',serif;font-size:1.05rem}
+  .rcard b{font-size:.86rem;font-weight:600}
+  .rcard small{color:var(--muted);display:block}
+
+  .info{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+  .info h2{font-size:clamp(1.7rem,3.4vw,2.3rem);margin-bottom:14px}
+  .info>div>p{color:var(--muted);margin-bottom:26px}
+  .info-list{list-style:none;display:grid;gap:14px}
+  .info-list li{display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid rgba(61,46,51,.09);border-radius:14px;padding:15px 18px}
+  .info-list .ico{font-size:1.2rem}
+  .info-list b{display:block;font-size:.9rem;font-weight:600}
+  .info-list small{color:var(--muted)}
+
+  footer{background:var(--plum);color:rgba(253,244,240,.65);padding:30px 0;font-size:.84rem}
+  .foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
+  .foot a{color:var(--gold);text-decoration:none;font-weight:500}
+
+  @media(max-width:840px){
+    .nav-links a:not(.btn){display:none}
+    .hero{grid-template-columns:1fr;padding:60px 0 72px;gap:38px}
+    .svc-grid,.rev-grid{grid-template-columns:1fr}
+    .mariee{grid-template-columns:1fr;padding:36px 26px}
+    .gal{grid-template-columns:repeat(2,1fr)}
+    .info{grid-template-columns:1fr;gap:34px}
+    section{padding:64px 0}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-in">
+    <div class="logo">Nour <span>Beauté</span></div>
+    <div class="nav-links">
+      <a href="#services">Services & tarifs</a>
+      <a href="#mariee">Espace mariée</a>
+      <a href="#galerie">Galerie</a>
+      <a href="#infos">Infos</a>
+      <a class="btn" href="#infos">Prendre RDV</a>
+    </div>
+  </div>
+</nav>
+
+<header>
+  <div class="wrap hero">
+    <div>
+      <span class="eyebrow">Salon & institut — Femmes uniquement · Hydra, Alger</span>
+      <h1>Révélez votre beauté, <em>en toute sérénité</em></h1>
+      <p class="lead">Coiffure, soins du visage, onglerie et forfaits mariée dans un espace 100% féminin, sur rendez-vous. Une équipe qui prend le temps de vous écouter.</p>
+      <div class="hero-cta">
+        <a class="btn" href="#infos">Prendre rendez-vous</a>
+        <a class="btn ghost" href="#services">Voir les tarifs</a>
+      </div>
+    </div>
+    <div class="hero-visual" role="img" aria-label="Ambiance du salon Nour Beauté">
+      <div class="hero-note">✨ <span><b>Espace privé</b> — vitres opaques, ambiance calme, thé offert</span></div>
+    </div>
+  </div>
+</header>
+
+<section id="services">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Nos services</span>
+      <h2>Services & tarifs</h2>
+      <p>Des prix affichés, sans surprise. Le diagnostic est toujours offert avant toute prestation technique.</p>
+    </div>
+    <div class="svc-grid">
+      <div class="svc">
+        <span class="ico">💇‍♀️</span>
+        <h3>Coiffure</h3>
+        <small>Sur cheveux lavés au bac, produits professionnels</small>
+        <ul>
+          <li><span>Brushing (selon longueur)</span><span>dès 800 DA</span></li>
+          <li><span>Coupe + brushing</span><span>1 500 DA</span></li>
+          <li><span>Coloration complète</span><span>dès 3 500 DA</span></li>
+          <li><span>Balayage / mèches</span><span>dès 5 000 DA</span></li>
+          <li><span>Lissage protéine</span><span>dès 8 000 DA</span></li>
+        </ul>
+      </div>
+      <div class="svc">
+        <span class="ico">🌸</span>
+        <h3>Soins & esthétique</h3>
+        <small>Cabine privée, produits hypoallergéniques</small>
+        <ul>
+          <li><span>Soin visage éclat</span><span>2 500 DA</span></li>
+          <li><span>Soin visage profond (1h)</span><span>3 800 DA</span></li>
+          <li><span>Épilation sourcils</span><span>400 DA</span></li>
+          <li><span>Épilation jambes complètes</span><span>1 800 DA</span></li>
+        </ul>
+      </div>
+      <div class="svc">
+        <span class="ico">💅</span>
+        <h3>Onglerie</h3>
+        <small>Matériel stérilisé à chaque cliente</small>
+        <ul>
+          <li><span>Manucure classique</span><span>1 200 DA</span></li>
+          <li><span>Pose vernis semi-permanent</span><span>2 200 DA</span></li>
+          <li><span>Pose gel complète</span><span>3 500 DA</span></li>
+          <li><span>Pédicure spa</span><span>2 500 DA</span></li>
+        </ul>
+      </div>
+      <div class="svc">
+        <span class="ico">✨</span>
+        <h3>Maquillage</h3>
+        <small>Produits longue tenue, essai possible</small>
+        <ul>
+          <li><span>Maquillage jour</span><span>2 000 DA</span></li>
+          <li><span>Maquillage soirée</span><span>3 500 DA</span></li>
+          <li><span>Maquillage invitée mariage</span><span>4 500 DA</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="mariee" style="padding-top:0">
+  <div class="wrap">
+    <div class="mariee">
+      <div>
+        <span class="eyebrow">Le jour J</span>
+        <h2>Espace mariée</h2>
+        <p>Un forfait complet construit avec vous lors d'un essai : coiffure, maquillage, pose de voile, retouches. Possibilité de déplacement à domicile ou à la salle des fêtes le jour du mariage.</p>
+        <a class="btn" href="#infos">Demander le forfait mariée</a>
+      </div>
+      <ul>
+        <li>👰 Essai coiffure + maquillage avant le jour J</li>
+        <li>🚗 Déplacement possible sur Alger et environs</li>
+        <li>👭 Tarifs dégressifs pour les accompagnantes</li>
+        <li>📅 Réservation conseillée 1 à 2 mois à l'avance</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="galerie" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Galerie</span>
+      <h2>Nos réalisations</h2>
+      <p>Vos photos remplaceront ces visuels : coiffures, poses gel, mises en beauté mariée.</p>
+    </div>
+    <div class="gal">
+      <div class="ph">💇‍♀️</div>
+      <div class="ph">👰</div>
+      <div class="ph">💅</div>
+      <div class="ph">🌸</div>
+    </div>
+  </div>
+</section>
+
+<section class="rev-sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Avis clientes</span>
+      <h2>Elles nous font confiance</h2>
+    </div>
+    <div class="rev-grid">
+      <div class="rcard">
+        <div class="stars">★★★★★</div>
+        <p>« Mon lissage a tenu 5 mois. Elles m'ont conseillée honnêtement au lieu de me vendre le plus cher. Je ne change plus de salon. »</p>
+        <b>Sarah D.</b><small>Hydra</small>
+      </div>
+      <div class="rcard">
+        <div class="stars">★★★★★</div>
+        <p>« Maquillée et coiffée pour mon mariage, avec l'essai un mois avant. Le jour J, zéro stress, tout était calé. Merci Nour ! »</p>
+        <b>Imène T.</b><small>Kouba</small>
+      </div>
+      <div class="rcard">
+        <div class="stars">★★★★★</div>
+        <p>« Enfin un salon où on te reçoit à l'heure de ton rendez-vous. Propre, calme, et le thé est un vrai plus. »</p>
+        <b>Meriem B.</b><small>El Biar</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="infos">
+  <div class="wrap info">
+    <div>
+      <span class="eyebrow">Rendez-vous</span>
+      <h2>Réservez votre moment</h2>
+      <p>Envoyez-nous un message WhatsApp avec la prestation souhaitée et vos disponibilités. Nous confirmons votre créneau dans la journée.</p>
+      <a class="btn wa" href="https://wa.me/213540462143?text=Bonjour%2C%20je%20souhaite%20prendre%20rendez-vous" target="_blank" rel="noopener">💬 Prendre RDV sur WhatsApp</a>
+    </div>
+    <ul class="info-list">
+      <li><span class="ico">📍</span><div><b>Adresse</b><small>Rue des Frères Oughlis, Hydra, Alger</small></div></li>
+      <li><span class="ico">🕐</span><div><b>Horaires</b><small>Sam – Jeu : 9h30 – 18h30 · Vendredi fermé</small></div></li>
+      <li><span class="ico">📞</span><div><b>Téléphone</b><small>+213 (0) 00 00 00 00</small></div></li>
+      <li><span class="ico">📸</span><div><b>Instagram</b><small>@nour.beaute.alger</small></div></li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <div>© 2026 Nour Beauté — Site de démonstration</div>
+    <div>Site réalisé par <a href="https://www.instagram.com/fennec.web" target="_blank" rel="noopener">Fennec Web</a></div>
+  </div>
+</footer>
+
+</body>
+</html>
