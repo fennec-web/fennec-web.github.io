@@ -315,5 +315,112 @@
   </div>
 </footer>
 
+
+<style>
+.fx-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:flex-end;justify-content:center;z-index:100;padding:0}
+.fx-overlay.open{display:flex}
+.fx-modal{background:#181b1e;color:#eef1f3;width:100%;max-width:520px;max-height:92vh;overflow-y:auto;border-radius:22px 22px 0 0;padding:26px 24px 30px;position:relative}
+@media(min-width:560px){.fx-overlay{align-items:center;padding:20px}.fx-modal{border-radius:22px}}
+.fx-close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:1.5rem;cursor:pointer;color:#98a0a8;line-height:1}
+.fx-modal h3{font-family:'Archivo',sans-serif;font-size:1.45rem;margin-bottom:4px;color:#eef1f3}
+.fx-modal .fx-sub{font-size:.85rem;color:#98a0a8;margin-bottom:18px}
+.fx-step{display:none}
+.fx-step.on{display:block}
+.fx-field{margin-bottom:14px}
+.fx-field label{display:block;font-size:.82rem;font-weight:600;margin-bottom:6px;color:#eef1f3}
+.fx-field input,.fx-field select,.fx-field textarea{width:100%;padding:13px 14px;border:1.5px solid rgba(255,255,255,.15);border-radius:12px;font-size:.95rem;font-family:inherit;background:#101214;color:#eef1f3;box-sizing:border-box}
+.fx-field input:focus,.fx-field select:focus,.fx-field textarea:focus{outline:none;border-color:#c9f24b}
+.fx-radio{display:block;border:1.5px solid rgba(255,255,255,.15);border-radius:12px;padding:13px 14px;margin-bottom:10px;cursor:pointer;font-size:.92rem;background:#101214}
+.fx-radio input{margin-right:9px;accent-color:#c9f24b}
+.fx-radio.sel{border-color:#c9f24b;box-shadow:0 0 0 1px #c9f24b}
+.fx-radio small{display:block;color:#98a0a8;font-size:.8rem;margin-top:2px}
+.fx-row{display:flex;gap:10px;margin-top:18px}
+.fx-btn{flex:1;padding:14px;border:none;border-radius:12px;font-weight:700;font-size:.95rem;cursor:pointer;font-family:inherit}
+.fx-btn.pri{background:#c9f24b;color:#101214}
+.fx-btn.sec{background:transparent;border:1.5px solid rgba(255,255,255,.15);color:#eef1f3}
+.fx-err{color:#c0392b;font-size:.8rem;margin-top:8px;display:none}
+.fx-pay{border:1.5px dashed #c9f24b;border-radius:14px;padding:18px;text-align:center;margin:6px 0 4px;background:#101214}
+.fx-pay .amt{font-family:'Archivo',sans-serif;font-size:2rem;font-weight:700;margin:6px 0}
+.fx-pay .cards{font-size:.8rem;color:#98a0a8;margin-bottom:4px}
+.fx-demo{display:inline-block;background:#f5c518;color:#3a2e00;font-size:.68rem;font-weight:800;letter-spacing:.1em;padding:3px 10px;border-radius:999px;margin-bottom:8px}
+.fx-done{text-align:center;padding:8px 0}
+.fx-done .ok{width:64px;height:64px;border-radius:50%;background:#d9f2e1;color:#1a7a44;display:inline-flex;align-items:center;justify-content:center;font-size:1.9rem;margin-bottom:12px}
+.fx-recap{text-align:left;background:#101214;border:1.5px solid rgba(255,255,255,.15);border-radius:12px;padding:14px 16px;font-size:.87rem;margin:14px 0;line-height:1.8}
+.fx-wa{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;background:#1faa54;color:#fff;text-decoration:none;padding:15px;border-radius:12px;font-weight:700;font-size:.95rem;margin-bottom:10px;box-sizing:border-box}
+.fx-mail{font-size:.8rem;color:#98a0a8}
+</style>
+<div class="fx-overlay" id="fxo">
+<div class="fx-modal">
+<button class="fx-close" onclick="fxClose()">X</button>
+
+<div class="fx-step on" id="fxs1">
+<h3>Demande d'inscription</h3>
+<div class="fx-sub">Etape 1/3 - Choisis ta formule</div>
+<label class="fx-radio"><input type="radio" name="formule" value="1 mois|3500">1 mois - 3 500 DA<small>Sans engagement</small></label>
+<label class="fx-radio sel"><input type="radio" name="formule" value="3 mois|9000" checked>3 mois - 9 000 DA<small>Le plus choisi - 3 000 DA/mois</small></label>
+<label class="fx-radio"><input type="radio" name="formule" value="12 mois|30000">12 mois - 30 000 DA<small>2 500 DA/mois + t-shirt offert</small></label>
+<div class="fx-field"><label>Creneau</label><select id="fx-creneau"><option>Hommes</option><option>Femmes</option></select></div>
+<div class="fx-row"><button class="fx-btn pri" onclick="fxGo(2)">Continuer</button></div>
+</div>
+
+<div class="fx-step" id="fxs2">
+<h3>Tes coordonnees</h3>
+<div class="fx-sub">Etape 2/3 - Pour te recontacter et preparer ta carte</div>
+<div class="fx-field"><label>Nom complet *</label><input id="fx-nom" type="text" placeholder="Ex : Yacine Benali"></div>
+<div class="fx-field"><label>Telephone *</label><input id="fx-tel" type="tel" placeholder="05 XX XX XX XX"></div>
+<div class="fx-field"><label>Email (optionnel)</label><input id="fx-email" type="email" placeholder="pour recevoir la confirmation"></div>
+<div class="fx-err" id="fx-err2">Merci de remplir le nom et le telephone.</div>
+<div class="fx-row"><button class="fx-btn sec" onclick="fxGo(1)">Retour</button><button class="fx-btn pri" onclick="fxVal2()">Continuer</button></div>
+</div>
+
+<div class="fx-step" id="fxs3">
+<h3>Paiement</h3>
+<div class="fx-sub">Etape 3/3 - Comment veux-tu regler ?</div>
+<label class="fx-radio sel"><input type="radio" name="pay" value="Carte CIB / Edahabia (en ligne)" checked>&#128179; Carte CIB / Edahabia<small>Paiement en ligne securise, carte activee immediatement</small></label>
+<label class="fx-radio"><input type="radio" name="pay" value="BaridiMob">&#128241; Virement BaridiMob<small>On t'envoie le RIP apres validation</small></label>
+<label class="fx-radio"><input type="radio" name="pay" value="En salle (especes)">&#128181; A la salle<small>En especes lors de ta premiere visite</small></label>
+<div class="fx-row"><button class="fx-btn sec" onclick="fxGo(2)">Retour</button><button class="fx-btn pri" onclick="fxPayChoice()">Continuer</button></div>
+</div>
+
+<div class="fx-step" id="fxspay">
+<h3>Paiement en ligne</h3>
+<div class="fx-sub">Redirection vers la page de paiement securisee</div>
+<div class="fx-pay">
+<span class="fx-demo">DEMO</span>
+<div class="cards">Cartes acceptees : CIB - Edahabia</div>
+<div class="amt" id="fx-amt">9 000 DA</div>
+<div class="cards">Traitement securise SATIM / Algerie Poste</div>
+</div>
+<div class="fx-row"><button class="fx-btn sec" onclick="fxGo(3)">Retour</button><button class="fx-btn pri" onclick="fxDone(true)">Payer (demo)</button></div>
+</div>
+
+<div class="fx-step" id="fxsdone">
+<div class="fx-done">
+<div class="ok">&#10003;</div>
+<h3>Demande envoyee !</h3>
+<div class="fx-recap" id="fx-recap"></div>
+<a class="fx-wa" id="fx-walink" target="_blank" rel="noopener">&#128172; Confirmer sur WhatsApp</a>
+<div class="fx-mail">&#128231; Une copie part par email a la salle (demo - l'email du club sera branche ici)</div>
+</div>
+</div>
+
+</div></div>
+<script>
+(function(){
+var S={};
+window.fxGo=function(n){var all=document.querySelectorAll('.fx-step');for(var i=0;i<all.length;i++)all[i].classList.remove('on');document.getElementById(n==='pay'?'fxspay':(n==='done'?'fxsdone':'fxs'+n)).classList.add('on');};
+window.fxClose=function(){document.getElementById('fxo').classList.remove('open');};
+function openM(pre){document.getElementById('fxo').classList.add('open');if(pre){document.querySelectorAll('input[name=formule]').forEach(function(r){r.checked=r.value.indexOf(pre)===0;r.closest('.fx-radio').classList.toggle('sel',r.checked);});}fxGo(1);}
+document.querySelectorAll('.plan .btn').forEach(function(b){b.addEventListener('click',function(e){e.preventDefault();var h=b.closest('.plan').querySelector('h3').textContent.trim();openM(h);});});
+document.addEventListener('change',function(e){if(e.target.matches('.fx-radio input')){document.querySelectorAll('input[name='+e.target.name+']').forEach(function(r){r.closest('.fx-radio').classList.toggle('sel',r.checked);});}});
+window.fxVal2=function(){var n=document.getElementById('fx-nom').value.trim(),t=document.getElementById('fx-tel').value.trim();if(!n||t.length<8){document.getElementById('fx-err2').style.display='block';return;}document.getElementById('fx-err2').style.display='none';S.nom=n;S.tel=t;S.email=document.getElementById('fx-email').value.trim();fxGo(3);};
+window.fxPayChoice=function(){var f=document.querySelector('input[name=formule]:checked').value.split('|');S.formule=f[0];S.prix=parseInt(f[1]).toLocaleString('fr-FR')+' DA';S.creneau=document.getElementById('fx-creneau').value;S.pay=document.querySelector('input[name=pay]:checked').value;if(S.pay.indexOf('en ligne')>-1){document.getElementById('fx-amt').textContent=S.prix;fxGo('pay');}else{fxDone(false);}};
+window.fxDone=function(paid){S.ref='ATL-'+Math.floor(1000+Math.random()*9000);var st=paid?'Paye en ligne (demo)':S.pay;
+document.getElementById('fx-recap').innerHTML='<b>Ref : '+S.ref+'</b><br>Formule : '+S.formule+' - '+S.prix+'<br>Creneau : '+S.creneau+'<br>Nom : '+S.nom+'<br>Tel : '+S.tel+'<br>Paiement : '+st;
+var msg='DEMANDE INSCRIPTION - Atlas Power Gym%0aRef : '+S.ref+'%0aFormule : '+S.formule+' ('+S.prix+')%0aCreneau : '+S.creneau+'%0aNom : '+S.nom+'%0aTel : '+S.tel+'%0aPaiement : '+st;
+document.getElementById('fx-walink').href='https://wa.me/213540462143?text='+msg;fxGo('done');};
+})();
+</script>
+
 </body>
 </html>

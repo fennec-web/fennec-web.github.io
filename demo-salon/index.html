@@ -292,5 +292,120 @@
   </div>
 </footer>
 
+
+<style>
+.fx-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:flex-end;justify-content:center;z-index:100;padding:0}
+.fx-overlay.open{display:flex}
+.fx-modal{background:#ffffff;color:#3d2e33;width:100%;max-width:520px;max-height:92vh;overflow-y:auto;border-radius:22px 22px 0 0;padding:26px 24px 30px;position:relative}
+@media(min-width:560px){.fx-overlay{align-items:center;padding:20px}.fx-modal{border-radius:22px}}
+.fx-close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:1.5rem;cursor:pointer;color:#8d7b80;line-height:1}
+.fx-modal h3{font-family:'Cormorant Garamond',serif;font-size:1.45rem;margin-bottom:4px;color:#3d2e33}
+.fx-modal .fx-sub{font-size:.85rem;color:#8d7b80;margin-bottom:18px}
+.fx-step{display:none}
+.fx-step.on{display:block}
+.fx-field{margin-bottom:14px}
+.fx-field label{display:block;font-size:.82rem;font-weight:600;margin-bottom:6px;color:#3d2e33}
+.fx-field input,.fx-field select,.fx-field textarea{width:100%;padding:13px 14px;border:1.5px solid rgba(61,46,51,.2);border-radius:12px;font-size:.95rem;font-family:inherit;background:#fdf9f7;color:#3d2e33;box-sizing:border-box}
+.fx-field input:focus,.fx-field select:focus,.fx-field textarea:focus{outline:none;border-color:#a95e66}
+.fx-radio{display:block;border:1.5px solid rgba(61,46,51,.2);border-radius:12px;padding:13px 14px;margin-bottom:10px;cursor:pointer;font-size:.92rem;background:#fdf9f7}
+.fx-radio input{margin-right:9px;accent-color:#a95e66}
+.fx-radio.sel{border-color:#a95e66;box-shadow:0 0 0 1px #a95e66}
+.fx-radio small{display:block;color:#8d7b80;font-size:.8rem;margin-top:2px}
+.fx-row{display:flex;gap:10px;margin-top:18px}
+.fx-btn{flex:1;padding:14px;border:none;border-radius:12px;font-weight:700;font-size:.95rem;cursor:pointer;font-family:inherit}
+.fx-btn.pri{background:#a95e66;color:#fff}
+.fx-btn.sec{background:transparent;border:1.5px solid rgba(61,46,51,.2);color:#3d2e33}
+.fx-err{color:#c0392b;font-size:.8rem;margin-top:8px;display:none}
+.fx-pay{border:1.5px dashed #a95e66;border-radius:14px;padding:18px;text-align:center;margin:6px 0 4px;background:#fdf9f7}
+.fx-pay .amt{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;margin:6px 0}
+.fx-pay .cards{font-size:.8rem;color:#8d7b80;margin-bottom:4px}
+.fx-demo{display:inline-block;background:#f5c518;color:#3a2e00;font-size:.68rem;font-weight:800;letter-spacing:.1em;padding:3px 10px;border-radius:999px;margin-bottom:8px}
+.fx-done{text-align:center;padding:8px 0}
+.fx-done .ok{width:64px;height:64px;border-radius:50%;background:#d9f2e1;color:#1a7a44;display:inline-flex;align-items:center;justify-content:center;font-size:1.9rem;margin-bottom:12px}
+.fx-recap{text-align:left;background:#fdf9f7;border:1.5px solid rgba(61,46,51,.2);border-radius:12px;padding:14px 16px;font-size:.87rem;margin:14px 0;line-height:1.8}
+.fx-wa{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;background:#1faa54;color:#fff;text-decoration:none;padding:15px;border-radius:12px;font-weight:700;font-size:.95rem;margin-bottom:10px;box-sizing:border-box}
+.fx-mail{font-size:.8rem;color:#8d7b80}
+</style>
+<div class="fx-overlay" id="fxo">
+<div class="fx-modal">
+<button class="fx-close" onclick="fxClose()">X</button>
+
+<div class="fx-step on" id="fxs1">
+<h3>Reserver un rendez-vous</h3>
+<div class="fx-sub">Etape 1/3 - Votre prestation et votre creneau</div>
+<div class="fx-field"><label>Prestation *</label><select id="fx-presta">
+<option>Brushing - des 800 DA</option>
+<option>Coupe + brushing - 1 500 DA</option>
+<option>Coloration - des 3 500 DA</option>
+<option>Lissage proteine - des 8 000 DA</option>
+<option>Soin visage - des 2 500 DA</option>
+<option>Pose gel - 3 500 DA</option>
+<option>Maquillage soiree - 3 500 DA</option>
+<option>Forfait mariee - sur devis</option>
+</select></div>
+<div class="fx-field"><label>Date souhaitee *</label><input id="fx-date" type="date"></div>
+<div class="fx-field"><label>Moment prefere</label><select id="fx-moment"><option>Matin (9h30 - 12h30)</option><option>Apres-midi (13h - 18h30)</option></select></div>
+<div class="fx-err" id="fx-err1">Merci de choisir une date.</div>
+<div class="fx-row"><button class="fx-btn pri" onclick="fxVal1()">Continuer</button></div>
+</div>
+
+<div class="fx-step" id="fxs2">
+<h3>Vos coordonnees</h3>
+<div class="fx-sub">Etape 2/3 - Pour confirmer votre creneau</div>
+<div class="fx-field"><label>Prenom et nom *</label><input id="fx-nom" type="text" placeholder="Ex : Lina M."></div>
+<div class="fx-field"><label>Telephone *</label><input id="fx-tel" type="tel" placeholder="05 XX XX XX XX"></div>
+<div class="fx-err" id="fx-err2">Merci de remplir le nom et le telephone.</div>
+<div class="fx-row"><button class="fx-btn sec" onclick="fxGo(1)">Retour</button><button class="fx-btn pri" onclick="fxVal2()">Continuer</button></div>
+</div>
+
+<div class="fx-step" id="fxs3">
+<h3>Garantir votre creneau</h3>
+<div class="fx-sub">Etape 3/3 - L'acompte bloque votre rendez-vous en priorite</div>
+<label class="fx-radio sel"><input type="radio" name="pay" value="acompte" checked>&#128179; Payer l'acompte de 500 DA en ligne<small>Creneau garanti - deduit du prix de la prestation - carte CIB / Edahabia</small></label>
+<label class="fx-radio"><input type="radio" name="pay" value="sans">&#128203; Reserver sans acompte<small>Le salon vous confirme selon les disponibilites restantes</small></label>
+<div class="fx-row"><button class="fx-btn sec" onclick="fxGo(2)">Retour</button><button class="fx-btn pri" onclick="fxPayChoice()">Continuer</button></div>
+</div>
+
+<div class="fx-step" id="fxspay">
+<h3>Acompte en ligne</h3>
+<div class="fx-sub">Redirection vers la page de paiement securisee</div>
+<div class="fx-pay">
+<span class="fx-demo">DEMO</span>
+<div class="cards">Cartes acceptees : CIB - Edahabia</div>
+<div class="amt">500 DA</div>
+<div class="cards">Deduits du montant de votre prestation</div>
+</div>
+<div class="fx-row"><button class="fx-btn sec" onclick="fxGo(3)">Retour</button><button class="fx-btn pri" onclick="fxDone(true)">Payer l'acompte (demo)</button></div>
+</div>
+
+<div class="fx-step" id="fxsdone">
+<div class="fx-done">
+<div class="ok">&#10003;</div>
+<h3>Demande de rendez-vous envoyee !</h3>
+<div class="fx-recap" id="fx-recap"></div>
+<a class="fx-wa" id="fx-walink" target="_blank" rel="noopener">&#128172; Confirmer sur WhatsApp</a>
+<div class="fx-mail">&#128231; Une copie part par email au salon (demo - l'email du salon sera branche ici)</div>
+</div>
+</div>
+
+</div></div>
+<script>
+(function(){
+var S={};
+window.fxGo=function(n){var all=document.querySelectorAll('.fx-step');for(var i=0;i<all.length;i++)all[i].classList.remove('on');document.getElementById(n==='pay'?'fxspay':(n==='done'?'fxsdone':'fxs'+n)).classList.add('on');};
+window.fxClose=function(){document.getElementById('fxo').classList.remove('open');};
+document.querySelectorAll('a[href*="wa.me"]').forEach(function(b){b.addEventListener('click',function(e){e.preventDefault();document.getElementById('fxo').classList.add('open');fxGo(1);});});
+var d=document.getElementById('fx-date');d.min=new Date().toISOString().split('T')[0];
+document.addEventListener('change',function(e){if(e.target.matches('.fx-radio input')){document.querySelectorAll('input[name='+e.target.name+']').forEach(function(r){r.closest('.fx-radio').classList.toggle('sel',r.checked);});}});
+window.fxVal1=function(){if(!d.value){document.getElementById('fx-err1').style.display='block';return;}document.getElementById('fx-err1').style.display='none';S.presta=document.getElementById('fx-presta').value;S.date=d.value.split('-').reverse().join('/');S.moment=document.getElementById('fx-moment').value;fxGo(2);};
+window.fxVal2=function(){var n=document.getElementById('fx-nom').value.trim(),t=document.getElementById('fx-tel').value.trim();if(!n||t.length<8){document.getElementById('fx-err2').style.display='block';return;}document.getElementById('fx-err2').style.display='none';S.nom=n;S.tel=t;fxGo(3);};
+window.fxPayChoice=function(){S.pay=document.querySelector('input[name=pay]:checked').value;if(S.pay==='acompte'){fxGo('pay');}else{fxDone(false);}};
+window.fxDone=function(paid){S.ref='NB-'+Math.floor(1000+Math.random()*9000);var st=paid?'Acompte 500 DA paye (demo) - creneau prioritaire':'Sans acompte - a confirmer par le salon';
+document.getElementById('fx-recap').innerHTML='<b>Ref : '+S.ref+'</b><br>Prestation : '+S.presta+'<br>Date : '+S.date+' - '+S.moment+'<br>Nom : '+S.nom+'<br>Tel : '+S.tel+'<br>'+st;
+var msg='DEMANDE DE RDV - Nour Beaute%0aRef : '+S.ref+'%0aPrestation : '+S.presta+'%0aDate : '+S.date+' ('+S.moment+')%0aNom : '+S.nom+'%0aTel : '+S.tel+'%0a'+st;
+document.getElementById('fx-walink').href='https://wa.me/213540462143?text='+msg;fxGo('done');};
+})();
+</script>
+
 </body>
 </html>
