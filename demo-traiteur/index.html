@@ -101,10 +101,20 @@
   .pc li{padding:3.5px 0 3.5px 16px;position:relative}
   .pc li::before{content:"◆";position:absolute;left:0;color:var(--red);font-size:.6rem;top:7px}
   .pc .sd{margin-top:12px;font-weight:700;color:var(--red);font-size:.82rem}
+  .pc .btn{margin-top:12px;display:block;text-align:center}
 
   .refs{padding:46px 0}
   .refs .rl{display:flex;flex-wrap:wrap;gap:10px}
   .refs .r{background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:7px 18px;font-size:.8rem;font-weight:600;color:#5c4a38}
+
+  /* ===== CATALOGUE PDF ===== */
+  .cat{background:var(--ink);color:var(--peach)}
+  .cat .box{display:flex;gap:26px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+  .cat h2{font-size:clamp(1.5rem,3vw,2.1rem);margin-bottom:8px}
+  .cat h2 .k{color:#FF5A5A}
+  .cat p{color:rgba(254,231,197,.75);max-width:56ch;font-size:.93rem}
+  .cat .meta{margin-top:12px;font-size:.78rem;color:rgba(254,231,197,.55)}
+  .cat .btn{background:var(--red);color:#fff;white-space:nowrap}
 
   /* ===== CONTACT ===== */
   .ct{display:grid;grid-template-columns:1fr 1fr;gap:24px}
@@ -351,10 +361,10 @@
         <p>Pour vos réunions, formations et séminaires. Mini-salés, mini-sucrés, mignardises : thé et café seront bien sûr au rendez-vous.</p>
       </div>
       <div class="pgrid">
-        <div class="pc"><h3>Pause café Basique</h3><ul><li>Café en thermos, thé à la menthe</li><li>2 viennoiseries + 2 sucrés (minis)</li><li>Jus, eau minérale</li><li>Gobelets, serviettes, sucre</li></ul><div class="sd">Sur demande</div></div>
-        <div class="pc"><h3>Pause café Standard</h3><ul><li>Tout Basique</li><li>+ 2 salés (minis)</li></ul><div class="sd">Sur demande</div></div>
-        <div class="pc"><h3>Pause café Premium</h3><ul><li>Café en capsule Nespresso</li><li>2 viennoiseries + 3 sucrés + 3 salés</li><li>Pur jus, eau pétillante & minérale</li><li>Service en porcelaine + serveur</li></ul><div class="sd">Sur demande</div></div>
-        <div class="pc"><h3>Pause café Excellence</h3><ul><li>Nespresso, thé, lait, croissant</li><li>Tartelette, sucrés, salés, gâteaux amandes</li><li>Pur jus, eaux</li><li>Porcelaine + serveur</li></ul><div class="sd">Sur demande</div></div>
+        <div class="pc"><h3>Pause café Basique</h3><ul><li>Café en thermos, thé à la menthe</li><li>2 viennoiseries + 2 sucrés (minis)</li><li>Jus, eau minérale</li><li>Gobelets, serviettes, sucre</li></ul><div class="sd">Sur demande</div><a class="btn sm" href="https://wa.me/213770371909?text=Bonjour%20Erriane%20Foods%2C%20je%20souhaite%20un%20devis%20pour%20une%20Pause%20caf%C3%A9%20Basique." target="_blank" rel="noopener">Demander un devis</a></div>
+        <div class="pc"><h3>Pause café Standard</h3><ul><li>Tout Basique</li><li>+ 2 salés (minis)</li></ul><div class="sd">Sur demande</div><a class="btn sm" href="https://wa.me/213770371909?text=Bonjour%20Erriane%20Foods%2C%20je%20souhaite%20un%20devis%20pour%20une%20Pause%20caf%C3%A9%20Standard." target="_blank" rel="noopener">Demander un devis</a></div>
+        <div class="pc"><h3>Pause café Premium</h3><ul><li>Café en capsule Nespresso</li><li>2 viennoiseries + 3 sucrés + 3 salés</li><li>Pur jus, eau pétillante & minérale</li><li>Service en porcelaine + serveur</li></ul><div class="sd">Sur demande</div><a class="btn sm" href="https://wa.me/213770371909?text=Bonjour%20Erriane%20Foods%2C%20je%20souhaite%20un%20devis%20pour%20une%20Pause%20caf%C3%A9%20Premium." target="_blank" rel="noopener">Demander un devis</a></div>
+        <div class="pc"><h3>Pause café Excellence</h3><ul><li>Nespresso, thé, lait, croissant</li><li>Tartelette, sucrés, salés, gâteaux amandes</li><li>Pur jus, eaux</li><li>Porcelaine + serveur</li></ul><div class="sd">Sur demande</div><a class="btn sm" href="https://wa.me/213770371909?text=Bonjour%20Erriane%20Foods%2C%20je%20souhaite%20un%20devis%20pour%20une%20Pause%20caf%C3%A9%20Excellence." target="_blank" rel="noopener">Demander un devis</a></div>
       </div>
       <p style="margin-top:22px;font-size:.9rem;color:var(--muted)">Également : <b>méchoui entier</b>, <b>buffets</b>, <b>déjeuners d'affaires</b>, <b>gérance de cantines</b> et <b>bases de vie</b> pour le sud algérien — sur devis.</p>
     </div>
@@ -368,6 +378,17 @@
       </div>
     </div>
   </div>
+
+  <section class="cat" id="catalogue" style="padding:52px 0">
+    <div class="wrap box">
+      <div>
+        <h2>Notre <span class="k">catalogue</span></h2>
+        <p>Tout Erriane en un seul document : coffrets repas, pauses café, buffets, méchoui et bases de vie, avec photos et compositions.</p>
+        <div class="meta">PDF · 24 pages · ~5 Mo</div>
+      </div>
+      <a class="btn" href="https://www.erriane.com/erriane-01-2024.pdf" download="Catalogue-Erriane-Foods.pdf">Télécharger le catalogue</a>
+    </div>
+  </section>
 
   <section id="contact" style="padding-top:24px">
     <div class="wrap">
