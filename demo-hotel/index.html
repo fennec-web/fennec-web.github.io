@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dar El Bahr — Hôtel & Spa, Sidi Fredj</title>
+<meta name="description" content="Dar El Bahr, hôtel et spa face à la Méditerranée à Sidi Fredj. Chambres vue mer, piscine, hammam, petit-déjeuner maison. Réservation en ligne avec acompte.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sea:#12506B;
+    --sea-deep:#0C3A4E;
+    --sand:#F6F0E4;
+    --sand-2:#EEE5D2;
+    --gold:#C9A24B;
+    --ink:#1E2B32;
+    --muted:#6E7D86;
+    --line:#E2D9C6;
+    --radius:16px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--sand);color:var(--ink);line-height:1.7;font-size:16px}
+  h1,h2,h3{font-family:'Marcellus',Georgia,serif;line-height:1.15;font-weight:400}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+  .eyebrow{display:inline-block;letter-spacing:.26em;text-transform:uppercase;font-size:.7rem;font-weight:600;color:var(--gold);margin-bottom:14px}
+  .btn{display:inline-block;background:var(--sea);color:#fff;text-decoration:none;padding:14px 30px;border-radius:4px;font-weight:600;font-size:.92rem;letter-spacing:.03em;transition:background .2s;cursor:pointer;border:none;font-family:inherit}
+  .btn:hover{background:var(--sea-deep)}
+  .btn.gold{background:var(--gold)}
+  .btn.ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.6)}
+
+  nav{position:sticky;top:0;z-index:50;background:rgba(246,240,228,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:68px}
+  .logo{font-family:'Marcellus',serif;font-size:1.35rem;letter-spacing:.04em}
+  .logo span{color:var(--gold)}
+  .nav-links{display:flex;gap:26px;align-items:center;font-size:.88rem;font-weight:500}
+  .nav-links a:not(.btn){color:var(--ink);text-decoration:none;opacity:.75}
+  .nav-links a:hover{opacity:1}
+  .nav-links .btn{padding:10px 22px}
+
+  header{position:relative;min-height:82vh;display:flex;align-items:flex-end;color:#fff;background:url('img/hero.jpg') center/cover no-repeat}
+  header::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,58,78,.25) 0%,rgba(12,58,78,.05) 40%,rgba(10,35,48,.82) 100%)}
+  .hero{position:relative;padding:0 0 64px;width:100%}
+  .hero h1{font-size:clamp(2.4rem,5.8vw,4.2rem);max-width:18ch;margin-bottom:14px;text-shadow:0 2px 24px rgba(0,0,0,.35)}
+  .hero p.lead{font-size:1.1rem;color:rgba(255,255,255,.92);max-width:52ch;margin-bottom:28px;text-shadow:0 1px 12px rgba(0,0,0,.35)}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .hero .from{font-size:.92rem;color:rgba(255,255,255,.85)}
+  .hero .from b{font-size:1.15rem;color:#fff}
+
+  .facts{background:var(--sea);color:#fff}
+  .facts .wrap{display:flex;flex-wrap:wrap}
+  .facts .f{flex:1;min-width:180px;padding:18px 20px;font-size:.86rem;display:flex;gap:10px;align-items:center;border-left:1px solid rgba(255,255,255,.15)}
+  .facts .f:first-child{border-left:none}
+  .facts .ico{font-size:1.2rem}
+
+  section{padding:88px 0}
+  .sec-head{text-align:center;max-width:58ch;margin:0 auto 48px}
+  .sec-head h2{font-size:clamp(1.8rem,3.6vw,2.5rem);margin-bottom:12px}
+  .sec-head p{color:var(--muted)}
+
+  .rooms{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .room{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column}
+  .room .im{aspect-ratio:4/2.9;overflow:hidden}
+  .room .im img{width:100%;height:100%;object-fit:cover;display:block}
+  .room .bd{padding:22px 22px 24px;display:flex;flex-direction:column;flex:1}
+  .room h3{font-size:1.3rem;margin-bottom:2px}
+  .room .px{color:var(--sea);font-weight:700;font-size:1.05rem;margin-bottom:12px}
+  .room .px small{color:var(--muted);font-weight:400}
+  .room ul{list-style:none;font-size:.86rem;color:var(--muted);margin-bottom:18px;flex:1}
+  .room li{padding:4px 0 4px 20px;position:relative}
+  .room li::before{content:"—";position:absolute;left:0;color:var(--gold)}
+  .room .btn{text-align:center}
+
+  .svcs{background:var(--sand-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .svc-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
+  .svc{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 12px;text-align:center;font-size:.8rem;font-weight:500}
+  .svc .ico{font-size:1.5rem;display:block;margin-bottom:8px}
+
+  .gal{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .gal .ph{aspect-ratio:1;border-radius:12px;overflow:hidden;position:relative}
+  .gal .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+
+  .rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .rcard{background:#fff;border-radius:var(--radius);padding:26px 24px;border:1px solid var(--line)}
+  .rcard .stars{color:var(--gold);letter-spacing:2px;margin-bottom:12px}
+  .rcard p{font-size:.93rem;color:#4c5a63;margin-bottom:14px;font-style:italic}
+  .rcard b{font-size:.88rem}
+  .rcard small{color:var(--muted);display:block}
+
+  .cta-sec{background:linear-gradient(rgba(12,58,78,.88),rgba(12,58,78,.88)),url('img/g2-piscine.jpg') center/cover no-repeat;color:#fff;text-align:center}
+  .cta-sec h2{font-size:clamp(1.8rem,4vw,2.6rem);margin-bottom:12px}
+  .cta-sec p{color:rgba(255,255,255,.85);max-width:52ch;margin:0 auto 30px}
+  .cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .info-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;text-align:left;max-width:860px;margin:40px auto 0}
+  .info-strip div{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:16px 18px;font-size:.85rem}
+  .info-strip b{display:block;color:var(--gold);font-size:.76rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px}
+
+  footer{background:var(--sea-deep);color:rgba(255,255,255,.6);padding:30px 0;font-size:.83rem}
+  .foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
+  .foot a{color:var(--gold);text-decoration:none;font-weight:600}
+
+  @media(max-width:900px){.svc-grid{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:840px){
+    .nav-links a:not(.btn){display:none}
+    header{min-height:70vh}
+    .rooms,.rev-grid{grid-template-columns:1fr}
+    .gal{grid-template-columns:repeat(2,1fr)}
+    .info-strip{grid-template-columns:1fr}
+    section{padding:64px 0}
+    .facts .f{border-left:none;border-top:1px solid rgba(255,255,255,.15);min-width:46%}
+  }
+
+  /* ===== RESERVATION ===== */
+  .bk-overlay{position:fixed;inset:0;background:rgba(10,30,40,.6);display:none;align-items:flex-end;justify-content:center;z-index:100}
+  .bk-overlay.open{display:flex}
+  .bk{background:#fff;width:100%;max-width:560px;max-height:93vh;overflow-y:auto;border-radius:20px 20px 0 0;padding:26px 24px 30px;position:relative}
+  @media(min-width:600px){.bk-overlay{align-items:center;padding:20px}.bk{border-radius:20px}}
+  .bk-close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--muted)}
+  .bk h3{font-size:1.5rem;margin-bottom:2px}
+  .bk .sub{font-size:.85rem;color:var(--muted);margin-bottom:18px}
+  .bk-step{display:none}
+  .bk-step.on{display:block}
+  .bk .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .bk .fld{margin-bottom:14px}
+  .bk .fld label{display:block;font-size:.8rem;font-weight:600;margin-bottom:6px}
+  .bk .fld input,.bk .fld select{width:100%;padding:12px 13px;border:1.5px solid var(--line);border-radius:10px;font-size:.95rem;font-family:inherit;background:var(--sand);color:var(--ink)}
+  .bk .fld input:focus,.bk .fld select:focus{outline:none;border-color:var(--sea)}
+  .bk .nights{background:var(--sand-2);border-radius:10px;padding:10px 14px;font-size:.88rem;margin-bottom:14px;display:none}
+  .bk .nights b{color:var(--sea)}
+  .bk .up{display:flex;gap:12px;align-items:flex-start;border:1.5px solid var(--line);border-radius:12px;padding:13px 14px;margin-bottom:10px;cursor:pointer;font-size:.9rem}
+  .bk .up input{margin-top:4px;accent-color:var(--sea)}
+  .bk .up small{display:block;color:var(--muted);font-size:.8rem}
+  .bk .up .pz{margin-left:auto;font-weight:700;color:var(--sea);white-space:nowrap;font-size:.85rem}
+  .bk .total{background:var(--sea);color:#fff;border-radius:12px;padding:14px 18px;margin:14px 0;font-size:.9rem}
+  .bk .total .tl{display:flex;justify-content:space-between;padding:2px 0}
+  .bk .total .tl.big{font-size:1.08rem;font-weight:700;border-top:1px solid rgba(255,255,255,.3);margin-top:6px;padding-top:8px}
+  .bk .total .tl.acpt{color:#FFD98A}
+  .bk .brow{display:flex;gap:10px;margin-top:16px}
+  .bk .bbtn{flex:1;padding:14px;border:none;border-radius:10px;font-weight:700;font-size:.95rem;cursor:pointer;font-family:inherit}
+  .bk .bbtn.pri{background:var(--sea);color:#fff}
+  .bk .bbtn.sec{background:#fff;border:1.5px solid var(--line);color:var(--ink)}
+  .bk .err{color:#b3382c;font-size:.8rem;margin-top:8px;display:none}
+  .bk .radio{display:block;border:1.5px solid var(--line);border-radius:12px;padding:13px 14px;margin-bottom:10px;cursor:pointer;font-size:.9rem}
+  .bk .radio input{margin-right:9px;accent-color:var(--sea)}
+  .bk .radio.sel{border-color:var(--sea);box-shadow:0 0 0 1px var(--sea)}
+  .bk .radio small{display:block;color:var(--muted);font-size:.8rem;margin-top:2px}
+  .bk .pay{border:1.5px dashed var(--sea);border-radius:14px;padding:18px;text-align:center;margin:6px 0}
+  .bk .pay .amt{font-family:'Marcellus',serif;font-size:2rem;margin:6px 0}
+  .bk .pay .c{font-size:.8rem;color:var(--muted)}
+  .bk .demo{display:inline-block;background:#f5c518;color:#3a2e00;font-size:.68rem;font-weight:800;letter-spacing:.1em;padding:3px 10px;border-radius:999px;margin-bottom:8px}
+  .bk .done{text-align:center;padding:8px 0}
+  .bk .done .ok{width:64px;height:64px;border-radius:50%;background:#d9f2e1;color:#1a7a44;display:inline-flex;align-items:center;justify-content:center;font-size:1.9rem;margin-bottom:12px}
+  .bk .recap{text-align:left;background:var(--sand);border:1.5px solid var(--line);border-radius:12px;padding:14px 16px;font-size:.87rem;margin:14px 0;line-height:1.8}
+  .bk .wa{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;background:#1faa54;color:#fff;text-decoration:none;padding:15px;border-radius:10px;font-weight:700;font-size:.95rem;margin-bottom:10px}
+  .bk .mail{font-size:.8rem;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-in">
+    <div class="logo">Dar <span>El Bahr</span></div>
+    <div class="nav-links">
+      <a href="#chambres">Chambres</a>
+      <a href="#services">Services</a>
+      <a href="#galerie">Galerie</a>
+      <a href="#contact">Contact</a>
+      <button class="btn bk-open">Réserver</button>
+    </div>
+  </div>
+</nav>
+
+<header>
+  <div class="wrap hero">
+    <span class="eyebrow">Hôtel & Spa · Sidi Fredj, Alger</span>
+    <h1>Face à la Méditerranée, les pieds dans le sable</h1>
+    <p class="lead">Chambres avec vue, piscine à débordement, hammam traditionnel et petit-déjeuner maison. À 25 minutes de l'aéroport d'Alger.</p>
+    <div class="hero-cta">
+      <button class="btn gold bk-open">Réserver un séjour</button>
+      <span class="from">à partir de <b>12 000 DA</b> / nuit</span>
+    </div>
+  </div>
+</header>
+
+<div class="facts">
+  <div class="wrap" style="display:flex;flex-wrap:wrap;padding:0 22px">
+    <div class="f"><span class="ico">🏖️</span> Plage privée à 50 mètres</div>
+    <div class="f"><span class="ico">🍳</span> Petit-déjeuner maison</div>
+    <div class="f"><span class="ico">🧖</span> Hammam & spa traditionnel</div>
+    <div class="f"><span class="ico">🚗</span> Parking gratuit surveillé</div>
+  </div>
+</div>
+
+<section id="chambres">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Nos chambres</span>
+      <h2>Trois façons de séjourner</h2>
+      <p>Toutes nos chambres incluent la climatisation, le wifi et la télévision. Enfants de moins de 6 ans hébergés gratuitement.</p>
+    </div>
+    <div class="rooms">
+      <div class="room">
+        <div class="im"><img src="img/ch-standard.jpg" alt="Chambre Standard" loading="lazy"></div>
+        <div class="bd">
+          <h3>Chambre Standard</h3>
+          <div class="px">12 000 DA <small>/ nuit · 2 pers.</small></div>
+          <ul>
+            <li>Grand lit ou lits jumeaux</li>
+            <li>Vue jardin, 22 m²</li>
+            <li>Salle de bain privative</li>
+          </ul>
+          <button class="btn bk-open" data-room="standard">Réserver</button>
+        </div>
+      </div>
+      <div class="room">
+        <div class="im"><img src="img/ch-vuemer.jpg" alt="Chambre Vue Mer" loading="lazy"></div>
+        <div class="bd">
+          <h3>Chambre Vue Mer</h3>
+          <div class="px">16 000 DA <small>/ nuit · 2 pers.</small></div>
+          <ul>
+            <li>Balcon face à la Méditerranée</li>
+            <li>Grand lit, 26 m²</li>
+            <li>Plateau de bienvenue</li>
+          </ul>
+          <button class="btn bk-open" data-room="vuemer">Réserver</button>
+        </div>
+      </div>
+      <div class="room">
+        <div class="im"><img src="img/ch-suite.jpg" alt="Suite Familiale" loading="lazy"></div>
+        <div class="bd">
+          <h3>Suite Familiale</h3>
+          <div class="px">24 000 DA <small>/ nuit · 4 pers.</small></div>
+          <ul>
+            <li>Chambre + salon convertible, 42 m²</li>
+            <li>Balcon vue mer</li>
+            <li>Idéale pour les familles</li>
+          </ul>
+          <button class="btn bk-open" data-room="suite">Réserver</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="svcs" id="services">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Services</span>
+      <h2>Tout est sur place</h2>
+    </div>
+    <div class="svc-grid">
+      <div class="svc"><span class="ico">🏊</span>Piscine à débordement</div>
+      <div class="svc"><span class="ico">🧖</span>Hammam & massages</div>
+      <div class="svc"><span class="ico">🍽️</span>Restaurant & terrasse</div>
+      <div class="svc"><span class="ico">🚐</span>Transfert aéroport</div>
+      <div class="svc"><span class="ico">📶</span>Wifi haut débit</div>
+      <div class="svc"><span class="ico">👨‍👩‍👧</span>Espace enfants</div>
+    </div>
+  </div>
+</section>
+
+<section id="galerie">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Galerie</span>
+      <h2>L'art de vivre Dar El Bahr</h2>
+    </div>
+    <div class="gal">
+      <div class="ph"><img src="img/g2-piscine.jpg" alt="" loading="lazy"></div>
+      <div class="ph"><img src="img/g3-terrasse.jpg" alt="" loading="lazy"></div>
+      <div class="ph"><img src="img/g1-petitdej.jpg" alt="" loading="lazy"></div>
+      <div class="ph"><img src="img/g4-patio.jpg" alt="" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Avis voyageurs</span>
+      <h2>Ils ont séjourné chez nous</h2>
+    </div>
+    <div class="rev-grid">
+      <div class="rcard">
+        <div class="stars">★★★★★</div>
+        <p>« Le petit-déjeuner sur la terrasse face à la mer vaut à lui seul le séjour. Personnel aux petits soins. »</p>
+        <b>Famille Benmoussa</b><small>Alger · séjour en famille</small>
+      </div>
+      <div class="rcard">
+        <div class="stars">★★★★★</div>
+        <p>« Réservé en ligne en 2 minutes, acompte payé par carte, confirmation dans l'heure. Le hammam est superbe. »</p>
+        <b>Sara & Mehdi</b><small>Oran · week-end en couple</small>
+      </div>
+      <div class="rcard">
+        <div class="stars">★★★★☆</div>
+        <p>« Chambre vue mer impeccable, transfert aéroport ponctuel. On reviendra pour la saison des figues de barbarie ! »</p>
+        <b>Karim L.</b><small>Paris · retour au bled</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-sec" id="contact">
+  <div class="wrap">
+    <span class="eyebrow">Réservation</span>
+    <h2>Votre chambre vous attend</h2>
+    <p>Choisissez vos dates, votre chambre et vos options : l'acompte de 30% par carte CIB ou Edahabia garantit votre réservation.</p>
+    <div class="cta-row">
+      <button class="btn gold bk-open">Réserver un séjour</button>
+      <a class="btn ghost" href="https://wa.me/213540462143?text=Bonjour%2C%20j%27ai%20une%20question%20sur%20l%27h%C3%B4tel" target="_blank" rel="noopener">Une question ? WhatsApp</a>
+    </div>
+    <div class="info-strip">
+      <div><b>Adresse</b>Presqu'île de Sidi Fredj, Staoueli, Alger</div>
+      <div><b>Téléphone</b>+213 (0) 00 00 00 00 · réception 24h/24</div>
+      <div><b>Arrivée / Départ</b>Check-in 14h00 · Check-out 12h00</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <div>© 2026 Dar El Bahr — Site de démonstration · <span style="opacity:.6;font-size:.76rem">Photos : P. Stephenson, kuhnmi, K. T. Conklin (CC BY)</span></div>
+    <div>Site réalisé par <a href="https://www.instagram.com/fennec.web" target="_blank" rel="noopener">Fennec Web</a></div>
+  </div>
+</footer>
+
+<!-- ===== RESERVATION ===== -->
+<div class="bk-overlay" id="bko">
+<div class="bk">
+<button class="bk-close" onclick="bkClose()">✕</button>
+
+<div class="bk-step on" id="bks1">
+<h3>Réserver un séjour</h3>
+<div class="sub">Étape 1/4 — Vos dates et votre chambre</div>
+<div class="row2">
+  <div class="fld"><label>Arrivée *</label><input type="date" id="bk-in"></div>
+  <div class="fld"><label>Départ *</label><input type="date" id="bk-out"></div>
+</div>
+<div class="nights" id="bk-nights"></div>
+<div class="fld"><label>Chambre</label>
+  <select id="bk-room">
+    <option value="standard|Chambre Standard|12000">Chambre Standard — 12 000 DA/nuit</option>
+    <option value="vuemer|Chambre Vue Mer|16000">Chambre Vue Mer — 16 000 DA/nuit</option>
+    <option value="suite|Suite Familiale|24000">Suite Familiale — 24 000 DA/nuit</option>
+  </select>
+</div>
+<div class="row2">
+  <div class="fld"><label>Adultes</label><select id="bk-ad"><option>1</option><option selected>2</option><option>3</option><option>4</option></select></div>
+  <div class="fld"><label>Enfants</label><select id="bk-en"><option selected>0</option><option>1</option><option>2</option><option>3</option></select></div>
+</div>
+<div class="err" id="bk-err1">Choisissez une date d'arrivée et une date de départ postérieure.</div>
+<div class="brow"><button class="bbtn pri" onclick="bkVal1()">Continuer</button></div>
+</div>
+
+<div class="bk-step" id="bks2">
+<h3>Vos options</h3>
+<div class="sub">Étape 2/4 — Personnalisez votre séjour</div>
+<label class="up"><input type="checkbox" id="up-pdj" onchange="bkTotal()"><span><b>Petit-déjeuner</b><small>Buffet maison servi en terrasse, par adulte et par nuit</small></span><span class="pz">+1 200 DA</span></label>
+<label class="up"><input type="checkbox" id="up-trf" onchange="bkTotal()"><span><b>Transfert aéroport aller-retour</b><small>Chauffeur à l'arrivée, retour à l'heure de votre vol</small></span><span class="pz">+2 500 DA</span></label>
+<label class="up"><input type="checkbox" id="up-spa" onchange="bkTotal()"><span><b>Accès hammam & spa</b><small>Une séance par séjour, serviettes fournies</small></span><span class="pz">+3 000 DA</span></label>
+<label class="up"><input type="checkbox" id="up-tard" onchange="bkTotal()"><span><b>Départ tardif 16h</b><small>Selon disponibilité, confirmé la veille</small></span><span class="pz">+3 000 DA</span></label>
+<label class="up"><input type="checkbox" id="up-bebe" onchange="bkTotal()"><span><b>Lit bébé</b><small>Sur demande</small></span><span class="pz">Gratuit</span></label>
+<div class="total" id="bk-total"></div>
+<div class="brow"><button class="bbtn sec" onclick="bkGo(1)">Retour</button><button class="bbtn pri" onclick="bkGo(3)">Continuer</button></div>
+</div>
+
+<div class="bk-step" id="bks3">
+<h3>Vos coordonnées</h3>
+<div class="sub">Étape 3/4 — Pour confirmer votre réservation</div>
+<div class="fld"><label>Nom complet *</label><input type="text" id="bk-nom" placeholder="Ex : Famille Benali"></div>
+<div class="fld"><label>Téléphone *</label><input type="tel" id="bk-tel" placeholder="05 XX XX XX XX"></div>
+<div class="fld"><label>Email</label><input type="email" id="bk-email" placeholder="pour recevoir la confirmation écrite"></div>
+<div class="err" id="bk-err3">Merci de remplir le nom et le téléphone.</div>
+<div class="brow"><button class="bbtn sec" onclick="bkGo(2)">Retour</button><button class="bbtn pri" onclick="bkVal3()">Continuer</button></div>
+</div>
+
+<div class="bk-step" id="bks4">
+<h3>Garantir la réservation</h3>
+<div class="sub">Étape 4/4 — L'acompte de 30% bloque votre chambre</div>
+<label class="radio sel"><input type="radio" name="bkpay" value="acompte" checked>💳 Payer l'acompte de 30% en ligne<span id="bk-acpt-inline"></span><small>Carte CIB / Edahabia · réservation garantie · solde à l'arrivée</small></label>
+<label class="radio"><input type="radio" name="bkpay" value="arrivee">🏨 Payer à l'arrivée<small>Sous réserve de confirmation par l'hôtel selon les disponibilités</small></label>
+<div class="brow"><button class="bbtn sec" onclick="bkGo(3)">Retour</button><button class="bbtn pri" onclick="bkPayChoice()">Continuer</button></div>
+</div>
+
+<div class="bk-step" id="bkspay">
+<h3>Acompte en ligne</h3>
+<div class="sub">Redirection vers la page de paiement sécurisée</div>
+<div class="pay">
+<span class="demo">DÉMO</span>
+<div class="c">Cartes acceptées : CIB · Edahabia</div>
+<div class="amt" id="bk-payamt"></div>
+<div class="c">30% du séjour · le solde se règle à l'arrivée</div>
+</div>
+<div class="brow"><button class="bbtn sec" onclick="bkGo(4)">Retour</button><button class="bbtn pri" onclick="bkDone(true)">Payer l'acompte (démo)</button></div>
+</div>
+
+<div class="bk-step" id="bksdone">
+<div class="done">
+<div class="ok">✓</div>
+<h3>Demande de réservation envoyée !</h3>
+<div class="recap" id="bk-recap"></div>
+<a class="wa" id="bk-walink" target="_blank" rel="noopener">💬 Confirmer sur WhatsApp</a>
+<div class="mail">📧 Une copie part par email à la réception (démo — l'email de l'hôtel sera branché ici)</div>
+</div>
+</div>
+
+</div></div>
+
+<script>
+(function(){
+var S = {};
+var PRICES = {pdj:1200, trf:2500, spa:3000, tard:3000};
+function fmt(n){return n.toLocaleString('fr-FR').replace(/ | /g,' ') + ' DA';}
+window.bkGo = function(n){
+  document.querySelectorAll('.bk-step').forEach(function(e){e.classList.remove('on');});
+  var id = n==='pay' ? 'bkspay' : (n==='done' ? 'bksdone' : 'bks'+n);
+  document.getElementById(id).classList.add('on');
+  if(n===2) bkTotal();
+};
+window.bkClose = function(){document.getElementById('bko').classList.remove('open');};
+document.querySelectorAll('.bk-open').forEach(function(b){
+  b.addEventListener('click', function(e){
+    e.preventDefault();
+    document.getElementById('bko').classList.add('open');
+    if(b.dataset.room){
+      var sel = document.getElementById('bk-room');
+      for(var i=0;i<sel.options.length;i++){ if(sel.options[i].value.indexOf(b.dataset.room)===0) sel.selectedIndex=i; }
+    }
+    bkGo(1); nights();
+  });
+});
+var din = document.getElementById('bk-in'), dout = document.getElementById('bk-out');
+var today = new Date().toISOString().split('T')[0];
+din.min = today;
+function nights(){
+  if(!din.value){ return 0; }
+  var minOut = new Date(din.value); minOut.setDate(minOut.getDate()+1);
+  dout.min = minOut.toISOString().split('T')[0];
+  if(!dout.value || dout.value <= din.value){ document.getElementById('bk-nights').style.display='none'; return 0; }
+  var n = Math.round((new Date(dout.value) - new Date(din.value)) / 86400000);
+  var el = document.getElementById('bk-nights');
+  el.style.display = 'block';
+  el.innerHTML = 'Séjour de <b>' + n + ' nuit' + (n>1?'s':'') + '</b>, du ' + din.value.split('-').reverse().join('/') + ' au ' + dout.value.split('-').reverse().join('/');
+  return n;
+}
+din.addEventListener('change', nights);
+dout.addEventListener('change', nights);
+window.bkVal1 = function(){
+  var n = nights();
+  if(!n){ document.getElementById('bk-err1').style.display='block'; return; }
+  document.getElementById('bk-err1').style.display='none';
+  S.nuits = n;
+  var r = document.getElementById('bk-room').value.split('|');
+  S.roomName = r[1]; S.roomPrice = parseInt(r[2]);
+  S.ad = parseInt(document.getElementById('bk-ad').value);
+  S.en = parseInt(document.getElementById('bk-en').value);
+  S.din = din.value.split('-').reverse().join('/');
+  S.dout = dout.value.split('-').reverse().join('/');
+  bkGo(2);
+};
+window.bkTotal = function(){
+  if(!S.nuits) return;
+  var lines = [];
+  var base = S.roomPrice * S.nuits;
+  lines.push(['Chambre (' + S.nuits + ' nuit' + (S.nuits>1?'s':'') + ' × ' + fmt(S.roomPrice) + ')', base]);
+  var total = base;
+  S.opts = [];
+  if(document.getElementById('up-pdj').checked){ var v = PRICES.pdj * S.ad * S.nuits; total += v; lines.push(['Petit-déjeuner (' + S.ad + ' ad. × ' + S.nuits + ' nuits)', v]); S.opts.push('Petit-dejeuner'); }
+  if(document.getElementById('up-trf').checked){ total += PRICES.trf; lines.push(['Transfert aéroport A/R', PRICES.trf]); S.opts.push('Transfert aeroport'); }
+  if(document.getElementById('up-spa').checked){ total += PRICES.spa; lines.push(['Hammam & spa', PRICES.spa]); S.opts.push('Hammam-spa'); }
+  if(document.getElementById('up-tard').checked){ total += PRICES.tard; lines.push(['Départ tardif 16h', PRICES.tard]); S.opts.push('Depart tardif'); }
+  if(document.getElementById('up-bebe').checked){ lines.push(['Lit bébé', 0]); S.opts.push('Lit bebe'); }
+  S.total = total;
+  S.acompte = Math.round(total * 0.3 / 100) * 100;
+  var html = '';
+  lines.forEach(function(l){ html += '<div class="tl"><span>' + l[0] + '</span><span>' + (l[1] ? fmt(l[1]) : 'Offert') + '</span></div>'; });
+  html += '<div class="tl big"><span>Total séjour</span><span>' + fmt(total) + '</span></div>';
+  html += '<div class="tl acpt"><span>Acompte 30% pour garantir</span><span>' + fmt(S.acompte) + '</span></div>';
+  document.getElementById('bk-total').innerHTML = html;
+  document.getElementById('bk-acpt-inline').textContent = ' — ' + fmt(S.acompte);
+};
+window.bkVal3 = function(){
+  var n = document.getElementById('bk-nom').value.trim(), t = document.getElementById('bk-tel').value.trim();
+  if(!n || t.length < 8){ document.getElementById('bk-err3').style.display='block'; return; }
+  document.getElementById('bk-err3').style.display='none';
+  S.nom = n; S.tel = t; S.email = document.getElementById('bk-email').value.trim();
+  bkTotal(); bkGo(4);
+};
+document.addEventListener('change', function(e){
+  if(e.target.matches('.radio input')){
+    document.querySelectorAll('input[name=' + e.target.name + ']').forEach(function(r){ r.closest('.radio').classList.toggle('sel', r.checked); });
+  }
+});
+window.bkPayChoice = function(){
+  S.pay = document.querySelector('input[name=bkpay]:checked').value;
+  if(S.pay === 'acompte'){ document.getElementById('bk-payamt').textContent = fmt(S.acompte); bkGo('pay'); }
+  else { bkDone(false); }
+};
+window.bkDone = function(paid){
+  S.ref = 'DEB-' + Math.floor(1000 + Math.random() * 9000);
+  var st = paid ? 'Acompte ' + fmt(S.acompte) + ' payé (démo) — réservation garantie' : 'Paiement à l\'arrivée — sous réserve de confirmation';
+  document.getElementById('bk-recap').innerHTML =
+    '<b>Réf : ' + S.ref + '</b><br>' + S.roomName + ' · ' + S.din + ' → ' + S.dout + ' (' + S.nuits + ' nuits)<br>' +
+    S.ad + ' adulte(s), ' + S.en + ' enfant(s)' + (S.opts.length ? '<br>Options : ' + S.opts.join(', ') : '') +
+    '<br>Total : ' + fmt(S.total) + '<br>' + S.nom + ' · ' + S.tel + '<br>' + st;
+  var msg = 'RESERVATION - Dar El Bahr%0aRef : ' + S.ref + '%0aChambre : ' + S.roomName + '%0aDates : ' + S.din + ' au ' + S.dout + ' (' + S.nuits + ' nuits)%0aPersonnes : ' + S.ad + ' adultes, ' + S.en + ' enfants' + (S.opts.length ? '%0aOptions : ' + S.opts.join(', ') : '') + '%0aTotal : ' + fmt(S.total) + '%0aNom : ' + S.nom + '%0aTel : ' + S.tel + '%0a' + st;
+  document.getElementById('bk-walink').href = 'https://wa.me/213540462143?text=' + msg;
+  bkGo('done');
+};
+})();
+</script>
+</body>
+</html>

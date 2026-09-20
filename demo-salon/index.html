@@ -117,6 +117,7 @@
     .info{grid-template-columns:1fr;gap:34px}
     section{padding:64px 0}
   }
+.has-photo::after{content:none!important}
 </style>
 </head>
 <body>
@@ -129,7 +130,7 @@
       <a href="#mariee">Espace mariée</a>
       <a href="#galerie">Galerie</a>
       <a href="#infos">Infos</a>
-      <a class="btn" href="#infos">Prendre RDV</a>
+      <a class="btn fx-open" href="#">Prendre RDV</a>
     </div>
   </div>
 </nav>
@@ -141,11 +142,11 @@
       <h1>Révélez votre beauté, <em>en toute sérénité</em></h1>
       <p class="lead">Coiffure, soins du visage, onglerie et forfaits mariée dans un espace 100% féminin, sur rendez-vous. Une équipe qui prend le temps de vous écouter.</p>
       <div class="hero-cta">
-        <a class="btn" href="#infos">Prendre rendez-vous</a>
+        <a class="btn fx-open" href="#">Prendre rendez-vous</a>
         <a class="btn ghost" href="#services">Voir les tarifs</a>
       </div>
     </div>
-    <div class="hero-visual" role="img" aria-label="Ambiance du salon Nour Beauté">
+    <div class="hero-visual has-photo" role="img" aria-label="Ambiance du salon Nour Beauté" style="background:url('img/hero-salon.jpg') center/cover no-repeat">
       <div class="hero-note">✨ <span><b>Espace privé</b> — vitres opaques, ambiance calme, thé offert</span></div>
     </div>
   </div>
@@ -214,7 +215,7 @@
         <span class="eyebrow">Le jour J</span>
         <h2>Espace mariée</h2>
         <p>Un forfait complet construit avec vous lors d'un essai : coiffure, maquillage, pose de voile, retouches. Possibilité de déplacement à domicile ou à la salle des fêtes le jour du mariage.</p>
-        <a class="btn" href="#infos">Demander le forfait mariée</a>
+        <a class="btn fx-open" href="#" data-presta="mariee">Demander le forfait mariée</a>
       </div>
       <ul>
         <li>👰 Essai coiffure + maquillage avant le jour J</li>
@@ -231,13 +232,13 @@
     <div class="sec-head">
       <span class="eyebrow">Galerie</span>
       <h2>Nos réalisations</h2>
-      <p>Vos photos remplaceront ces visuels : coiffures, poses gel, mises en beauté mariée.</p>
+      <p>Coiffure, henné, onglerie, mise en beauté : un aperçu de notre savoir-faire.</p>
     </div>
     <div class="gal">
-      <div class="ph">💇‍♀️</div>
-      <div class="ph">👰</div>
-      <div class="ph">💅</div>
-      <div class="ph">🌸</div>
+      <div class="ph has-photo"><img src="img/g1-coiffure.jpg" alt="" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></div>
+      <div class="ph has-photo"><img src="img/g2-henne.jpg" alt="" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></div>
+      <div class="ph has-photo"><img src="img/g3-ongles.jpg" alt="" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></div>
+      <div class="ph has-photo"><img src="img/g4-mariee.jpg" alt="" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></div>
     </div>
   </div>
 </section>
@@ -273,8 +274,9 @@
     <div>
       <span class="eyebrow">Rendez-vous</span>
       <h2>Réservez votre moment</h2>
-      <p>Envoyez-nous un message WhatsApp avec la prestation souhaitée et vos disponibilités. Nous confirmons votre créneau dans la journée.</p>
-      <a class="btn wa" href="https://wa.me/213540462143?text=Bonjour%2C%20je%20souhaite%20prendre%20rendez-vous" target="_blank" rel="noopener">💬 Prendre RDV sur WhatsApp</a>
+      <p>Choisissez votre prestation et votre créneau : nous confirmons dans la journée.</p>
+      <a class="btn wa fx-open" href="#">📅 Réserver un créneau</a>
+      <p style="margin-top:12px;font-size:.85rem"><a href="https://wa.me/213540462143?text=Bonjour%2C%20je%20souhaite%20prendre%20rendez-vous" target="_blank" rel="noopener" style="color:inherit;opacity:.75">ou écrivez-nous directement sur WhatsApp →</a></p>
     </div>
     <ul class="info-list">
       <li><span class="ico">📍</span><div><b>Adresse</b><small>Rue des Frères Oughlis, Hydra, Alger</small></div></li>
@@ -287,7 +289,7 @@
 
 <footer>
   <div class="wrap foot">
-    <div>© 2026 Nour Beauté — Site de démonstration</div>
+    <div>© 2026 Nour Beauté — Site de démonstration · <span style="opacity:.65;font-size:.78rem">Photos : geehairimages (CC BY), Stacie (CC BY-SA)</span></div>
     <div>Site réalisé par <a href="https://www.instagram.com/fennec.web" target="_blank" rel="noopener">Fennec Web</a></div>
   </div>
 </footer>
@@ -394,7 +396,7 @@
 var S={};
 window.fxGo=function(n){var all=document.querySelectorAll('.fx-step');for(var i=0;i<all.length;i++)all[i].classList.remove('on');document.getElementById(n==='pay'?'fxspay':(n==='done'?'fxsdone':'fxs'+n)).classList.add('on');};
 window.fxClose=function(){document.getElementById('fxo').classList.remove('open');};
-document.querySelectorAll('a[href*="wa.me"]').forEach(function(b){b.addEventListener('click',function(e){e.preventDefault();document.getElementById('fxo').classList.add('open');fxGo(1);});});
+document.querySelectorAll('.fx-open').forEach(function(b){b.addEventListener('click',function(e){e.preventDefault();document.getElementById('fxo').classList.add('open');if(b.dataset.presta==='mariee'){var s=document.getElementById('fx-presta');s.selectedIndex=s.options.length-1;}fxGo(1);});});
 var d=document.getElementById('fx-date');d.min=new Date().toISOString().split('T')[0];
 document.addEventListener('change',function(e){if(e.target.matches('.fx-radio input')){document.querySelectorAll('input[name='+e.target.name+']').forEach(function(r){r.closest('.fx-radio').classList.toggle('sel',r.checked);});}});
 window.fxVal1=function(){if(!d.value){document.getElementById('fx-err1').style.display='block';return;}document.getElementById('fx-err1').style.display='none';S.presta=document.getElementById('fx-presta').value;S.date=d.value.split('-').reverse().join('/');S.moment=document.getElementById('fx-moment').value;fxGo(2);};

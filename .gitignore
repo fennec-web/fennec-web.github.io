@@ -1,0 +1,9 @@
+# Prive — ne jamais publier
+pos-resto/
+
+# Duplication rendue inutile par git
+deploy/
+
+# Systeme
+.DS_Store
+Thumbs.db

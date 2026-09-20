@@ -134,6 +134,7 @@
     section{padding:64px 0}
     .hero-stats{gap:24px}
   }
+.has-photo::after{content:none!important}
 </style>
 </head>
 <body>
@@ -167,7 +168,7 @@
         <div><b>7j/7</b><small>ouvert toute l'année</small></div>
       </div>
     </div>
-    <div class="hero-visual" role="img" aria-label="Espace musculation Atlas Power Gym">
+    <div class="hero-visual has-photo" role="img" aria-label="Espace musculation Atlas Power Gym" style="background:url('img/hero-gym.jpg') center/cover no-repeat">
       <span class="hero-tag">Nouveau matériel 2026</span>
     </div>
   </div>
@@ -181,10 +182,10 @@
       <p>Que tu vises la prise de masse, la perte de poids ou juste la forme, tu trouveras ton espace et ton coach.</p>
     </div>
     <div class="prog-grid">
-      <div class="prog"><span class="ico">🏋️</span><h3>Musculation</h3><p>Zone poids libres et machines guidées, du débutant au confirmé.</p></div>
-      <div class="prog"><span class="ico">🏃</span><h3>Cardio</h3><p>Tapis, vélos, rameurs et escaliers, avec programmes de perte de poids.</p></div>
-      <div class="prog"><span class="ico">🥊</span><h3>Cours collectifs</h3><p>Cross training, boxe fitness, HIIT. Planning affiché chaque semaine.</p></div>
-      <div class="prog"><span class="ico">🎯</span><h3>Coaching perso</h3><p>Programme et suivi nutrition individualisés avec un coach dédié.</p></div>
+      <div class="prog"><img src="img/p1-muscu.jpg" alt="" loading="lazy" style="width:calc(100% + 44px);margin:-26px -22px 16px;height:150px;object-fit:cover;border-radius:15px 15px 0 0;display:block"><span class="ico" style="display:none">🏋️</span><h3>Musculation</h3><p>Zone poids libres et machines guidées, du débutant au confirmé.</p></div>
+      <div class="prog"><img src="img/p2-cardio.jpg" alt="" loading="lazy" style="width:calc(100% + 44px);margin:-26px -22px 16px;height:150px;object-fit:cover;border-radius:15px 15px 0 0;display:block"><span class="ico" style="display:none">🏃</span><h3>Cardio</h3><p>Tapis, vélos, rameurs et escaliers, avec programmes de perte de poids.</p></div>
+      <div class="prog"><img src="img/p3-cours.jpg" alt="" loading="lazy" style="width:calc(100% + 44px);margin:-26px -22px 16px;height:150px;object-fit:cover;border-radius:15px 15px 0 0;display:block"><span class="ico" style="display:none">🥊</span><h3>Cours collectifs</h3><p>Cross training, boxe fitness, HIIT. Planning affiché chaque semaine.</p></div>
+      <div class="prog"><img src="img/p4-coach.jpg" alt="" loading="lazy" style="width:calc(100% + 44px);margin:-26px -22px 16px;height:150px;object-fit:cover;border-radius:15px 15px 0 0;display:block"><span class="ico" style="display:none">🎯</span><h3>Coaching perso</h3><p>Programme et suivi nutrition individualisés avec un coach dédié.</p></div>
     </div>
   </div>
 </section>
@@ -206,7 +207,7 @@
           <li>Cours collectifs inclus</li>
           <li>Programme de départ offert</li>
         </ul>
-        <a class="btn" href="#contact">Commencer</a>
+        <a class="btn" href="#contact">S'inscrire</a>
       </div>
       <div class="plan hot">
         <span class="flag">Le plus choisi</span>
@@ -219,7 +220,7 @@
           <li>Suivi mensuel des mesures</li>
           <li>Gel de l'abonnement possible (15 j)</li>
         </ul>
-        <a class="btn" href="#contact">Commencer</a>
+        <a class="btn" href="#contact">S'inscrire</a>
       </div>
       <div class="plan ghosted">
         <h3>12 mois</h3>
@@ -231,7 +232,7 @@
           <li>T-shirt Atlas offert</li>
           <li>Invité gratuit 1×/mois</li>
         </ul>
-        <a class="btn" href="#contact">Commencer</a>
+        <a class="btn" href="#contact">S'inscrire</a>
       </div>
     </div>
   </div>
@@ -310,7 +311,7 @@
 
 <footer>
   <div class="wrap foot">
-    <div>© 2026 Atlas Power Gym — Site de démonstration</div>
+    <div>© 2026 Atlas Power Gym — Site de démonstration · <span style="opacity:.55;font-size:.78rem">Photo : PTPioneer (CC BY)</span></div>
     <div>Site réalisé par <a href="https://www.instagram.com/fennec.web" target="_blank" rel="noopener">Fennec Web</a></div>
   </div>
 </footer>
@@ -355,17 +356,18 @@
 
 <div class="fx-step on" id="fxs1">
 <h3>Demande d'inscription</h3>
-<div class="fx-sub">Etape 1/3 - Choisis ta formule</div>
+<div class="fx-sub">Ta formule</div>
 <label class="fx-radio"><input type="radio" name="formule" value="1 mois|3500">1 mois - 3 500 DA<small>Sans engagement</small></label>
 <label class="fx-radio sel"><input type="radio" name="formule" value="3 mois|9000" checked>3 mois - 9 000 DA<small>Le plus choisi - 3 000 DA/mois</small></label>
 <label class="fx-radio"><input type="radio" name="formule" value="12 mois|30000">12 mois - 30 000 DA<small>2 500 DA/mois + t-shirt offert</small></label>
 <div class="fx-field"><label>Creneau</label><select id="fx-creneau"><option>Hommes</option><option>Femmes</option></select></div>
-<div class="fx-row"><button class="fx-btn pri" onclick="fxGo(2)">Continuer</button></div>
+<div class="fx-row"><button class="fx-btn pri" onclick="fxSum();fxGo(2)">Choisir cette formule</button></div>
 </div>
 
 <div class="fx-step" id="fxs2">
 <h3>Tes coordonnees</h3>
-<div class="fx-sub">Etape 2/3 - Pour te recontacter et preparer ta carte</div>
+<div class="fx-sub">Pour te recontacter et preparer ta carte</div>
+<div id="fx-chosen" style="background:#101214;border:1.5px solid rgba(255,255,255,.15);border-radius:12px;padding:11px 14px;font-size:.88rem;margin-bottom:14px"></div>
 <div class="fx-field"><label>Nom complet *</label><input id="fx-nom" type="text" placeholder="Ex : Yacine Benali"></div>
 <div class="fx-field"><label>Telephone *</label><input id="fx-tel" type="tel" placeholder="05 XX XX XX XX"></div>
 <div class="fx-field"><label>Email (optionnel)</label><input id="fx-email" type="email" placeholder="pour recevoir la confirmation"></div>
@@ -375,7 +377,7 @@
 
 <div class="fx-step" id="fxs3">
 <h3>Paiement</h3>
-<div class="fx-sub">Etape 3/3 - Comment veux-tu regler ?</div>
+<div class="fx-sub">Comment veux-tu regler ?</div>
 <label class="fx-radio sel"><input type="radio" name="pay" value="Carte CIB / Edahabia (en ligne)" checked>&#128179; Carte CIB / Edahabia<small>Paiement en ligne securise, carte activee immediatement</small></label>
 <label class="fx-radio"><input type="radio" name="pay" value="BaridiMob">&#128241; Virement BaridiMob<small>On t'envoie le RIP apres validation</small></label>
 <label class="fx-radio"><input type="radio" name="pay" value="En salle (especes)">&#128181; A la salle<small>En especes lors de ta premiere visite</small></label>
@@ -410,7 +412,8 @@
 var S={};
 window.fxGo=function(n){var all=document.querySelectorAll('.fx-step');for(var i=0;i<all.length;i++)all[i].classList.remove('on');document.getElementById(n==='pay'?'fxspay':(n==='done'?'fxsdone':'fxs'+n)).classList.add('on');};
 window.fxClose=function(){document.getElementById('fxo').classList.remove('open');};
-function openM(pre){document.getElementById('fxo').classList.add('open');if(pre){document.querySelectorAll('input[name=formule]').forEach(function(r){r.checked=r.value.indexOf(pre)===0;r.closest('.fx-radio').classList.toggle('sel',r.checked);});}fxGo(1);}
+window.fxSum=function(){var v=document.querySelector('input[name=formule]:checked').value.split('|');document.getElementById('fx-chosen').innerHTML='Formule choisie : <b>'+v[0]+' - '+parseInt(v[1]).toLocaleString('fr-FR')+' DA</b> &nbsp;·&nbsp; <a href="#" style="color:#c9f24b" onclick="fxGo(1);return false">modifier</a>';};
+function openM(pre){document.getElementById('fxo').classList.add('open');if(pre){document.querySelectorAll('input[name=formule]').forEach(function(r){r.checked=r.value.indexOf(pre)===0;r.closest('.fx-radio').classList.toggle('sel',r.checked);});}fxSum();fxGo(2);}
 document.querySelectorAll('.plan .btn').forEach(function(b){b.addEventListener('click',function(e){e.preventDefault();var h=b.closest('.plan').querySelector('h3').textContent.trim();openM(h);});});
 document.addEventListener('change',function(e){if(e.target.matches('.fx-radio input')){document.querySelectorAll('input[name='+e.target.name+']').forEach(function(r){r.closest('.fx-radio').classList.toggle('sel',r.checked);});}});
 window.fxVal2=function(){var n=document.getElementById('fx-nom').value.trim(),t=document.getElementById('fx-tel').value.trim();if(!n||t.length<8){document.getElementById('fx-err2').style.display='block';return;}document.getElementById('fx-err2').style.display='none';S.nom=n;S.tel=t;S.email=document.getElementById('fx-email').value.trim();fxGo(3);};
