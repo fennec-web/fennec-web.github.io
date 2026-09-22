@@ -525,10 +525,9 @@ function renderAdmin(){
     } else {
       acts += '<button class="abtn neutral xs" title="Remettre en attente" onclick="setSt(\''+o.ref+'\',\'attente\')">↩</button>';
     }
-    acts += '<button class="abtn neutral xs" title="Détails" onclick="openDetail(\''+o.ref+'\')">Détails</button>';
     var dst = detailStatus(o);
-    var detailCell = '<span class="' + (dst.done ? 'detail-ok' : 'detail-warn') + '">' +
-      (dst.done ? '✓ Détaillé' : '⚠ À détailler') + '</span>' + histLineDetail(o);
+    var detailCell = '<button class="abtn ' + (dst.done ? 'ok' : 'neutral') + ' xs" style="width:100%;text-align:center" onclick="openDetail(\''+o.ref+'\')">' +
+      (dst.done ? '✓ Détaillé' : '⚠ À détailler') + '</button>' + histLineDetail(o);
     return '<tr>' +
       '<td><b>'+o.ref+'</b><br><span class="st '+o.st+'">'+ST_LABEL[o.st]+'</span>'+(o.rep?'<div class="mini">📆 '+o.rep+'</div>':'')+'</td>' +
       '<td><b>'+o.date.split('-').reverse().join('/')+'</b><br>'+o.heure+'<div class="mini">'+o.lieu+'</div>'+(o.tel?'<div class="mini">📞 '+o.tel+'</div>':'')+'</td>' +

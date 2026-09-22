@@ -230,7 +230,7 @@
   .filters .fbtn.on{background:var(--ink);color:var(--peach)}
   .filters input[type=date],.filters select{padding:7px 10px;border:1.5px solid var(--line);border-radius:9px;font-family:inherit;font-size:.82rem;background:#fff}
   .tblwrap{overflow-x:auto;background:#fff;border:2px solid var(--ink);border-radius:14px}
-  table.adm{width:100%;border-collapse:collapse;font-size:.82rem;min-width:1080px}
+  table.adm{width:100%;border-collapse:collapse;font-size:.82rem}
   table.adm th{background:var(--ink);color:var(--peach);text-align:left;padding:10px 10px;font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
   table.adm td{padding:9px 10px;border-bottom:1px solid #f0e6d4;vertical-align:top}
   table.adm tr:last-child td{border-bottom:none}
