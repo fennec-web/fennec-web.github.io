@@ -857,7 +857,7 @@ function refreshChip(){
     document.getElementById('userchip').textContent = '👤 ' + USER.etab;
     document.getElementById('userchip').onclick = logout;
     document.getElementById('userchip').title = 'Cliquer pour se déconnecter';
-    if(reg) reg.style.display = 'none';
+    if(reg) reg.style.display = '';
   } else {
     document.getElementById('userchip').textContent = 'Se connecter';
     document.getElementById('userchip').onclick = chipClick;
