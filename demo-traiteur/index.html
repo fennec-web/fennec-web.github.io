@@ -337,7 +337,7 @@
     </nav>
     <div class="right">
       <span class="cart-badge" id="cart-badge" onclick="openCart()" style="display:none">🛒 <span id="cart-count">0</span></span>
-      <span class="chip" style="background:transparent;color:var(--ink);border:1.5px solid var(--ink)" onclick="openOv('ov-auth');authTab('reg')">Créer un compte</span>
+      <span class="chip" style="background:transparent;color:var(--ink);border:1.5px solid var(--ink)" onclick="openOv('ov-auth');authTab('reg')" id="btn-register">Créer un compte</span>
       <span class="chip" id="userchip" onclick="chipClick()">Se connecter</span>
       <span class="adminlink" onclick="goV('admin')">Espace traiteur</span>
     </div>
@@ -638,12 +638,9 @@
     <div class="fld"><label>Heure de livraison *</label><input type="time" id="c-heure" value="12:00"></div>
   </div>
   <div class="fld"><label>Lieu de livraison *</label><input type="text" id="c-lieu" placeholder="Ex : Siège SEAAL, 2 rue…, Kouba"></div>
-  <div class="fld"><label>Position Google Maps <small style="color:var(--muted)">(lien, optionnel)</small></label>
-    <div style="display:flex;gap:8px"><input type="text" id="c-maps" placeholder="https://maps.google.com/…"><button class="btn sm ghost" style="white-space:nowrap" onclick="geoloc()">📍 Ma position</button></div>
-  </div>
-  <div class="fld"><label>Bon de commande (PDF ou scan, optionnel)</label><input type="file" id="c-bc" accept=".pdf,image/*"><div class="note-file" id="c-bcname"></div></div>
-  <div class="fld"><label>Remarques</label><textarea id="c-note" rows="2" placeholder="Allergies, accès au site, contact sur place…"></textarea></div>
-  <div class="err" id="c-err">Veuillez remplir la date, l'heure et le lieu de livraison.</div>
+  <div class="fld"><label>Téléphone contact livraison *</label><input type="tel" id="c-tel" placeholder="05 XX XX XX XX"></div>
+  <div class="fld"><label>Remarques</label><textarea id="c-note" rows="2" placeholder="Allergies, accès au site, étage, contact sur place…"></textarea></div>
+  <div class="err" id="c-err">Veuillez remplir la date, l'heure, le lieu et le téléphone.</div>
   <div style="display:flex;gap:10px">
     <button class="btn ghost" style="flex:1" onclick="closeOv('ov-checkout');openCart()">← Retour au panier</button>
     <button class="btn red" style="flex:1;padding:14px" onclick="submitOrder()">Valider ma commande</button>
@@ -785,13 +782,13 @@ if(!ORDERS){
   ORDERS = [
     {ref:'ERR-1042', client:{nom:'Amel Z.', etab:'Merinal Laboratoires', tel:'0550 11 22 33', email:'a.z@merinal.dz'},
      lignes:[{nom:'Coffret Standard', qty:45, pu:1200}], total:54000, date:'2026-09-24', heure:'12:00',
-     lieu:'Siège Merinal, Zone industrielle Oued Smar', maps:'', bc:'BC-2026-118.pdf', note:'Livraison quai B', st:'confirmee', rep:null, prep:{dessert:'Fruit : orange', boisson:"Jus d'orange", livreur:'Rachid'}},
+     lieu:'Siège Merinal, Zone industrielle Oued Smar', tel:'0550 11 22 33', note:'Livraison quai B', st:'confirmee', rep:null, prep:{dessert:'Fruit : orange', boisson:"Jus d'orange", livreur:'Rachid'}},
     {ref:'ERR-1043', client:{nom:'Karim H.', etab:'Colas Rail — Base vie Hassi Messaoud', tel:'0661 44 55 66', email:'k.h@colasrail.dz'},
      lignes:[{nom:'Coffret Privilège Viande', qty:12, pu:3000},{nom:'Coffret Basique', qty:30, pu:1000}], total:66000, date:'2026-09-26', heure:'11:30',
-     lieu:'Aéroport Alger, fret — départ base vie', maps:'', bc:null, note:'', st:'attente', rep:null, prep:{dessert:'', boisson:'', livreur:''}},
+     lieu:'Aéroport Alger, fret — départ base vie', tel:'0661 44 55 66', note:'', st:'attente', rep:null, prep:{dessert:'', boisson:'', livreur:''}},
     {ref:'ERR-1044', client:{nom:'Amel Z.', etab:'Merinal Laboratoires', tel:'0550 11 22 33', email:'a.z@merinal.dz'},
      lignes:[{nom:'Coffret Basique', qty:45, pu:1000}], total:45000, date:'2026-09-24', heure:'16:30',
-     lieu:'Siège Merinal, Zone industrielle Oued Smar', maps:'', bc:null, note:'Collation d\'après-midi', st:'attente', rep:null, prep:{dessert:'', boisson:'', livreur:''}}
+     lieu:'Siège Merinal, Zone industrielle Oued Smar', tel:'0550 11 22 33', note:'Collation d\'après-midi', st:'attente', rep:null, prep:{dessert:'', boisson:'', livreur:''}}
   ];
   save('err_orders', ORDERS);
 }
@@ -847,13 +844,26 @@ function goPaneA(p){
   if(p==='apay') renderAPay();
 }
 function openOv(id){
+  document.querySelectorAll('.ov.open').forEach(function(o){ o.classList.remove('open'); });
   document.getElementById(id).classList.add('open');
   if(id==='ov-auth'){ authTab('login'); renderLoginList(); }
 }
 function closeOv(id){document.getElementById(id).classList.remove('open');}
 function chipClick(){ if(USER){ goV('client'); } else { openOv('ov-auth'); } }
+function logout(){ USER = null; save('err_user', null); refreshChip(); goV('public'); }
 function refreshChip(){
-  document.getElementById('userchip').textContent = USER ? ('👤 ' + USER.etab) : 'Se connecter';
+  var reg = document.getElementById('btn-register');
+  if(USER){
+    document.getElementById('userchip').textContent = '👤 ' + USER.etab;
+    document.getElementById('userchip').onclick = logout;
+    document.getElementById('userchip').title = 'Cliquer pour se déconnecter';
+    if(reg) reg.style.display = 'none';
+  } else {
+    document.getElementById('userchip').textContent = 'Se connecter';
+    document.getElementById('userchip').onclick = chipClick;
+    document.getElementById('userchip').title = '';
+    if(reg) reg.style.display = '';
+  }
 }
 refreshChip();
 
@@ -1033,6 +1043,7 @@ function confirmCustomize(){
   }
   var qty = parseInt(document.getElementById('cz-qty').value) || 10;
   LINES.push({nom: c.nom, qty: qty, pu: c.prix, comp: parts.join(' · ')});
+  saveLines();
   closeOv('ov-customize');
   updateCartBadge();
   toast('✓ ' + c.nom + ' ajouté au panier (' + qty + ' × ' + fmt(c.prix) + ')');
@@ -1109,6 +1120,7 @@ function renderCart(){
 function changeQty(i, delta){
   LINES[i].qty = Math.max(1, LINES[i].qty + delta);
   renderCart();
+  saveLines();
 }
 function updateCartBadge(){
   var count = LINES.reduce(function(s,l){return s+l.qty;},0);
@@ -1132,6 +1144,7 @@ function quickAdd(i){
     return;
   }
   LINES.push({nom:c.nom, qty:10, pu:c.prix});
+  saveLines();
   updateCartBadge();
   toast('✓ ' + c.nom + ' ajouté au panier (10 × ' + fmt(c.prix) + ')');
 }
@@ -1180,7 +1193,8 @@ function register(){
 }
 
 /* ================== CLIENT : commande ================== */
-var LINES = [];
+var LINES = load('err_lines', []);
+function saveLines(){ save('err_lines', LINES); updateCartBadge(); }
 function renderClient(){
   document.getElementById('cl-hello').textContent = USER ? (USER.nom + ' · ' + USER.etab + ' · ' + USER.tel + ' · ' + USER.email) : '';
   var d = document.getElementById('c-date'); d.min = new Date().toISOString().split('T')[0];
@@ -1227,38 +1241,26 @@ function renderLines(){
   var tot = LINES.reduce(function(s,l){return s+l.qty*l.pu;},0);
   var t2 = document.getElementById('c-total'); if(t2) t2.textContent = fmt(tot);
 }
-function rmLine(i){ LINES.splice(i,1); renderCart(); updateCartBadge(); }
-document.getElementById('c-bc').addEventListener('change', function(e){
-  var f = e.target.files[0];
-  document.getElementById('c-bcname').textContent = f ? ('Joint : ' + f.name + ' (' + Math.round(f.size/1024) + ' Ko)') : '';
-});
-function geoloc(){
-  if(!navigator.geolocation){ alert('Géolocalisation non disponible'); return; }
-  navigator.geolocation.getCurrentPosition(function(p){
-    document.getElementById('c-maps').value = 'https://maps.google.com/?q=' + p.coords.latitude.toFixed(6) + ',' + p.coords.longitude.toFixed(6);
-  }, function(){ alert('Position refusée — collez un lien Maps.'); });
-}
+function rmLine(i){ LINES.splice(i,1); renderCart(); updateCartBadge(); saveLines(); }
 function submitOrder(){
   var date = document.getElementById('c-date').value,
       heure = document.getElementById('c-heure').value,
-      lieu = document.getElementById('c-lieu').value.trim();
-  if(!LINES.length || !date || !heure || !lieu){ document.getElementById('c-err').style.display='block'; return; }
+      lieu = document.getElementById('c-lieu').value.trim(),
+      tel = document.getElementById('c-tel').value.trim();
+  if(!LINES.length || !date || !heure || !lieu || !tel){ document.getElementById('c-err').style.display='block'; return; }
   document.getElementById('c-err').style.display='none';
-  var f = document.getElementById('c-bc').files[0];
   var o = {
     ref: 'ERR-' + Math.floor(1000 + Math.random()*9000),
     client: USER,
     lignes: LINES.slice(),
     total: LINES.reduce(function(s,l){return s + l.qty*l.pu;}, 0),
-    date: date, heure: heure, lieu: lieu,
-    maps: document.getElementById('c-maps').value.trim(),
-    bc: f ? f.name : null,
+    date: date, heure: heure, lieu: lieu, tel: tel,
     note: document.getElementById('c-note').value.trim(),
     st: 'attente', rep: null, prep: {dessert:'', boisson:'', livreur:''}
   };
   ORDERS.unshift(o); save('err_orders', ORDERS);
-  LINES = [];
-  document.getElementById('c-lieu').value=''; document.getElementById('c-note').value=''; document.getElementById('c-maps').value=''; document.getElementById('c-bc').value=''; document.getElementById('c-bcname').textContent='';
+  LINES = []; saveLines();
+  document.getElementById('c-lieu').value=''; document.getElementById('c-note').value=''; document.getElementById('c-tel').value='';
   closeOv('ov-checkout');
   updateCartBadge();
   goV('client'); goPane('mes');
@@ -1268,9 +1270,8 @@ function ordHtml(o, admin){
   var lignes = o.lignes.map(function(l){return l.nom+' × '+l.qty;}).join(' · ');
   var h = '<div class="ord"><div class="top"><span class="ref">'+o.ref+'</span><span class="st '+o.st+'">'+ST_LABEL[o.st]+'</span></div>';
   h += '<div class="det">📅 <b>'+o.date.split('-').reverse().join('/')+' à '+o.heure+'</b> — 📍 '+o.lieu;
-  if(o.maps) h += ' · <a href="'+o.maps+'" target="_blank" rel="noopener">carte</a>';
+  if(o.tel) h += ' · 📞 '+o.tel;
   h += '<br>🍱 '+lignes+' — <b>'+fmt(o.total)+'</b>';
-  if(o.bc) h += '<br>📎 Bon de commande : '+o.bc;
   if(o.note) h += '<br>📝 '+o.note;
   if(o.rep) h += '<br><span style="color:#3949ab;font-weight:600">📆 Nouvelle date proposée : '+o.rep+'</span>';
   if(admin) h += '<br>👤 <b>'+o.client.nom+'</b> — '+o.client.etab+' · '+o.client.tel+' · '+o.client.email;
@@ -1357,7 +1358,7 @@ function renderAdmin(){
     }
     return '<tr>' +
       '<td><b>'+o.ref+'</b><br><span class="st '+o.st+'">'+ST_LABEL[o.st]+'</span>'+(o.rep?'<div class="mini">📆 '+o.rep+'</div>':'')+'</td>' +
-      '<td><b>'+o.date.split('-').reverse().join('/')+'</b><br>'+o.heure+'<div class="mini">'+o.lieu+'</div>'+(o.bc?'<div class="mini">📎 '+o.bc+'</div>':'')+'</td>' +
+      '<td><b>'+o.date.split('-').reverse().join('/')+'</b><br>'+o.heure+'<div class="mini">'+o.lieu+'</div>'+(o.tel?'<div class="mini">📞 '+o.tel+'</div>':'')+'</td>' +
       '<td class="cl"><b>'+o.client.nom+'</b><small>'+o.client.etab+'<br>'+o.client.tel+'</small></td>' +
       '<td>'+lignes+'<div class="mini">'+fmt(o.total)+' HT</div></td>' +
       '<td>'+selHtml(o.ref,'dessert',DESSERTS,o.prep.dessert)+histLine(o,'dessert')+'</td>' +
