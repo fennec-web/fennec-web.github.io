@@ -52,6 +52,9 @@
   .hd nav a:hover{opacity:1}
   .hd .right{display:flex;gap:10px;align-items:center}
   .chip{background:var(--ink);color:var(--peach);border-radius:999px;padding:7px 15px;font-size:.8rem;font-weight:700;cursor:pointer}
+  .cart-badge{background:var(--red);color:#fff;border-radius:999px;padding:7px 14px;font-size:.82rem;font-weight:700;cursor:pointer;white-space:nowrap}
+  .qty-btn{width:30px;height:30px;border:1.5px solid var(--line);border-radius:8px;background:#fff;font-size:1rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-family:inherit}
+  .qty-btn:hover{border-color:var(--ink)}
   .adminlink{font-size:.75rem;color:var(--muted);text-decoration:underline;cursor:pointer;white-space:nowrap}
 
   .view{display:none}
@@ -132,6 +135,12 @@
   .tab.on{background:var(--ink);color:var(--peach)}
   .pane{display:none}
   .pane.on{display:block}
+  .demo-acct{display:flex;gap:10px;align-items:center;background:linear-gradient(160deg,var(--peach),#fff 75%);border:1.5px solid var(--line);border-radius:12px;padding:12px 16px;margin-bottom:10px;cursor:pointer;font-size:.88rem}
+  .demo-acct:hover{border-color:var(--ink)}
+  .demo-acct b{display:block;font-size:.92rem}
+  .demo-acct span{color:var(--muted);font-size:.8rem}
+  /* ===== SELECTEUR VISUEL COFFRETS (modales panier / livraison) ===== */
+  #ov-cart .md,#ov-checkout .md{max-width:640px}
 
   .fld{margin-bottom:13px}
   .fld label{display:block;font-size:.8rem;font-weight:700;margin-bottom:5px}
@@ -182,6 +191,22 @@
   .md ul.compo{list-style:none;margin-bottom:18px}
   .md ul.compo li{padding:8px 0 8px 22px;position:relative;border-bottom:1px dashed var(--line);font-size:.9rem}
   .md ul.compo li::before{content:"◆";position:absolute;left:0;color:var(--red);font-size:.65rem;top:11px}
+
+  /* ===== MODALE PERSONNALISATION ===== */
+  .cz-sec{margin-bottom:18px}
+  .cz-sec>label{display:block;font-size:.82rem;font-weight:700;margin-bottom:8px;color:var(--ink);text-transform:uppercase;letter-spacing:.06em}
+  .cz-radio{display:flex;gap:8px;flex-wrap:wrap}
+  .cz-radio label{display:flex;align-items:center;gap:6px;padding:8px 14px;border:1.5px solid var(--line);border-radius:999px;font-size:.84rem;font-weight:600;cursor:pointer;transition:border-color .15s}
+  .cz-radio label:has(input:checked){border-color:var(--red);background:rgba(206,17,38,.06)}
+  .cz-radio input{accent-color:var(--red)}
+  .cz-chips{display:flex;flex-wrap:wrap;gap:8px}
+  .cz-chip{display:inline-flex;align-items:center;gap:4px;padding:7px 14px;border:1.5px solid var(--line);border-radius:999px;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .15s;user-select:none}
+  .cz-chip.on{border-color:var(--red);background:rgba(206,17,38,.08);color:var(--red)}
+  .cz-chip.off{opacity:.45;cursor:not-allowed}
+  .cz-chip input{display:none}
+  .cz-max{font-size:.78rem;color:var(--muted);margin-top:6px}
+  .cz-line{font-size:.86rem;color:var(--muted);padding:6px 0;border-bottom:1px dashed var(--line);margin-bottom:2px}
+  .ln .comp{font-size:.78rem;color:var(--muted);display:block;margin-top:2px;line-height:1.4}
 
   /* ===== FACTURE ===== */
   .inv{background:#fff;max-width:640px;width:100%;border-radius:14px;padding:34px 36px;position:relative;max-height:92vh;overflow-y:auto}
@@ -311,6 +336,7 @@
       <a onclick="goV('public');setTimeout(()=>document.getElementById('contact').scrollIntoView(),50)">Contact</a>
     </nav>
     <div class="right">
+      <span class="cart-badge" id="cart-badge" onclick="openCart()" style="display:none">🛒 <span id="cart-count">0</span></span>
       <span class="chip" id="userchip" onclick="chipClick()">Se connecter</span>
       <span class="adminlink" onclick="goV('admin')">Espace traiteur</span>
     </div>
@@ -328,8 +354,8 @@
       <h1>Le traiteur des <span class="k">entreprises</span> qui ont bon goût</h1>
       <p>Coffrets repas, pauses café, déjeuners d'affaires, buffets, méchoui et bases de vie. Près de deux décennies de cuisine exigeante, livrée chez vous, à l'heure.</p>
       <div class="cta">
-        <button class="btn" onclick="startOrder()">Commander un coffret</button>
-        <button class="btn ghost" onclick="document.getElementById('coffrets').scrollIntoView()">Voir les coffrets</button>
+        <button class="btn" onclick="document.getElementById('cofs').scrollIntoView({behavior:'smooth'})">Voir nos coffrets</button>
+        <button class="btn ghost" onclick="document.getElementById('pauses').scrollIntoView({behavior:'smooth'})">Nos pauses café</button>
       </div>
       <div class="since">Depuis 2004 · Kouba, Alger · Restaurant devenu traiteur en 2012</div>
     </div>
@@ -412,43 +438,14 @@
   <div class="space-head"><div class="wrap"><h2>Espace client</h2><p id="cl-hello"></p><div id="cl-bal"></div></div></div>
   <div class="wrap" style="padding-bottom:70px">
     <div class="tabs">
-      <button class="tab on" data-pane="cmd" onclick="goPane('cmd')">🛒 Passer commande</button>
-      <button class="tab" data-pane="mes" onclick="goPane('mes')">📋 Mes commandes</button>
+      <button class="tab on" data-pane="mes" onclick="goPane('mes')">📋 Mes commandes</button>
       <button class="tab" data-pane="pay" onclick="goPane('pay')">💳 Paiements</button>
       <button class="tab" data-pane="fb" onclick="goPane('fb')">💬 Message au traiteur</button>
     </div>
-
-    <!-- Commander -->
-    <div class="pane on" id="p-cmd">
-      <div class="panel" style="margin-bottom:18px">
-        <h3>1 · Votre commande</h3>
-        <div class="grid3">
-          <div class="fld"><label>Coffret</label><select id="c-cof"></select></div>
-          <div class="fld"><label>Quantité</label><input type="number" id="c-qty" min="1" value="10"></div>
-          <button class="btn sm" style="margin-bottom:13px" onclick="addLine()">+ Ajouter</button>
-        </div>
-        <div class="lines" id="c-lines"><div style="color:var(--muted);font-size:.86rem">Aucune ligne pour l'instant : choisissez un coffret et une quantité.</div></div>
-        <div class="tot"><span>Total</span><span id="c-total">0 DA</span></div>
-      </div>
-      <div class="panel" style="margin-bottom:18px">
-        <h3>2 · Livraison</h3>
-        <div class="grid2">
-          <div class="fld"><label>Date de livraison *</label><input type="date" id="c-date"></div>
-          <div class="fld"><label>Heure de livraison *</label><input type="time" id="c-heure" value="12:00"></div>
-        </div>
-        <div class="fld"><label>Lieu de livraison *</label><input type="text" id="c-lieu" placeholder="Ex : Siège SEAAL, 2 rue…, Kouba"></div>
-        <div class="fld"><label>Position Google Maps <small style="color:var(--muted)">(lien, optionnel)</small></label>
-          <div style="display:flex;gap:8px"><input type="text" id="c-maps" placeholder="https://maps.google.com/…"><button class="btn sm ghost" style="white-space:nowrap" onclick="geoloc()">📍 Ma position</button></div>
-        </div>
-        <div class="fld"><label>Bon de commande (PDF ou scan, optionnel)</label><input type="file" id="c-bc" accept=".pdf,image/*"><div class="note-file" id="c-bcname"></div></div>
-        <div class="fld"><label>Remarques</label><textarea id="c-note" rows="2" placeholder="Allergies, accès au site, contact sur place…"></textarea></div>
-      </div>
-      <div class="err" id="c-err">Ajoutez au moins une ligne et remplissez date, heure et lieu de livraison.</div>
-      <button class="btn red" style="width:100%;padding:16px" onclick="submitOrder()">Valider ma commande</button>
-    </div>
+    <div style="margin-bottom:16px"><button class="btn red" style="width:100%" onclick="goV('public');setTimeout(function(){document.getElementById('cofs').scrollIntoView({behavior:'smooth'})},100)">🛒 Passer une nouvelle commande</button></div>
 
     <!-- Mes commandes -->
-    <div class="pane" id="p-mes"><div id="mes-list"></div></div>
+    <div class="pane on" id="p-mes"><div id="mes-list"></div></div>
 
     <!-- Paiements client -->
     <div class="pane" id="p-pay">
@@ -592,16 +589,65 @@
 <div class="ov" id="ov-auth"><div class="md">
   <button class="x" onclick="closeOv('ov-auth')">✕</button>
   <h3>Espace client</h3>
-  <div class="s">Créez votre compte établissement pour commander (démo : aucune donnée n'est envoyée).</div>
-  <div class="grid2">
-    <div class="fld"><label>Nom et prénom *</label><input type="text" id="a-nom" placeholder="Ex : Karim Benali"></div>
-    <div class="fld"><label>Téléphone *</label><input type="tel" id="a-tel" placeholder="05 XX XX XX XX"></div>
+  <div class="tabs" style="margin-bottom:16px">
+    <span class="tab on" id="tab-login" onclick="authTab('login')">Se connecter</span>
+    <span class="tab" id="tab-reg" onclick="authTab('reg')">Créer un compte</span>
   </div>
-  <div class="fld"><label>Établissement / entreprise *</label><input type="text" id="a-etab" placeholder="Ex : SEAAL — Direction Kouba"></div>
-  <div class="fld"><label>Email *</label><input type="email" id="a-email" placeholder="vous@entreprise.dz"></div>
-  <div class="fld"><label>Mot de passe</label><input type="password" id="a-mdp" placeholder="••••••••"></div>
-  <div class="err" id="a-err">Merci de remplir nom, téléphone, établissement et email.</div>
-  <button class="btn red" style="width:100%" onclick="register()">Créer mon compte & continuer</button>
+  <!-- CONNEXION : comptes déjà connus -->
+  <div class="pane on" id="a-login">
+    <div class="s">Retrouvez votre compte établissement (démo : un clic suffit, sans mot de passe).</div>
+    <div id="login-list"></div>
+    <div class="err" id="l-err">Ce compte n'existe pas encore : créez-le dans l'onglet « Créer un compte ».</div>
+    <div class="fld"><label>Email professionnel</label><input type="email" id="l-email" placeholder="vous@entreprise.dz"></div>
+    <button class="btn red" style="width:100%" onclick="login()">Se connecter</button>
+  </div>
+  <!-- INSCRIPTION : nouveau compte -->
+  <div class="pane" id="a-reg">
+    <div class="s">Créez votre compte établissement pour commander (démo : aucune donnée n'est envoyée).</div>
+    <div class="grid2">
+      <div class="fld"><label>Nom et prénom *</label><input type="text" id="a-nom" placeholder="Ex : Karim Benali"></div>
+      <div class="fld"><label>Téléphone *</label><input type="tel" id="a-tel" placeholder="05 XX XX XX XX"></div>
+    </div>
+    <div class="fld"><label>Établissement / entreprise *</label><input type="text" id="a-etab" placeholder="Ex : SEAAL — Direction Kouba"></div>
+    <div class="fld"><label>Email *</label><input type="email" id="a-email" placeholder="vous@entreprise.dz"></div>
+    <div class="fld"><label>Mot de passe</label><input type="password" id="a-mdp" placeholder="••••••••"></div>
+    <div class="err" id="a-err">Merci de remplir nom, téléphone, établissement et email.</div>
+    <button class="btn red" style="width:100%" onclick="register()">Créer mon compte & continuer</button>
+  </div>
+</div></div>
+
+<!-- ===== MODALE PANIER ===== -->
+<div class="ov" id="ov-cart"><div class="md">
+  <button class="x" onclick="closeOv('ov-cart')">✕</button>
+  <h3>Mon panier</h3>
+  <div class="lines" id="cart-lines"></div>
+  <div class="tot"><span>Total</span><span id="cart-total">0 DA</span></div>
+  <div style="display:flex;gap:10px;margin-top:14px">
+    <button class="btn ghost" style="flex:1" onclick="closeOv('ov-cart');document.getElementById('cofs').scrollIntoView({behavior:'smooth'})">Continuer mes achats</button>
+    <button class="btn red" style="flex:1;padding:14px" onclick="openCheckout()">Passer à la livraison</button>
+  </div>
+</div></div>
+
+<!-- ===== MODALE LIVRAISON ===== -->
+<div class="ov" id="ov-checkout"><div class="md">
+  <button class="x" onclick="closeOv('ov-checkout')">✕</button>
+  <h3>Informations de livraison</h3>
+  <div class="s">Remplissez les détails pour finaliser votre commande.</div>
+  <div class="grid2" style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+    <div class="fld"><label>Date de livraison *</label><input type="date" id="c-date"></div>
+    <div class="fld"><label>Heure de livraison *</label><input type="time" id="c-heure" value="12:00"></div>
+  </div>
+  <div class="fld"><label>Lieu de livraison *</label><input type="text" id="c-lieu" placeholder="Ex : Siège SEAAL, 2 rue…, Kouba"></div>
+  <div class="fld"><label>Position Google Maps <small style="color:var(--muted)">(lien, optionnel)</small></label>
+    <div style="display:flex;gap:8px"><input type="text" id="c-maps" placeholder="https://maps.google.com/…"><button class="btn sm ghost" style="white-space:nowrap" onclick="geoloc()">📍 Ma position</button></div>
+  </div>
+  <div class="fld"><label>Bon de commande (PDF ou scan, optionnel)</label><input type="file" id="c-bc" accept=".pdf,image/*"><div class="note-file" id="c-bcname"></div></div>
+  <div class="fld"><label>Remarques</label><textarea id="c-note" rows="2" placeholder="Allergies, accès au site, contact sur place…"></textarea></div>
+  <div class="err" id="c-err">Veuillez remplir la date, l'heure et le lieu de livraison.</div>
+  <div style="display:flex;gap:10px">
+    <button class="btn ghost" style="flex:1" onclick="closeOv('ov-checkout');openCart()">← Retour au panier</button>
+    <button class="btn red" style="flex:1;padding:14px" onclick="submitOrder()">Valider ma commande</button>
+  </div>
 </div></div>
 
 <!-- ===== MODALE AUTRE DATE (admin) ===== -->
@@ -656,23 +702,64 @@
   </div>
 </div></div>
 
+<!-- ===== MODALE PERSONNALISATION COFFRET ===== -->
+<div class="ov" id="ov-customize"><div class="md">
+  <button class="x" onclick="closeOv('ov-customize')">✕</button>
+  <h3 id="cz-title"></h3>
+  <div class="s" id="cz-sub"></div>
+  <div id="cz-body"></div>
+  <div class="fld" style="margin-top:14px"><label>Quantité</label><input type="number" id="cz-qty" min="1" value="10" style="width:120px"></div>
+  <div class="err" id="cz-err">Veuillez compléter toutes les options.</div>
+  <button class="btn red" style="width:100%;padding:16px;margin-top:10px" id="cz-btn" onclick="confirmCustomize()">Ajouter au panier</button>
+</div></div>
+
 <script>
 /* ================== DONNEES ================== */
+var GARNITURES = ['Riz', 'Pommes de terre', 'Salade verte', 'Pâtes', 'Légumes sautés', 'Boulgour', 'Haricots verts', 'Semoule'];
+var ENTREES_FROIDES = ['Salade variée', 'Crudités de saison', 'Œufs durs mayonnaise'];
+var ENTREES_CHAUDES = ['Potage de légumes', 'Crème de volaille', 'Soufflé', 'Mini pizza'];
+var ENTREES_FROIDES_IMP = ['Salade de poulpe', 'Salade de thon', 'Blanc de seiche'];
+var ENTREES_CHAUDES_IMP = ['Gratin au poulet', 'Brick tunisien', 'Boureks à la viande hachée'];
+var ENTREES_CHAUDES_POISSON = ['Gratin aux fruits de mer', 'Brick au thon', 'Boureks aux crevettes'];
+var VIANDES_BLANCHES = ['Cuisse de poulet rôtie', 'Escalope de dinde grillée'];
+var VIANDES_ROUGES = ['Boulettes hachées à l\'italienne', 'Méchoui d\'agneau', 'Filet de veau grillé', 'Brochettes royales'];
+var POISSONS = ['Daurade au four', 'Merlan en friture', 'Espadon grillé', 'Brochettes de thon'];
 var DEFAULT_COFFRETS = [
   {id:'lunch', nom:'Le Lunch Bag', prix:null, img:'c-collation.jpg', d:"Le sac repas pratique : sandwich céréales, fruit et boisson.",
    compo:["Sandwich pain aux céréales, viande froide, laitue, fromage, sauce","Fruit","Soda ou jus en bouteille + eau minérale","Serviette, lingette rince-doigt","Cure-dent, dosettes sel & poivre noir"]},
   {id:'basique', nom:'Coffret Basique', prix:1000, img:'c-standard.jpg', d:"Entrée + plat de résistance (2 garnitures) + dessert.",
-   compo:["Entrée froide ou chaude : salade variée, crudités, œufs mayonnaise, potage, mini pizza…","Plat de résistance : viande blanche ou rouge + 2 garnitures","Fruit de saison ou yaourt","Pain + couverts complets + serviette","Soda ou jus + eau minérale","Lingette, cure-dent, sel & poivre"]},
+   compo:["Entrée froide ou chaude : salade variée, crudités, œufs mayonnaise, potage, mini pizza…","Plat de résistance : viande blanche ou rouge + 2 garnitures","Fruit de saison ou yaourt","Pain + couverts complets + serviette","Soda ou jus + eau minérale","Lingette, cure-dent, sel & poivre"],
+   choices:{entryType:'choice', entryFroides:ENTREES_FROIDES, entryChaudes:ENTREES_CHAUDES,
+    meatType:'choice', viandesBlanches:VIANDES_BLANCHES, viandesRouges:VIANDES_ROUGES,
+    garnitures:GARNITURES, maxGarnitures:2}},
   {id:'standard', nom:'Coffret Standard', prix:1200, img:'c-confort.jpg', d:"Comme le Basique, avec plat à 3 garnitures.", flag:"Le plus commandé",
-   compo:["Entrée froide ou chaude au choix","Plat de résistance : viande blanche ou rouge + 3 garnitures","Fruit de saison ou yaourt","Pain + couverts complets + serviette","Soda ou jus + eau minérale","Lingette, cure-dent, sel & poivre"]},
+   compo:["Entrée froide ou chaude au choix","Plat de résistance : viande blanche ou rouge + 3 garnitures","Fruit de saison ou yaourt","Pain + couverts complets + serviette","Soda ou jus + eau minérale","Lingette, cure-dent, sel & poivre"],
+   choices:{entryType:'choice', entryFroides:ENTREES_FROIDES, entryChaudes:ENTREES_CHAUDES,
+    meatType:'choice', viandesBlanches:VIANDES_BLANCHES, viandesRouges:VIANDES_ROUGES,
+    garnitures:GARNITURES, maxGarnitures:3}},
   {id:'premium', nom:'Coffret Premium', prix:2000, img:'c-prestige.jpg', d:"Deux entrées (froide + chaude) et fruit ou pâtisserie.",
-   compo:["Entrée froide : salade variée, crudités de saison…","Entrée chaude : potage, crème de volaille, soufflé, mini pizza…","Plat de résistance + 3 garnitures","Fruit de saison ou pâtisserie","Pain + couverts + serviette","Soda ou jus + eau minérale + accessoires"]},
+   compo:["Entrée froide : salade variée, crudités de saison…","Entrée chaude : potage, crème de volaille, soufflé, mini pizza…","Plat de résistance + 3 garnitures","Fruit de saison ou pâtisserie","Pain + couverts + serviette","Soda ou jus + eau minérale + accessoires"],
+   choices:{entryFroides:ENTREES_FROIDES, entryChaudes:ENTREES_CHAUDES,
+    meatType:'choice', viandesBlanches:VIANDES_BLANCHES, viandesRouges:VIANDES_ROUGES,
+    garnitures:GARNITURES, maxGarnitures:3,
+    dessert:['Fruit de saison', 'Pâtisserie']}},
   {id:'excellence', nom:'Coffret Excellence', prix:null, img:'hero-buffet.jpg', d:"Entrées améliorées : gratin au poulet, brick tunisien, boureks…",
-   compo:["Entrée froide améliorée","Entrée chaude améliorée : gratin au poulet, brick tunisien, boureks à la viande hachée…","Plat de résistance + 3 garnitures","Fruit ou pâtisserie","Soda ou jus + eau minérale + accessoires complets"]},
+   compo:["Entrée froide améliorée","Entrée chaude améliorée : gratin au poulet, brick tunisien, boureks à la viande hachée…","Plat de résistance + 3 garnitures","Fruit ou pâtisserie","Soda ou jus + eau minérale + accessoires complets"],
+   choices:{entryFroides:ENTREES_FROIDES_IMP, entryChaudes:ENTREES_CHAUDES_IMP,
+    garnitures:GARNITURES, maxGarnitures:3,
+    dessert:['Fruit de saison', 'Pâtisserie']}},
   {id:'privv', nom:'Coffret Privilège Viande', prix:3000, img:'c-vip.jpg', d:"Le VIP : méchoui d'agneau, filet de veau grillé, brochettes royales…", flag:"VIP",
-   compo:["Entrée froide améliorée + entrée chaude améliorée","Plat amélioré : méchoui d'agneau, filet de veau grillé, brochettes royales… + 3 garnitures","Fruit de saison ou pâtisserie","Pain + couverts + serviette","Soda ou jus + eau minérale + accessoires"]},
+   compo:["Entrée froide améliorée + entrée chaude améliorée","Plat amélioré : méchoui d'agneau, filet de veau grillé, brochettes royales… + 3 garnitures","Fruit de saison ou pâtisserie","Pain + couverts + serviette","Soda ou jus + eau minérale + accessoires"],
+   choices:{entryFroides:ENTREES_FROIDES_IMP, entryChaudes:ENTREES_CHAUDES_IMP,
+    meatType:'fixed_rouge', viandesRouges:['Méchoui d\'agneau', 'Filet de veau grillé', 'Brochettes royales'],
+    garnitures:GARNITURES, maxGarnitures:3,
+    dessert:['Fruit de saison', 'Pâtisserie']}},
   {id:'privp', nom:'Coffret Privilège Poisson', prix:3500, img:'c-poisson.jpg', d:"Le VIP mer : daurade au four, espadon grillé, brochettes de thon…", flag:"VIP",
-   compo:["Entrée froide améliorée : salade de poulpe, salade de thon, blanc de seiche…","Entrée chaude : gratin de fruits de mer, brick au thon, boureks aux crevettes…","Plat au poisson : daurade au four, merlan, espadon grillé, brochettes de thon… + 3 garnitures","Fruit ou pâtisserie","Soda ou jus + eau minérale + accessoires"]}
+   compo:["Entrée froide améliorée : salade de poulpe, salade de thon, blanc de seiche…","Entrée chaude : gratin de fruits de mer, brick au thon, boureks aux crevettes…","Plat au poisson : daurade au four, merlan, espadon grillé, brochettes de thon… + 3 garnitures","Fruit ou pâtisserie","Soda ou jus + eau minérale + accessoires"],
+   choices:{entryFroides:ENTREES_FROIDES_IMP, entryChaudes:ENTREES_CHAUDES_POISSON,
+    meatType:'fixed_poisson', viandesRouges:POISSONS,
+    garnitures:GARNITURES, maxGarnitures:3,
+    dessert:['Fruit de saison', 'Pâtisserie']}}
 ];
 var TVA = 0.19;
 function esc(t){return String(t).replace(/</g,'&lt;');}
@@ -684,6 +771,12 @@ var USER = load('err_user', null);
 var ORDERS = load('err_orders', null);
 var FBS = load('err_fbs', null);
 var COFFRETS = load('err_cofs', null) || DEFAULT_COFFRETS;
+/* Migration : ajoute les `choices` aux coffrets déjà cachés en localStorage (anciennes visites).
+   Les prix/noms modifiés par le traiteur sont conservés — seuls les choix manquants sont complétés. */
+COFFRETS.forEach(function(c){
+  var d = DEFAULT_COFFRETS.filter(function(x){return x.id===c.id;})[0];
+  if(d && d.choices && !c.choices) c.choices = d.choices;
+});
 save('err_cofs', COFFRETS);
 var LIVREURS = load('err_livreurs', null) || ['Rachid', 'Sofiane', 'Mounir'];
 var DESSERTS = load('err_desserts', null) || ['Fruit : pomme', 'Fruit : orange', 'Fruit : banane', 'Yaourt', 'Pâtisserie du jour'];
@@ -753,7 +846,10 @@ function goPaneA(p){
   document.getElementById('p-'+p).classList.add('on');
   if(p==='apay') renderAPay();
 }
-function openOv(id){document.getElementById(id).classList.add('open');}
+function openOv(id){
+  document.getElementById(id).classList.add('open');
+  if(id==='ov-auth'){ authTab('login'); renderLoginList(); }
+}
 function closeOv(id){document.getElementById(id).classList.remove('open');}
 function chipClick(){ if(USER){ goV('client'); } else { openOv('ov-auth'); } }
 function refreshChip(){
@@ -763,8 +859,8 @@ refreshChip();
 
 /* ================== COFFRETS (public) ================== */
 function renderCofs(){
-  var el = document.getElementById('cofs'), sel = document.getElementById('c-cof');
-  el.innerHTML = ''; sel.innerHTML = '';
+  var el = document.getElementById('cofs');
+  el.innerHTML = '';
   COFFRETS.forEach(function(c, i){
     var d = document.createElement('div');
     d.className = 'cof';
@@ -772,38 +868,306 @@ function renderCofs(){
       '<div class="dia"><img src="'+cofImg(c)+'" alt=""></div><h3>'+esc(c.nom)+'</h3>' +
       '<div class="px">'+(c.prix?fmt(c.prix):'Sur demande')+(c.prix?' <small>/ coffret</small>':'')+'</div>' +
       '<p>'+c.d+'</p>' +
-      '<div class="acts"><button class="btn sm ghost" onclick="openCompo('+i+')">Composition</button><button class="btn sm red" onclick="orderCof('+i+')">Commander</button></div>';
+      '<div class="acts"><button class="btn sm ghost" onclick="openCompo('+i+')">Composition</button>' +
+      (c.prix
+        ? '<button class="btn sm red" onclick="orderCof('+i+')">Commander</button>'
+        : '<a class="btn sm red" href="https://wa.me/213770371909?text=' + encodeURIComponent('Bonjour Erriane Foods, je souhaite un devis pour : ' + c.nom + '.') + '" target="_blank" rel="noopener">Demander un devis</a>') +
+      '</div>';
     el.appendChild(d);
-    if(c.prix){
-      var o = document.createElement('option');
-      o.value = i; o.textContent = c.nom + ' — ' + fmt(c.prix);
-      sel.appendChild(o);
-    }
   });
 }
 renderCofs();
+/* ================== PERSONNALISATION ================== */
+var CZ_I = null; // index du coffret en cours de personnalisation
+function openCustomize(i){
+  var c = COFFRETS[i];
+  CZ_I = i;
+  document.getElementById('cz-title').textContent = c.nom + ' — ' + (c.prix ? fmt(c.prix) : 'Sur demande');
+  document.getElementById('cz-sub').textContent = 'Personnalisez votre coffret avant de l\'ajouter au panier.';
+  var body = document.getElementById('cz-body');
+  var html = '';
+  var ch = c.choices;
+  if(!ch){ // pas de choix = ajout direct
+    closeOv('ov-customize');
+    quickAdd(i);
+    return;
+  }
+  // Entrée : froide/chaude au choix (basique, standard)
+  if(ch.entryType === 'choice'){
+    html += '<div class="cz-sec"><label>Entrée</label><div class="cz-radio">';
+    html += '<label><input type="radio" name="cz-entry" value="froide" checked> Froide</label>';
+    html += '<label><input type="radio" name="cz-entry" value="chaude"> Chaude</label>';
+    html += '</div></div>';
+    html += '<div class="cz-sec" id="cz-entry-list"><label>Choisissez votre entrée</label><div class="cz-radio" id="cz-entry-opts"></div></div>';
+  } else if(ch.entryFroides && ch.entryChaudes){
+    // Premium et au-dessus : les deux entrées
+    html += '<div class="cz-sec"><label>Entrée froide</label><div class="cz-radio" id="cz-ef-opts"></div></div>';
+    html += '<div class="cz-sec"><label>Entrée chaude</label><div class="cz-radio" id="cz-ec-opts"></div></div>';
+  }
+  // Viande
+  if(ch.meatType === 'choice'){
+    html += '<div class="cz-sec"><label>Viande</label><div class="cz-radio">';
+    html += '<label><input type="radio" name="cz-meat" value="blanche" checked> Blanche</label>';
+    html += '<label><input type="radio" name="cz-meat" value="rouge"> Rouge</label>';
+    html += '</div></div>';
+    html += '<div class="cz-sec" id="cz-meat-list"><label>Choisissez votre plat</label><div class="cz-radio" id="cz-meat-opts"></div></div>';
+  } else if(ch.meatType === 'fixed_rouge' || ch.meatType === 'fixed_poisson'){
+    var label = ch.meatType === 'fixed_poisson' ? 'Poisson' : 'Viande';
+    html += '<div class="cz-sec"><label>' + label + '</label><div class="cz-radio" id="cz-meat-opts"></div></div>';
+  }
+  // Garnitures
+  if(ch.garnitures){
+    html += '<div class="cz-sec"><label>' + ch.maxGarnitures + ' garniture' + (ch.maxGarnitures > 1 ? 's' : '') + ' parmi :</label>';
+    html += '<div class="cz-chips" id="cz-garn"></div>';
+    html += '<div class="cz-max" id="cz-garn-msg">0 / ' + ch.maxGarnitures + ' sélectionnée' + (ch.maxGarnitures > 1 ? 's' : '') + '</div></div>';
+  }
+  // Dessert
+  if(ch.dessert){
+    html += '<div class="cz-sec"><label>Dessert</label><div class="cz-radio" id="cz-dessert-opts"></div></div>';
+  }
+  body.innerHTML = html;
+  // Remplir les options
+  if(ch.entryType === 'choice'){
+    fillRadioGroup('cz-entry-opts', ch.entryFroides, 'cz-entry-item');
+    updateEntryList();
+    document.querySelectorAll('input[name="cz-entry"]').forEach(function(r){ r.addEventListener('change', updateEntryList); });
+  } else if(ch.entryFroides && ch.entryChaudes){
+    fillRadioGroup('cz-ef-opts', ch.entryFroides, 'cz-ef-item');
+    fillRadioGroup('cz-ec-opts', ch.entryChaudes, 'cz-ec-item');
+  }
+  if(ch.meatType === 'choice'){
+    fillRadioGroup('cz-meat-opts', ch.viandesBlanches, 'cz-meat-item');
+    updateMeatList();
+    document.querySelectorAll('input[name="cz-meat"]').forEach(function(r){ r.addEventListener('change', updateMeatList); });
+  } else if(ch.viandesRouges){
+    fillRadioGroup('cz-meat-opts', ch.viandesRouges, 'cz-meat-item');
+  }
+  if(ch.garnitures) fillChips('cz-garn', ch.garnitures, ch.maxGarnitures);
+  if(ch.dessert) fillRadioGroup('cz-dessert-opts', ch.dessert, 'cz-dessert-item');
+  document.getElementById('cz-err').style.display = 'none';
+  openOv('ov-customize');
+}
+function fillRadioGroup(id, items, name){
+  var el = document.getElementById(id);
+  if(!el) return;
+  el.innerHTML = items.map(function(item, idx){
+    return '<label><input type="radio" name="' + name + '" value="' + item + '"' + (idx === 0 ? ' checked' : '') + '> ' + item + '</label>';
+  }).join('');
+}
+function fillChips(id, items, max){
+  var el = document.getElementById(id);
+  el.innerHTML = items.map(function(item){
+    return '<label class="cz-chip" onclick="toggleChip(this,' + max + ')"><input type="checkbox" value="' + item + '"> ' + item + '</label>';
+  }).join('');
+}
+function toggleChip(el, max){
+  var box = el.querySelector('input');
+  if(box.checked){ box.checked = false; el.classList.remove('on'); }
+  else {
+    var chips = el.parentElement.querySelectorAll('.cz-chip input:checked');
+    if(chips.length >= max) return;
+    box.checked = true; el.classList.add('on');
+  }
+  var total = el.parentElement.querySelectorAll('.cz-chip input:checked').length;
+  var msg = el.parentElement.parentElement.querySelector('.cz-max');
+  if(msg) msg.textContent = total + ' / ' + max + ' sélectionnée' + (max > 1 ? 's' : '');
+}
+function updateEntryList(){
+  var v = document.querySelector('input[name="cz-entry"]:checked');
+  var ch = COFFRETS[CZ_I].choices;
+  if(!v || !ch) return;
+  var items = v.value === 'froide' ? ch.entryFroides : ch.entryChaudes;
+  fillRadioGroup('cz-entry-opts', items, 'cz-entry-item');
+}
+function updateMeatList(){
+  var v = document.querySelector('input[name="cz-meat"]:checked');
+  var ch = COFFRETS[CZ_I].choices;
+  if(!v || !ch) return;
+  var items = v.value === 'blanche' ? ch.viandesBlanches : ch.viandesRouges;
+  fillRadioGroup('cz-meat-opts', items, 'cz-meat-item');
+}
+function getRadioVal(name){
+  var r = document.querySelector('input[name="' + name + '"]:checked');
+  return r ? r.value : '';
+}
+function confirmCustomize(){
+  var c = COFFRETS[CZ_I];
+  var ch = c.choices;
+  var parts = [];
+  // Entrée
+  if(ch.entryType === 'choice'){
+    var entryType = getRadioVal('cz-entry');
+    var entryItem = getRadioVal('cz-entry-item');
+    if(!entryItem){ document.getElementById('cz-err').style.display='block'; return; }
+    parts.push((entryType === 'froide' ? 'Entrée froide' : 'Entrée chaude') + ' : ' + entryItem);
+  } else if(ch.entryFroides && ch.entryChaudes){
+    var ef = getRadioVal('cz-ef-item');
+    var ec = getRadioVal('cz-ec-item');
+    if(!ef || !ec){ document.getElementById('cz-err').style.display='block'; return; }
+    parts.push('Entrée froide : ' + ef);
+    parts.push('Entrée chaude : ' + ec);
+  }
+  // Viande
+  if(ch.meatType === 'choice'){
+    var meatType = getRadioVal('cz-meat');
+    var meatItem = getRadioVal('cz-meat-item');
+    if(!meatItem){ document.getElementById('cz-err').style.display='block'; return; }
+    parts.push(meatItem);
+  } else if(ch.viandesRouges){
+    var meatItem = getRadioVal('cz-meat-item');
+    if(!meatItem){ document.getElementById('cz-err').style.display='block'; return; }
+    parts.push(meatItem);
+  }
+  // Garnitures
+  if(ch.garnitures){
+    var garns = [];
+    document.querySelectorAll('#cz-garn .cz-chip input:checked').forEach(function(cb){ garns.push(cb.value); });
+    if(garns.length < 1){ document.getElementById('cz-err').style.display='block'; return; }
+    parts.push(garns.join(', '));
+  }
+  // Dessert
+  if(ch.dessert){
+    var dess = getRadioVal('cz-dessert-item');
+    if(!dess){ document.getElementById('cz-err').style.display='block'; return; }
+    parts.push(dess);
+  }
+  var qty = parseInt(document.getElementById('cz-qty').value) || 10;
+  LINES.push({nom: c.nom, qty: qty, pu: c.prix, comp: parts.join(' · ')});
+  closeOv('ov-customize');
+  updateCartBadge();
+  toast('✓ ' + c.nom + ' ajouté au panier (' + qty + ' × ' + fmt(c.prix) + ')');
+}
 function openCompo(i){
   var c = COFFRETS[i];
   document.getElementById('cp-titre').textContent = c.nom;
   document.getElementById('cp-prix').textContent = c.prix ? (fmt(c.prix) + ' par coffret') : 'Tarif sur demande selon quantités';
   var ul = document.getElementById('cp-list'); ul.innerHTML='';
   (c.compo && c.compo.length ? c.compo : ['Composition détaillée sur demande — contactez Erriane Foods.']).forEach(function(x){ var li=document.createElement('li'); li.textContent=x; ul.appendChild(li); });
-  document.getElementById('cp-order').onclick = function(){ closeOv('ov-compo'); orderCof(i); };
+  var cpBtn = document.getElementById('cp-order');
+  if(c.prix){
+    cpBtn.style.display = ''; cpBtn.textContent = 'Commander ce coffret';
+    cpBtn.onclick = function(){ closeOv('ov-compo'); orderCof(i); };
+  } else {
+    cpBtn.style.display = 'none';
+  }
   openOv('ov-compo');
 }
 function startOrder(){ orderCof(2); } /* standard par defaut */
-function orderCof(i){
-  PENDING = i;
-  if(!USER){ openOv('ov-auth'); return; }
-  goV('client'); goPane('cmd'); preselect(i);
-}
 var PENDING = null;
-function preselect(i){
-  var sel = document.getElementById('c-cof');
-  for(var k=0;k<sel.options.length;k++){ if(parseInt(sel.options[k].value)===i) sel.selectedIndex=k; }
+function orderCof(i){
+  CZ_I = i;
+  PENDING = (typeof i === 'number') ? i : null;
+  if(!USER){ openOv('ov-auth'); return; }
+  var c = COFFRETS[i];
+  if(!c.prix){
+    // Sur demande → WhatsApp
+    window.open('https://wa.me/213770371909?text=' + encodeURIComponent('Bonjour Erriane Foods, je souhaite un devis pour : ' + c.nom + '.'), '_blank');
+    return;
+  }
+  if(!c.choices){
+    // Pas de choix (Lunch Bag) → ajout direct
+    quickAdd(i);
+    return;
+  }
+  openCustomize(i);
+}
+function openCart(){
+  renderCart();
+  openOv('ov-cart');
+}
+function renderCart(){
+  var el = document.getElementById('cart-lines');
+  if(!LINES.length){
+    el.innerHTML = '<div style="color:var(--muted);font-size:.86rem;padding:20px 0;text-align:center">Votre panier est vide.</div>';
+    document.getElementById('cart-total').textContent = '0 DA';
+    updateCartBadge();
+    return;
+  }
+  var h = '';
+  LINES.forEach(function(l,i){
+    h += '<div class="ln" style="flex-direction:column;align-items:stretch;gap:6px">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center">' +
+        '<div><b>' + esc(l.nom) + '</b>' + (l.comp ? '<span class="comp">' + esc(l.comp) + '</span>' : '') + '</div>' +
+        '<span class="x" onclick="rmLine(' + i + ')" title="Retirer">✕</span>' +
+      '</div>' +
+      '<div style="display:flex;align-items:center;gap:10px;font-size:.88rem">' +
+        '<span style="color:var(--muted)">' + fmt(l.pu) + ' / unité</span>' +
+        '<span style="margin-left:auto;display:flex;align-items:center;gap:6px">' +
+          '<button class="qty-btn" onclick="changeQty(' + i + ',-1)">−</button>' +
+          '<b style="min-width:24px;text-align:center">' + l.qty + '</b>' +
+          '<button class="qty-btn" onclick="changeQty(' + i + ',1)">+</button>' +
+        '</span>' +
+        '<b style="min-width:90px;text-align:right">' + fmt(l.qty * l.pu) + '</b>' +
+      '</div>' +
+    '</div>';
+  });
+  el.innerHTML = h;
+  var tot = LINES.reduce(function(s,l){return s+l.qty*l.pu;},0);
+  document.getElementById('cart-total').textContent = fmt(tot);
+  updateCartBadge();
+}
+function changeQty(i, delta){
+  LINES[i].qty = Math.max(1, LINES[i].qty + delta);
+  renderCart();
+}
+function updateCartBadge(){
+  var count = LINES.reduce(function(s,l){return s+l.qty;},0);
+  var badge = document.getElementById('cart-badge');
+  if(count > 0){ badge.style.display=''; document.getElementById('cart-count').textContent=count; }
+  else { badge.style.display='none'; }
+}
+function openCheckout(){
+  if(!LINES.length){ toast('Votre panier est vide'); return; }
+  closeOv('ov-cart');
+  document.getElementById('c-date').min = new Date().toISOString().split('T')[0];
+  openOv('ov-checkout');
+}
+function quickAdd(i){
+  var c = COFFRETS[i];
+  if(!c || !c.prix) return;
+  if(c.choices){
+    CZ_I = i;
+    closeOv('ov-cart');
+    openCustomize(i);
+    return;
+  }
+  LINES.push({nom:c.nom, qty:10, pu:c.prix});
+  updateCartBadge();
+  toast('✓ ' + c.nom + ' ajouté au panier (10 × ' + fmt(c.prix) + ')');
 }
 
 /* ================== AUTH ================== */
+function authTab(which){
+  document.getElementById('tab-login').classList.toggle('on', which==='login');
+  document.getElementById('tab-reg').classList.toggle('on', which==='reg');
+  document.getElementById('a-login').classList.toggle('on', which==='login');
+  document.getElementById('a-reg').classList.toggle('on', which==='reg');
+}
+function renderLoginList(){
+  var el = document.getElementById('login-list');
+  var accts = clientsList();
+  el.innerHTML = accts.length ? accts.map(function(c){
+    return '<div class="demo-acct" onclick="loginAs(\'' + c.email.replace(/'/g,"\\'") + '\')">' +
+      '<div><b>' + esc(c.etab) + '</b><span>' + esc(c.nom) + ' · ' + esc(c.email) + '</span></div></div>';
+  }).join('') : '<div style="color:var(--muted);font-size:.86rem;margin-bottom:12px">Aucun compte pour l\'instant : créez le vôtre dans l\'onglet « Créer un compte ».</div>';
+}
+function enterAs(u){
+  USER = u;
+  save('err_user', USER); refreshChip(); closeOv('ov-auth');
+  if(PENDING !== null){ var tmp = PENDING; PENDING = null; orderCof(tmp); }
+  else { goV('client'); goPane('mes'); }
+}
+function loginAs(email){
+  var c = clientsList().filter(function(x){ return x.email===email; })[0];
+  if(c) enterAs({nom:c.nom, tel:c.tel, etab:c.etab, email:c.email});
+}
+function login(){
+  var email = document.getElementById('l-email').value.trim().toLowerCase();
+  var c = clientsList().filter(function(x){ return x.email.toLowerCase()===email; })[0];
+  if(!c){ document.getElementById('l-err').style.display='block'; return; }
+  document.getElementById('l-err').style.display='none';
+  enterAs({nom:c.nom, tel:c.tel, etab:c.etab, email:c.email});
+}
 function register(){
   var nom = document.getElementById('a-nom').value.trim(),
       tel = document.getElementById('a-tel').value.trim(),
@@ -812,10 +1176,7 @@ function register(){
   if(!nom || tel.length < 8 || !etab || email.indexOf('@') < 1){
     document.getElementById('a-err').style.display='block'; return;
   }
-  USER = {nom:nom, tel:tel, etab:etab, email:email};
-  save('err_user', USER); refreshChip(); closeOv('ov-auth');
-  goV('client'); goPane('cmd');
-  if(PENDING !== null){ preselect(PENDING); PENDING = null; }
+  enterAs({nom:nom, tel:tel, etab:etab, email:email});
 }
 
 /* ================== CLIENT : commande ================== */
@@ -853,28 +1214,20 @@ function renderPays(){
       '<td><span class="stp2 ' + x.st + '">' + PAY_ST[x.st] + '</span></td></tr>';
   }).join('') : '<tr><td colspan="4" style="padding:16px;text-align:center;color:var(--muted)">Aucun versement enregistré pour l\'instant.</td></tr>';
 }
-function addLine(){
-  var i = parseInt(document.getElementById('c-cof').value);
-  var q = Math.max(1, parseInt(document.getElementById('c-qty').value || 1));
-  var c = COFFRETS[i];
-  LINES.push({nom:c.nom, qty:q, pu:c.prix});
-  renderLines();
-}
 function renderLines(){
+  // Conservé pour compatibilité (panneau client) : le panier vit désormais dans ov-cart (renderCart).
   var el = document.getElementById('c-lines');
-  if(!LINES.length){ el.innerHTML = '<div style="color:var(--muted);font-size:.86rem">Aucune ligne pour l\'instant : choisissez un coffret et une quantité.</div>'; }
-  else{
-    el.innerHTML = '';
-    LINES.forEach(function(l, i){
-      var r = document.createElement('div'); r.className='ln';
-      r.innerHTML = '<span>'+l.nom+' × '+l.qty+'</span><span>'+fmt(l.qty*l.pu)+' <span class="x" onclick="rmLine('+i+')">✕</span></span>';
-      el.appendChild(r);
-    });
-  }
-  var t = LINES.reduce(function(s,l){return s + l.qty*l.pu;}, 0);
-  document.getElementById('c-total').textContent = fmt(t);
+  if(!el) return;
+  if(!LINES.length){ el.innerHTML = '<div style="color:var(--muted);font-size:.86rem">Votre panier est vide.</div>'; var t = document.getElementById('c-total'); if(t) t.textContent = '0 DA'; return; }
+  var h = '';
+  LINES.forEach(function(l,i){
+    h += '<div class="ln"><div><b>'+esc(l.nom)+'</b> × '+l.qty+'<br>'+fmt(l.pu)+' / unité'+(l.comp ? '<span class="comp">'+esc(l.comp)+'</span>' : '')+'</div><span class="x" onclick="rmLine('+i+')">✕</span></div>';
+  });
+  el.innerHTML = h;
+  var tot = LINES.reduce(function(s,l){return s+l.qty*l.pu;},0);
+  var t2 = document.getElementById('c-total'); if(t2) t2.textContent = fmt(tot);
 }
-function rmLine(i){ LINES.splice(i,1); renderLines(); }
+function rmLine(i){ LINES.splice(i,1); renderCart(); updateCartBadge(); }
 document.getElementById('c-bc').addEventListener('change', function(e){
   var f = e.target.files[0];
   document.getElementById('c-bcname').textContent = f ? ('Joint : ' + f.name + ' (' + Math.round(f.size/1024) + ' Ko)') : '';
@@ -904,9 +1257,11 @@ function submitOrder(){
     st: 'attente', rep: null, prep: {dessert:'', boisson:'', livreur:''}
   };
   ORDERS.unshift(o); save('err_orders', ORDERS);
-  LINES = []; renderLines();
+  LINES = [];
   document.getElementById('c-lieu').value=''; document.getElementById('c-note').value=''; document.getElementById('c-maps').value=''; document.getElementById('c-bc').value=''; document.getElementById('c-bcname').textContent='';
-  goPane('mes');
+  closeOv('ov-checkout');
+  updateCartBadge();
+  goV('client'); goPane('mes');
 }
 var ST_LABEL = {attente:'En attente', confirmee:'Confirmée', annulee:'Annulée', reportee:'Autre date proposée'};
 function ordHtml(o, admin){
@@ -938,7 +1293,7 @@ function renderMes(){
   var mine = ORDERS.filter(function(o){return USER && o.client.email === USER.email;});
   document.getElementById('mes-list').innerHTML = mine.length
     ? mine.map(function(o){return ordHtml(o, false);}).join('')
-    : '<div class="panel" style="color:var(--muted)">Aucune commande pour l\'instant. Passez votre première commande dans l\'onglet « Passer commande ».</div>';
+    : '<div class="panel" style="color:var(--muted)">Aucune commande pour l\'instant. <a href="#" onclick="orderCof(2);return false;" style="color:var(--red);font-weight:700">Passez votre première commande →</a></div>';
 }
 function sendFb(){
   var t = document.getElementById('fb-txt').value.trim();
