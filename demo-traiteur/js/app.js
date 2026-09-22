@@ -52,6 +52,7 @@ function fmt(n){return n.toLocaleString('fr-FR').replace(/ | /g,' ') + ' DA';
 function load(k,d){try{return JSON.parse(localStorage.getItem(k)) || d}catch(e){return d}}
 function save(k,v){localStorage.setItem(k, JSON.stringify(v));}
 var USER = load('err_user', null);
+var LINES = load('err_lines', []);
 var ORDERS = load('err_orders', null);
 var FBS = load('err_fbs', null);
 var COFFRETS = load('err_cofs', null) || DEFAULT_COFFRETS;
@@ -137,15 +138,16 @@ function refreshChip(){
   var reg = document.getElementById('btn-register');
   if(USER){
     document.getElementById('userchip').textContent = '👤 ' + USER.etab;
-    document.getElementById('userchip').onclick = logout;
-    document.getElementById('userchip').title = 'Cliquer pour se déconnecter';
-    if(reg) reg.style.display = '';
+    document.getElementById('userchip').onclick = null;
+    document.getElementById('userchip').title = USER.etab;
+    if(reg) reg.style.display = 'none';
   } else {
     document.getElementById('userchip').textContent = 'Se connecter';
     document.getElementById('userchip').onclick = chipClick;
     document.getElementById('userchip').title = '';
     if(reg) reg.style.display = '';
   }
+  updateCartBadge();
 }
 refreshChip();
 
@@ -207,7 +209,6 @@ function openOrderForm(i){
       '<div style="text-align:right"><span style="font-family:\'Anton\';font-size:1.2rem;color:var(--red)">' + fmt(c.prix) + '</span><br><span style="color:var(--muted);font-size:.8rem">/ coffret</span></div>' +
     '</div>';
   document.getElementById('c-qty').value = 10;
-  document.getElementById('c-date').min = new Date().toISOString().split('T')[0];
   document.getElementById('c-err').style.display = 'none';
   updateOrdTotal();
   openOv('ov-order');
@@ -264,8 +265,12 @@ function register(){
 
 /* ================== CLIENT : commande ================== */
 function renderProfil(){
-  var info = USER ? (USER.nom + ' · ' + USER.etab + ' · ' + USER.tel + ' · ' + USER.email) : '';
-  document.getElementById('cl-hello').textContent = info;
+  if(!USER) return;
+  document.getElementById('cl-hello').textContent = USER.nom + ' · ' + USER.etab;
+  document.getElementById('pf-etab').textContent = USER.etab;
+  document.getElementById('pf-nom').textContent = USER.nom;
+  document.getElementById('pf-tel').textContent = USER.tel;
+  document.getElementById('pf-email').textContent = USER.email;
   renderBal();
 }
 function renderCommandes(){
@@ -301,31 +306,18 @@ function renderPays(){
       '<td><span class="stp2 ' + x.st + '">' + PAY_ST[x.st] + '</span></td></tr>';
   }).join('') : '<tr><td colspan="4" style="padding:16px;text-align:center;color:var(--muted)">Aucun versement enregistré pour l\'instant.</td></tr>';
 }
-function submitOrder(){
+function addToCart(){
   if(ORD_COF === null) return;
   var c = COFFRETS[ORD_COF];
-  var qty = parseInt(document.getElementById('c-qty').value) || 0,
-      date = document.getElementById('c-date').value,
-      heure = document.getElementById('c-heure').value,
-      lieu = document.getElementById('c-lieu').value.trim(),
-      tel = document.getElementById('c-tel').value.trim();
-  if(!qty || !date || !heure || !lieu || !tel){ document.getElementById('c-err').style.display='block'; return; }
+  var qty = parseInt(document.getElementById('c-qty').value) || 0;
+  if(!qty){ document.getElementById('c-err').style.display='block'; return; }
   document.getElementById('c-err').style.display='none';
-  var o = {
-    ref: 'ERR-' + Math.floor(1000 + Math.random()*9000),
-    client: USER,
-    lignes: [{nom: c.nom, qty: qty, pu: c.prix}],
-    total: qty * c.prix,
-    date: date, heure: heure, lieu: lieu, tel: tel,
-    note: document.getElementById('c-note').value.trim(),
-    st: 'attente', rep: null, prep: {dessert:'', boisson:'', livreur:''}
-  };
-  ORDERS.unshift(o); save('err_orders', ORDERS);
-  document.getElementById('c-lieu').value=''; document.getElementById('c-note').value=''; document.getElementById('c-tel').value='';
+  LINES.push({cofId:c.id, nom:c.nom, qty:qty, pu:c.prix});
+  saveLines();
+  updateCartBadge();
   closeOv('ov-order');
   ORD_COF = null;
-  toast('✓ Commande ' + o.ref + ' envoyée !');
-  goV('commandes');
+  toast('✓ ' + qty + ' × ' + c.nom + ' ajouté au panier');
 }
 var ST_LABEL = {attente:'En attente', confirmee:'Confirmée', annulee:'Annulée', reportee:'Autre date proposée'};
 function ordHtml(o, admin){
@@ -360,12 +352,114 @@ function renderMes(){
     : '<div class="panel" style="color:var(--muted)">Aucune commande pour l\'instant. <a href="#" onclick="orderCof(2);return false;" style="color:var(--red);font-weight:700">Passez votre première commande →</a></div>';
 }
 function sendFb(){
-  var t = document.getElementById('fb-txt').value.trim();
+  var el = document.getElementById('fb-txt');
+  if(!el) return;
+  var t = el.value.trim();
   if(!t){ return; }
   FBS.unshift({de: USER.nom + ' (' + USER.etab + ')', txt: t, quand: "à l'instant"});
   save('err_fbs', FBS);
   document.getElementById('fb-txt').value='';
   document.getElementById('fb-ok').style.display='block';
+}
+
+/* ================== PANIER ================== */
+function saveLines(){ save('err_lines', LINES); updateCartBadge(); }
+function updateCartBadge(){
+  var n = LINES.reduce(function(t,l){return t+l.qty;},0);
+  var b = document.getElementById('cart-badge');
+  var c = document.getElementById('cart-count');
+  if(n > 0){ b.style.display=''; c.textContent = n; } else { b.style.display='none'; }
+}
+function openCart(){
+  var el = document.getElementById('cart-lines');
+  var ft = document.getElementById('cart-footer');
+  if(!LINES.length){ el.innerHTML = '<div style="color:var(--muted);padding:20px 0;text-align:center">Votre panier est vide.</div>'; ft.style.display='none'; openOv('ov-cart'); return; }
+  var total = 0;
+  el.innerHTML = LINES.map(function(l, i){
+    var sub = l.qty * l.pu; total += sub;
+    return '<div class="ln" style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px dashed var(--line)"><div style="flex:1"><b>'+esc(l.nom)+'</b><br><span style="color:var(--muted);font-size:.82rem">'+fmt(l.pu)+' / coffret</span></div><div style="display:flex;align-items:center;gap:8px"><button class="qty-btn" onclick="cartQty('+i+',-1)">−</button><span style="font-weight:700;min-width:24px;text-align:center">'+l.qty+'</span><button class="qty-btn" onclick="cartQty('+i+',1)">+</button><span style="font-weight:700;min-width:80px;text-align:right">'+fmt(sub)+'</span></div></div>';
+  }).join('');
+  document.getElementById('cart-total').textContent = fmt(total);
+  ft.style.display = '';
+  openOv('ov-cart');
+}
+function cartQty(i, d){
+  LINES[i].qty = Math.max(1, LINES[i].qty + d);
+  saveLines(); openCart();
+}
+function openCheckout(){
+  if(!USER){ closeOv('ov-cart'); openOv('ov-auth'); return; }
+  closeOv('ov-cart');
+  var total = LINES.reduce(function(t,l){return t+l.qty*l.pu;},0);
+  var summary = LINES.map(function(l){ return l.qty + ' × ' + l.nom + ' — <b>' + fmt(l.qty*l.pu) + '</b>'; }).join('<br>');
+  document.getElementById('ck-summary').innerHTML = summary;
+  document.getElementById('ck-total').textContent = fmt(total);
+  document.getElementById('ck-date').min = new Date().toISOString().split('T')[0];
+  document.getElementById('ck-err').style.display = 'none';
+  openOv('ov-checkout');
+}
+function submitCartOrder(){
+  if(!LINES.length || !USER) return;
+  var date = document.getElementById('ck-date').value,
+      heure = document.getElementById('ck-heure').value,
+      lieu = document.getElementById('ck-lieu').value.trim(),
+      tel = document.getElementById('ck-tel').value.trim();
+  if(!date || !heure || !lieu || !tel){ document.getElementById('ck-err').style.display='block'; return; }
+  document.getElementById('ck-err').style.display='none';
+  var o = {
+    ref: 'ERR-' + Math.floor(1000 + Math.random()*9000),
+    client: USER,
+    lignes: LINES.map(function(l){ return {nom:l.nom, qty:l.qty, pu:l.pu}; }),
+    total: LINES.reduce(function(t,l){return t+l.qty*l.pu;},0),
+    date: date, heure: heure, lieu: lieu, tel: tel,
+    note: document.getElementById('ck-note').value.trim(),
+    st: 'attente', rep: null, prep: {dessert:'', boisson:'', livreur:''}
+  };
+  ORDERS.unshift(o); save('err_orders', ORDERS);
+  LINES = []; saveLines(); updateCartBadge();
+  closeOv('ov-checkout');
+  toast('✓ Commande ' + o.ref + ' envoyée !<br><a href="#" onclick="goV(\'commandes\');return false" style="color:#FF9C6B;font-weight:700">Voir ma commande</a>');
+  goV('commandes');
+}
+
+/* ================== MESSAGE ================== */
+function openMsg(){
+  document.getElementById('msg-txt').value = '';
+  document.getElementById('msg-ok').style.display = 'none';
+  openOv('ov-msg');
+}
+function sendMsg(){
+  var t = document.getElementById('msg-txt').value.trim();
+  if(!t) return;
+  FBS.unshift({de: USER ? (USER.nom + ' (' + USER.etab + ')') : 'Anonyme', txt: t, quand: "à l'instant"});
+  save('err_fbs', FBS);
+  document.getElementById('msg-txt').value = '';
+  document.getElementById('msg-ok').style.display = 'block';
+}
+
+/* ================== PROFIL ================== */
+var profileEditing = false;
+function toggleProfileEdit(){
+  profileEditing = !profileEditing;
+  var view = document.getElementById('profile-fields');
+  var edit = document.getElementById('profile-fields-edit');
+  var btn = document.getElementById('btn-edit-profile');
+  if(profileEditing){
+    document.getElementById('pfe-etab').value = USER.etab;
+    document.getElementById('pfe-nom').value = USER.nom;
+    document.getElementById('pfe-tel').value = USER.tel;
+    document.getElementById('pfe-email').value = USER.email;
+    view.style.display = 'none'; edit.style.display = '';
+    btn.textContent = '✓ Mettre à jour';
+  } else {
+    USER.etab = document.getElementById('pfe-etab').value.trim() || USER.etab;
+    USER.nom = document.getElementById('pfe-nom').value.trim() || USER.nom;
+    USER.tel = document.getElementById('pfe-tel').value.trim() || USER.tel;
+    USER.email = document.getElementById('pfe-email').value.trim() || USER.email;
+    save('err_user', USER); refreshChip(); renderProfil();
+    edit.style.display = 'none'; view.style.display = '';
+    btn.textContent = '✏️ Éditer';
+  }
 }
 
 /* ================== ADMIN ================== */

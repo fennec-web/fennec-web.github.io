@@ -297,6 +297,18 @@
   .foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
   .foot a{color:#FF9C6B;text-decoration:none;font-weight:700}
 
+  .cart-badge{background:var(--red);color:#fff;border-radius:999px;padding:7px 14px;font-size:.82rem;font-weight:700;cursor:pointer;white-space:nowrap}
+  .qty-btn{width:28px;height:28px;border:1.5px solid var(--line);border-radius:8px;background:#fff;font-size:.95rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-family:inherit}
+  .qty-btn:hover{border-color:var(--ink)}
+  #ov-cart .md{max-width:640px}
+  #ov-order .md{max-width:640px}
+  #ov-checkout .md{max-width:640px}
+  .profile-fields{display:grid;gap:12px}
+  .profile-field{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px dashed var(--line)}
+  .profile-field label{font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+  .profile-field .val{font-size:.95rem;font-weight:600}
+  .profile-field input{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;font-size:.95rem;font-family:inherit;background:#fff}
+  .profile-field input:focus{outline:none;border-color:var(--red)}
   @media(max-width:900px){
     .hd nav{display:none}
     .cofs{grid-template-columns:repeat(2,1fr)}

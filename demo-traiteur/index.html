@@ -31,6 +31,7 @@
       <a onclick="goV('public');setTimeout(()=>document.getElementById('contact').scrollIntoView(),50)">Contact</a>
     </nav>
     <div class="right">
+      <span class="cart-badge" id="cart-badge" onclick="openCart()" style="display:none">🛒 <span id="cart-count">0</span></span>
       <span class="chip" style="background:transparent;color:var(--ink);border:1.5px solid var(--ink)" onclick="openOv('ov-auth');authTab('reg')" id="btn-register">Créer un compte</span>
       <div class="user-menu" id="user-menu">
         <span class="chip" id="userchip" onclick="chipClick()">Se connecter</span>
@@ -38,6 +39,7 @@
           <div class="ud-item" onclick="goV('profil')">👤 Mon profil</div>
           <div class="ud-item" onclick="goV('commandes')">📋 Mes commandes</div>
           <div class="ud-item" onclick="goV('paiements')">💳 Paiements</div>
+          <div class="ud-item" onclick="openMsg()">💬 Message au traiteur</div>
           <div class="ud-sep"></div>
           <div class="ud-item ud-red" onclick="logout()">🚪 Se déconnecter</div>
         </div>
@@ -138,16 +140,25 @@
 
 <!-- ==================== MON PROFIL ==================== -->
 <div class="view" id="v-profil">
-  <div class="space-head"><div class="wrap"><h2>Mon profil</h2><p id="cl-hello"></p><div id="cl-bal"></div></div></div>
+  <div class="space-head"><div class="wrap"><h2>Mon profil</h2><p id="cl-hello"></p></div></div>
   <div class="wrap" style="padding-bottom:70px">
     <div style="margin-bottom:16px"><button class="btn red" style="width:100%" onclick="goV('public');setTimeout(function(){document.getElementById('cofs').scrollIntoView({behavior:'smooth'})},100)">🛒 Commander un coffret</button></div>
-    <div class="panel">
-      <h3>Message privé au traiteur</h3>
-      <p style="font-size:.85rem;color:var(--muted);margin-bottom:14px">Votre retour n'est <b>pas publié</b> : seul Erriane Foods le voit dans son espace.</p>
-      <div class="fld"><textarea id="fb-txt" rows="4" placeholder="Un retour sur une livraison, une suggestion, un besoin particulier…"></textarea></div>
-      <button class="btn" onclick="sendFb()">Envoyer au traiteur</button>
-      <div id="fb-ok" style="display:none;background:#d9f2e1;color:var(--ok);border-radius:10px;padding:11px 15px;font-size:.88rem;margin-top:12px">✓ Message transmis à Erriane Foods. Merci !</div>
+    <div class="panel" style="margin-bottom:16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><h3 style="margin-bottom:0">Informations entreprise</h3><button class="btn sm" id="btn-edit-profile" onclick="toggleProfileEdit()">✏️ Éditer</button></div>
+      <div class="profile-fields" id="profile-fields">
+        <div class="profile-field"><label>Établissement</label><div class="val" id="pf-etab"></div></div>
+        <div class="profile-field"><label>Nom</label><div class="val" id="pf-nom"></div></div>
+        <div class="profile-field"><label>Téléphone</label><div class="val" id="pf-tel"></div></div>
+        <div class="profile-field"><label>Email</label><div class="val" id="pf-email"></div></div>
+      </div>
+      <div class="profile-fields" id="profile-fields-edit" style="display:none">
+        <div class="profile-field"><label>Établissement</label><input type="text" id="pfe-etab"></div>
+        <div class="profile-field"><label>Nom</label><input type="text" id="pfe-nom"></div>
+        <div class="profile-field"><label>Téléphone</label><input type="tel" id="pfe-tel"></div>
+        <div class="profile-field"><label>Email</label><input type="email" id="pfe-email"></div>
+      </div>
     </div>
+    <div class="panel" id="cl-bal"></div>
   </div>
 </div>
 
@@ -325,16 +336,50 @@
   <h3 id="ord-title"></h3>
   <div id="ord-preview" style="background:linear-gradient(160deg,var(--peach),#fff 70%);border:1.5px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:16px"></div>
   <div class="fld"><label>Quantité *</label><input type="number" id="c-qty" min="1" value="10" oninput="updateOrdTotal()"></div>
-  <div class="grid2" style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-    <div class="fld"><label>Date de livraison *</label><input type="date" id="c-date"></div>
-    <div class="fld"><label>Heure de livraison *</label><input type="time" id="c-heure" value="12:00"></div>
-  </div>
-  <div class="fld"><label>Lieu de livraison *</label><input type="text" id="c-lieu" placeholder="Ex : Siège SEAAL, 2 rue…, Kouba"></div>
-  <div class="fld"><label>Téléphone contact livraison *</label><input type="tel" id="c-tel" placeholder="05 XX XX XX XX"></div>
-  <div class="fld"><label>Remarques</label><textarea id="c-note" rows="2" placeholder="Allergies, accès au site, étage, contact sur place…"></textarea></div>
   <div class="tot"><span>Total</span><span id="ord-total">0 DA</span></div>
-  <div class="err" id="c-err">Veuillez remplir la quantité, la date, l'heure, le lieu et le téléphone.</div>
-  <button class="btn red" style="width:100%;padding:16px;margin-top:12px" onclick="submitOrder()">Valider ma commande</button>
+  <div class="err" id="c-err">Veuillez indiquer une quantité.</div>
+  <button class="btn red" style="width:100%;padding:16px;margin-top:12px" onclick="addToCart()">Ajouter au panier</button>
+</div></div>
+
+<!-- ===== MODALE PANIER ===== -->
+<div class="ov" id="ov-cart"><div class="md">
+  <button class="x" onclick="closeOv('ov-cart')">✕</button>
+  <h3>Mon panier</h3>
+  <div id="cart-lines"></div>
+  <div id="cart-footer" style="display:none">
+    <div class="tot"><span>Total</span><span id="cart-total">0 DA</span></div>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="btn ghost" style="flex:1" onclick="closeOv('ov-cart')">Continuer mes achats</button>
+      <button class="btn red" style="flex:1" onclick="openCheckout()">Passer à la livraison</button>
+    </div>
+  </div>
+</div></div>
+
+<!-- ===== MODALE CHECKOUT ===== -->
+<div class="ov" id="ov-checkout"><div class="md">
+  <button class="x" onclick="closeOv('ov-checkout')">✕</button>
+  <h3>Livraison</h3>
+  <div id="ck-summary" style="background:linear-gradient(160deg,var(--peach),#fff 70%);border:1.5px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:16px;font-size:.9rem"></div>
+  <div class="grid2" style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+    <div class="fld"><label>Date de livraison *</label><input type="date" id="ck-date"></div>
+    <div class="fld"><label>Heure de livraison *</label><input type="time" id="ck-heure" value="12:00"></div>
+  </div>
+  <div class="fld"><label>Lieu de livraison *</label><input type="text" id="ck-lieu" placeholder="Ex : Siège SEAAL, 2 rue…, Kouba"></div>
+  <div class="fld"><label>Téléphone contact livraison *</label><input type="tel" id="ck-tel" placeholder="05 XX XX XX XX"></div>
+  <div class="fld"><label>Remarques</label><textarea id="ck-note" rows="2" placeholder="Allergies, accès au site, étage, contact sur place…"></textarea></div>
+  <div class="tot"><span>Total</span><span id="ck-total">0 DA</span></div>
+  <div class="err" id="ck-err">Veuillez remplir la date, l'heure, le lieu et le téléphone.</div>
+  <button class="btn red" style="width:100%;padding:16px;margin-top:12px" onclick="submitCartOrder()">Valider ma commande</button>
+</div></div>
+
+<!-- ===== MODALE MESSAGE ===== -->
+<div class="ov" id="ov-msg"><div class="md">
+  <button class="x" onclick="closeOv('ov-msg')">✕</button>
+  <h3>Message au traiteur</h3>
+  <div class="s">Votre retour n'est pas publié : seul Erriane Foods le voit dans son espace.</div>
+  <div class="fld"><textarea id="msg-txt" rows="4" placeholder="Un retour sur une livraison, une suggestion, un besoin particulier…"></textarea></div>
+  <button class="btn red" style="width:100%" onclick="sendMsg()">Envoyer</button>
+  <div id="msg-ok" style="display:none;background:#d9f2e1;color:var(--ok);border-radius:10px;padding:11px 15px;font-size:.88rem;margin-top:12px">✓ Message transmis à Erriane Foods. Merci !</div>
 </div></div>
 
 <!-- ===== MODALE AUTRE DATE (admin) ===== -->
