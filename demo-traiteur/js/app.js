@@ -377,8 +377,9 @@ function openCart(){
   var total = 0;
   el.innerHTML = LINES.map(function(l, i){
     var sub = l.qty * l.pu; total += sub;
-    return '<div class="ln" style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px dashed var(--line)"><div style="flex:1"><b>'+esc(l.nom)+'</b><br><span style="color:var(--muted);font-size:.82rem">'+fmt(l.pu)+' / coffret</span></div><div style="display:flex;align-items:center;gap:8px"><button class="qty-btn" onclick="cartQty('+i+',-1)">−</button><span style="font-weight:700;min-width:24px;text-align:center">'+l.qty+'</span><button class="qty-btn" onclick="cartQty('+i+',1)">+</button><span style="font-weight:700;min-width:80px;text-align:right">'+fmt(sub)+'</span></div></div>';
+    return '<div class="ln" style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px dashed var(--line)"><div style="flex:1"><b>'+esc(l.nom)+'</b><br><span style="color:var(--muted);font-size:.82rem">'+fmt(l.pu)+' / coffret</span></div><div style="display:flex;align-items:center;gap:8px"><button class="qty-btn" onclick="cartQty('+i+',-1)">−</button><span style="font-weight:700;min-width:24px;text-align:center">'+l.qty+'</span><button class="qty-btn" onclick="cartQty('+i+',1)">+</button><span style="font-weight:700;min-width:80px;text-align:right">'+fmt(sub)+'</span><span style="color:var(--red);cursor:pointer;font-weight:800;padding:0 6px;font-size:1.1rem" onclick="rmCartLine('+i+')" title="Retirer">✕</span></div></div>';
   }).join('');
+  el.innerHTML += '<div style="text-align:right;margin-top:12px"><button class="btn sm ghost" style="color:var(--red);border-color:var(--red)" onclick="clearCart()">🗑 Vider le panier</button></div>';
   document.getElementById('cart-total').textContent = fmt(total);
   ft.style.display = '';
   openOv('ov-cart');
@@ -387,6 +388,8 @@ function cartQty(i, d){
   LINES[i].qty = Math.max(1, LINES[i].qty + d);
   saveLines(); openCart();
 }
+function rmCartLine(i){ LINES.splice(i, 1); saveLines(); openCart(); }
+function clearCart(){ if(confirm('Vider votre panier ?')){ LINES = []; saveLines(); openCart(); } }
 function openCheckout(){
   if(!USER){ closeOv('ov-cart'); openOv('ov-auth'); return; }
   closeOv('ov-cart');
