@@ -337,6 +337,7 @@
     </nav>
     <div class="right">
       <span class="cart-badge" id="cart-badge" onclick="openCart()" style="display:none">🛒 <span id="cart-count">0</span></span>
+      <span class="chip" style="background:transparent;color:var(--ink);border:1.5px solid var(--ink)" onclick="openOv('ov-auth');authTab('reg')">Créer un compte</span>
       <span class="chip" id="userchip" onclick="chipClick()">Se connecter</span>
       <span class="adminlink" onclick="goV('admin')">Espace traiteur</span>
     </div>
@@ -354,8 +355,7 @@
       <h1>Le traiteur des <span class="k">entreprises</span> qui ont bon goût</h1>
       <p>Coffrets repas, pauses café, déjeuners d'affaires, buffets, méchoui et bases de vie. Près de deux décennies de cuisine exigeante, livrée chez vous, à l'heure.</p>
       <div class="cta">
-        <button class="btn" onclick="document.getElementById('cofs').scrollIntoView({behavior:'smooth'})">Voir nos coffrets</button>
-        <button class="btn ghost" onclick="document.getElementById('pauses').scrollIntoView({behavior:'smooth'})">Nos pauses café</button>
+        <button class="btn" onclick="document.getElementById('cofs').scrollIntoView({behavior:'smooth'})">Voir nos offres</button>
       </div>
       <div class="since">Depuis 2004 · Kouba, Alger · Restaurant devenu traiteur en 2012</div>
     </div>
