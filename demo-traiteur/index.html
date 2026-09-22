@@ -52,10 +52,16 @@
   .hd nav a:hover{opacity:1}
   .hd .right{display:flex;gap:10px;align-items:center}
   .chip{background:var(--ink);color:var(--peach);border-radius:999px;padding:7px 15px;font-size:.8rem;font-weight:700;cursor:pointer}
-  .cart-badge{background:var(--red);color:#fff;border-radius:999px;padding:7px 14px;font-size:.82rem;font-weight:700;cursor:pointer;white-space:nowrap}
-  .qty-btn{width:30px;height:30px;border:1.5px solid var(--line);border-radius:8px;background:#fff;font-size:1rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-family:inherit}
-  .qty-btn:hover{border-color:var(--ink)}
+
   .adminlink{font-size:.75rem;color:var(--muted);text-decoration:underline;cursor:pointer;white-space:nowrap}
+  /* ===== DROPDOWN UTILISATEUR ===== */
+  .user-menu{position:relative}
+  .user-dropdown{display:none;position:absolute;top:100%;right:0;margin-top:6px;background:#fff;border:1.5px solid var(--line);border-radius:12px;min-width:200px;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:100;overflow:hidden}
+  .user-menu:hover .user-dropdown{display:block}
+  .ud-item{padding:10px 16px;font-size:.86rem;font-weight:600;cursor:pointer;transition:background .12s}
+  .ud-item:hover{background:rgba(43,29,20,.06)}
+  .ud-red{color:var(--red)}
+  .ud-sep{height:1px;background:var(--line);margin:0}
 
   .view{display:none}
   .view.on{display:block}
@@ -140,7 +146,7 @@
   .demo-acct b{display:block;font-size:.92rem}
   .demo-acct span{color:var(--muted);font-size:.8rem}
   /* ===== SELECTEUR VISUEL COFFRETS (modales panier / livraison) ===== */
-  #ov-cart .md,#ov-checkout .md{max-width:640px}
+  #ov-order .md{max-width:640px}
 
   .fld{margin-bottom:13px}
   .fld label{display:block;font-size:.8rem;font-weight:700;margin-bottom:5px}
@@ -336,9 +342,17 @@
       <a onclick="goV('public');setTimeout(()=>document.getElementById('contact').scrollIntoView(),50)">Contact</a>
     </nav>
     <div class="right">
-      <span class="cart-badge" id="cart-badge" onclick="openCart()" style="display:none">🛒 <span id="cart-count">0</span></span>
       <span class="chip" style="background:transparent;color:var(--ink);border:1.5px solid var(--ink)" onclick="openOv('ov-auth');authTab('reg')" id="btn-register">Créer un compte</span>
-      <span class="chip" id="userchip" onclick="chipClick()">Se connecter</span>
+      <div class="user-menu" id="user-menu">
+        <span class="chip" id="userchip" onclick="chipClick()">Se connecter</span>
+        <div class="user-dropdown" id="user-dropdown">
+          <div class="ud-item" onclick="goV('profil')">👤 Mon profil</div>
+          <div class="ud-item" onclick="goV('commandes')">📋 Mes commandes</div>
+          <div class="ud-item" onclick="goV('paiements')">💳 Paiements</div>
+          <div class="ud-sep"></div>
+          <div class="ud-item ud-red" onclick="logout()">🚪 Se déconnecter</div>
+        </div>
+      </div>
       <span class="adminlink" onclick="goV('admin')">Espace traiteur</span>
     </div>
   </div>
@@ -433,39 +447,39 @@
   </section>
 </div>
 
-<!-- ==================== ESPACE CLIENT ==================== -->
-<div class="view" id="v-client">
-  <div class="space-head"><div class="wrap"><h2>Espace client</h2><p id="cl-hello"></p><div id="cl-bal"></div></div></div>
+<!-- ==================== MON PROFIL ==================== -->
+<div class="view" id="v-profil">
+  <div class="space-head"><div class="wrap"><h2>Mon profil</h2><p id="cl-hello"></p><div id="cl-bal"></div></div></div>
   <div class="wrap" style="padding-bottom:70px">
-    <div class="tabs">
-      <button class="tab on" data-pane="mes" onclick="goPane('mes')">📋 Mes commandes</button>
-      <button class="tab" data-pane="pay" onclick="goPane('pay')">💳 Paiements</button>
-      <button class="tab" data-pane="fb" onclick="goPane('fb')">💬 Message au traiteur</button>
+    <div style="margin-bottom:16px"><button class="btn red" style="width:100%" onclick="goV('public');setTimeout(function(){document.getElementById('cofs').scrollIntoView({behavior:'smooth'})},100)">🛒 Commander un coffret</button></div>
+    <div class="panel">
+      <h3>Message privé au traiteur</h3>
+      <p style="font-size:.85rem;color:var(--muted);margin-bottom:14px">Votre retour n'est <b>pas publié</b> : seul Erriane Foods le voit dans son espace.</p>
+      <div class="fld"><textarea id="fb-txt" rows="4" placeholder="Un retour sur une livraison, une suggestion, un besoin particulier…"></textarea></div>
+      <button class="btn" onclick="sendFb()">Envoyer au traiteur</button>
+      <div id="fb-ok" style="display:none;background:#d9f2e1;color:var(--ok);border-radius:10px;padding:11px 15px;font-size:.88rem;margin-top:12px">✓ Message transmis à Erriane Foods. Merci !</div>
     </div>
-    <div style="margin-bottom:16px"><button class="btn red" style="width:100%" onclick="goV('public');setTimeout(function(){document.getElementById('cofs').scrollIntoView({behavior:'smooth'})},100)">🛒 Passer une nouvelle commande</button></div>
+  </div>
+</div>
 
-    <!-- Mes commandes -->
-    <div class="pane on" id="p-mes"><div id="mes-list"></div></div>
+<!-- ==================== MES COMMANDES ==================== -->
+<div class="view" id="v-commandes">
+  <div class="space-head"><div class="wrap"><h2>Mes commandes</h2><p id="cl-hello2"></p></div></div>
+  <div class="wrap" style="padding-bottom:70px">
+    <div style="margin-bottom:16px"><button class="btn red" style="width:100%" onclick="goV('public');setTimeout(function(){document.getElementById('cofs').scrollIntoView({behavior:'smooth'})},100)">🛒 Commander un coffret</button></div>
+    <div id="mes-list"></div>
+  </div>
+</div>
 
-    <!-- Paiements client -->
-    <div class="pane" id="p-pay">
-      <div class="panel" style="margin-bottom:16px" id="cl-pay-sum"></div>
-      <div class="tblwrap"><table class="adm" style="min-width:520px">
-        <thead><tr><th>Date</th><th>Type</th><th>Montant</th><th>Statut</th></tr></thead>
-        <tbody id="cl-pays"></tbody>
-      </table></div>
-    </div>
-
-    <!-- Feedback prive -->
-    <div class="pane" id="p-fb">
-      <div class="panel">
-        <h3>Message privé au traiteur</h3>
-        <p style="font-size:.85rem;color:var(--muted);margin-bottom:14px">Votre retour n'est <b>pas publié</b> : seul Erriane Foods le voit dans son espace.</p>
-        <div class="fld"><textarea id="fb-txt" rows="4" placeholder="Un retour sur une livraison, une suggestion, un besoin particulier…"></textarea></div>
-        <button class="btn" onclick="sendFb()">Envoyer au traiteur</button>
-        <div id="fb-ok" style="display:none;background:#d9f2e1;color:var(--ok);border-radius:10px;padding:11px 15px;font-size:.88rem;margin-top:12px">✓ Message transmis à Erriane Foods. Merci !</div>
-      </div>
-    </div>
+<!-- ==================== PAIEMENTS ==================== -->
+<div class="view" id="v-paiements">
+  <div class="space-head"><div class="wrap"><h2>Paiements</h2><p id="cl-hello3"></p></div></div>
+  <div class="wrap" style="padding-bottom:70px">
+    <div class="panel" style="margin-bottom:16px" id="cl-pay-sum"></div>
+    <div class="tblwrap"><table class="adm" style="min-width:520px">
+      <thead><tr><th>Date</th><th>Type</th><th>Montant</th><th>Statut</th></tr></thead>
+      <tbody id="cl-pays"></tbody>
+    </table></div>
   </div>
 </div>
 
@@ -616,23 +630,12 @@
   </div>
 </div></div>
 
-<!-- ===== MODALE PANIER ===== -->
-<div class="ov" id="ov-cart"><div class="md">
-  <button class="x" onclick="closeOv('ov-cart')">✕</button>
-  <h3>Mon panier</h3>
-  <div class="lines" id="cart-lines"></div>
-  <div class="tot"><span>Total</span><span id="cart-total">0 DA</span></div>
-  <div style="display:flex;gap:10px;margin-top:14px">
-    <button class="btn ghost" style="flex:1" onclick="closeOv('ov-cart');document.getElementById('cofs').scrollIntoView({behavior:'smooth'})">Continuer mes achats</button>
-    <button class="btn red" style="flex:1;padding:14px" onclick="openCheckout()">Passer à la livraison</button>
-  </div>
-</div></div>
-
-<!-- ===== MODALE LIVRAISON ===== -->
-<div class="ov" id="ov-checkout"><div class="md">
-  <button class="x" onclick="closeOv('ov-checkout')">✕</button>
-  <h3>Informations de livraison</h3>
-  <div class="s">Remplissez les détails pour finaliser votre commande.</div>
+<!-- ===== MODALE COMMANDE ===== -->
+<div class="ov" id="ov-order"><div class="md">
+  <button class="x" onclick="closeOv('ov-order')">✕</button>
+  <h3 id="ord-title"></h3>
+  <div id="ord-preview" style="background:linear-gradient(160deg,var(--peach),#fff 70%);border:1.5px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:16px"></div>
+  <div class="fld"><label>Quantité *</label><input type="number" id="c-qty" min="1" value="10" oninput="updateOrdTotal()"></div>
   <div class="grid2" style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
     <div class="fld"><label>Date de livraison *</label><input type="date" id="c-date"></div>
     <div class="fld"><label>Heure de livraison *</label><input type="time" id="c-heure" value="12:00"></div>
@@ -640,11 +643,9 @@
   <div class="fld"><label>Lieu de livraison *</label><input type="text" id="c-lieu" placeholder="Ex : Siège SEAAL, 2 rue…, Kouba"></div>
   <div class="fld"><label>Téléphone contact livraison *</label><input type="tel" id="c-tel" placeholder="05 XX XX XX XX"></div>
   <div class="fld"><label>Remarques</label><textarea id="c-note" rows="2" placeholder="Allergies, accès au site, étage, contact sur place…"></textarea></div>
-  <div class="err" id="c-err">Veuillez remplir la date, l'heure, le lieu et le téléphone.</div>
-  <div style="display:flex;gap:10px">
-    <button class="btn ghost" style="flex:1" onclick="closeOv('ov-checkout');openCart()">← Retour au panier</button>
-    <button class="btn red" style="flex:1;padding:14px" onclick="submitOrder()">Valider ma commande</button>
-  </div>
+  <div class="tot"><span>Total</span><span id="ord-total">0 DA</span></div>
+  <div class="err" id="c-err">Veuillez remplir la quantité, la date, l'heure, le lieu et le téléphone.</div>
+  <button class="btn red" style="width:100%;padding:16px;margin-top:12px" onclick="submitOrder()">Valider ma commande</button>
 </div></div>
 
 <!-- ===== MODALE AUTRE DATE (admin) ===== -->
@@ -697,17 +698,6 @@
     <button class="btn red" onclick="window.print()">🖨️ Imprimer / PDF</button>
     <a class="btn ghost" id="i-mail" href="#">📧 Envoyer par email</a>
   </div>
-</div></div>
-
-<!-- ===== MODALE PERSONNALISATION COFFRET ===== -->
-<div class="ov" id="ov-customize"><div class="md">
-  <button class="x" onclick="closeOv('ov-customize')">✕</button>
-  <h3 id="cz-title"></h3>
-  <div class="s" id="cz-sub"></div>
-  <div id="cz-body"></div>
-  <div class="fld" style="margin-top:14px"><label>Quantité</label><input type="number" id="cz-qty" min="1" value="10" style="width:120px"></div>
-  <div class="err" id="cz-err">Veuillez compléter toutes les options.</div>
-  <button class="btn red" style="width:100%;padding:16px;margin-top:10px" id="cz-btn" onclick="confirmCustomize()">Ajouter au panier</button>
 </div></div>
 
 <script>
@@ -828,14 +818,9 @@ function goV(v){
   document.getElementById('v-'+v).classList.add('on');
   window.scrollTo({top:0});
   if(v==='admin'){ renderAdmin(); renderCat(); renderAPay(); }
-  if(v==='client') renderClient();
-}
-function goPane(p){
-  document.querySelectorAll('#v-client .tab').forEach(function(t){t.classList.toggle('on', t.dataset.pane===p);});
-  document.querySelectorAll('#v-client .pane').forEach(function(x){x.classList.remove('on');});
-  document.getElementById('p-'+p).classList.add('on');
-  if(p==='mes') renderMes();
-  if(p==='pay') renderPays();
+  if(v==='profil') renderProfil();
+  if(v==='commandes') renderMes();
+  if(v==='paiements') renderPays();
 }
 function goPaneA(p){
   document.querySelectorAll('#v-admin .tab').forEach(function(t){t.classList.toggle('on', t.dataset.pane===p);});
@@ -849,7 +834,7 @@ function openOv(id){
   if(id==='ov-auth'){ authTab('login'); renderLoginList(); }
 }
 function closeOv(id){document.getElementById(id).classList.remove('open');}
-function chipClick(){ if(USER){ goV('client'); } else { openOv('ov-auth'); } }
+function chipClick(){ if(USER){ goV('profil'); } else { openOv('ov-auth'); } }
 function logout(){ USER = null; save('err_user', null); refreshChip(); goV('public'); }
 function refreshChip(){
   var reg = document.getElementById('btn-register');
@@ -887,167 +872,6 @@ function renderCofs(){
   });
 }
 renderCofs();
-/* ================== PERSONNALISATION ================== */
-var CZ_I = null; // index du coffret en cours de personnalisation
-function openCustomize(i){
-  var c = COFFRETS[i];
-  CZ_I = i;
-  document.getElementById('cz-title').textContent = c.nom + ' — ' + (c.prix ? fmt(c.prix) : 'Sur demande');
-  document.getElementById('cz-sub').textContent = 'Personnalisez votre coffret avant de l\'ajouter au panier.';
-  var body = document.getElementById('cz-body');
-  var html = '';
-  var ch = c.choices;
-  if(!ch){ // pas de choix = ajout direct
-    closeOv('ov-customize');
-    quickAdd(i);
-    return;
-  }
-  // Entrée : froide/chaude au choix (basique, standard)
-  if(ch.entryType === 'choice'){
-    html += '<div class="cz-sec"><label>Entrée</label><div class="cz-radio">';
-    html += '<label><input type="radio" name="cz-entry" value="froide" checked> Froide</label>';
-    html += '<label><input type="radio" name="cz-entry" value="chaude"> Chaude</label>';
-    html += '</div></div>';
-    html += '<div class="cz-sec" id="cz-entry-list"><label>Choisissez votre entrée</label><div class="cz-radio" id="cz-entry-opts"></div></div>';
-  } else if(ch.entryFroides && ch.entryChaudes){
-    // Premium et au-dessus : les deux entrées
-    html += '<div class="cz-sec"><label>Entrée froide</label><div class="cz-radio" id="cz-ef-opts"></div></div>';
-    html += '<div class="cz-sec"><label>Entrée chaude</label><div class="cz-radio" id="cz-ec-opts"></div></div>';
-  }
-  // Viande
-  if(ch.meatType === 'choice'){
-    html += '<div class="cz-sec"><label>Viande</label><div class="cz-radio">';
-    html += '<label><input type="radio" name="cz-meat" value="blanche" checked> Blanche</label>';
-    html += '<label><input type="radio" name="cz-meat" value="rouge"> Rouge</label>';
-    html += '</div></div>';
-    html += '<div class="cz-sec" id="cz-meat-list"><label>Choisissez votre plat</label><div class="cz-radio" id="cz-meat-opts"></div></div>';
-  } else if(ch.meatType === 'fixed_rouge' || ch.meatType === 'fixed_poisson'){
-    var label = ch.meatType === 'fixed_poisson' ? 'Poisson' : 'Viande';
-    html += '<div class="cz-sec"><label>' + label + '</label><div class="cz-radio" id="cz-meat-opts"></div></div>';
-  }
-  // Garnitures
-  if(ch.garnitures){
-    html += '<div class="cz-sec"><label>' + ch.maxGarnitures + ' garniture' + (ch.maxGarnitures > 1 ? 's' : '') + ' parmi :</label>';
-    html += '<div class="cz-chips" id="cz-garn"></div>';
-    html += '<div class="cz-max" id="cz-garn-msg">0 / ' + ch.maxGarnitures + ' sélectionnée' + (ch.maxGarnitures > 1 ? 's' : '') + '</div></div>';
-  }
-  // Dessert
-  if(ch.dessert){
-    html += '<div class="cz-sec"><label>Dessert</label><div class="cz-radio" id="cz-dessert-opts"></div></div>';
-  }
-  body.innerHTML = html;
-  // Remplir les options
-  if(ch.entryType === 'choice'){
-    fillRadioGroup('cz-entry-opts', ch.entryFroides, 'cz-entry-item');
-    updateEntryList();
-    document.querySelectorAll('input[name="cz-entry"]').forEach(function(r){ r.addEventListener('change', updateEntryList); });
-  } else if(ch.entryFroides && ch.entryChaudes){
-    fillRadioGroup('cz-ef-opts', ch.entryFroides, 'cz-ef-item');
-    fillRadioGroup('cz-ec-opts', ch.entryChaudes, 'cz-ec-item');
-  }
-  if(ch.meatType === 'choice'){
-    fillRadioGroup('cz-meat-opts', ch.viandesBlanches, 'cz-meat-item');
-    updateMeatList();
-    document.querySelectorAll('input[name="cz-meat"]').forEach(function(r){ r.addEventListener('change', updateMeatList); });
-  } else if(ch.viandesRouges){
-    fillRadioGroup('cz-meat-opts', ch.viandesRouges, 'cz-meat-item');
-  }
-  if(ch.garnitures) fillChips('cz-garn', ch.garnitures, ch.maxGarnitures);
-  if(ch.dessert) fillRadioGroup('cz-dessert-opts', ch.dessert, 'cz-dessert-item');
-  document.getElementById('cz-err').style.display = 'none';
-  openOv('ov-customize');
-}
-function fillRadioGroup(id, items, name){
-  var el = document.getElementById(id);
-  if(!el) return;
-  el.innerHTML = items.map(function(item, idx){
-    return '<label><input type="radio" name="' + name + '" value="' + item + '"' + (idx === 0 ? ' checked' : '') + '> ' + item + '</label>';
-  }).join('');
-}
-function fillChips(id, items, max){
-  var el = document.getElementById(id);
-  el.innerHTML = items.map(function(item){
-    return '<label class="cz-chip" onclick="toggleChip(this,' + max + ')"><input type="checkbox" value="' + item + '"> ' + item + '</label>';
-  }).join('');
-}
-function toggleChip(el, max){
-  var box = el.querySelector('input');
-  if(box.checked){ box.checked = false; el.classList.remove('on'); }
-  else {
-    var chips = el.parentElement.querySelectorAll('.cz-chip input:checked');
-    if(chips.length >= max) return;
-    box.checked = true; el.classList.add('on');
-  }
-  var total = el.parentElement.querySelectorAll('.cz-chip input:checked').length;
-  var msg = el.parentElement.parentElement.querySelector('.cz-max');
-  if(msg) msg.textContent = total + ' / ' + max + ' sélectionnée' + (max > 1 ? 's' : '');
-}
-function updateEntryList(){
-  var v = document.querySelector('input[name="cz-entry"]:checked');
-  var ch = COFFRETS[CZ_I].choices;
-  if(!v || !ch) return;
-  var items = v.value === 'froide' ? ch.entryFroides : ch.entryChaudes;
-  fillRadioGroup('cz-entry-opts', items, 'cz-entry-item');
-}
-function updateMeatList(){
-  var v = document.querySelector('input[name="cz-meat"]:checked');
-  var ch = COFFRETS[CZ_I].choices;
-  if(!v || !ch) return;
-  var items = v.value === 'blanche' ? ch.viandesBlanches : ch.viandesRouges;
-  fillRadioGroup('cz-meat-opts', items, 'cz-meat-item');
-}
-function getRadioVal(name){
-  var r = document.querySelector('input[name="' + name + '"]:checked');
-  return r ? r.value : '';
-}
-function confirmCustomize(){
-  var c = COFFRETS[CZ_I];
-  var ch = c.choices;
-  var parts = [];
-  // Entrée
-  if(ch.entryType === 'choice'){
-    var entryType = getRadioVal('cz-entry');
-    var entryItem = getRadioVal('cz-entry-item');
-    if(!entryItem){ document.getElementById('cz-err').style.display='block'; return; }
-    parts.push((entryType === 'froide' ? 'Entrée froide' : 'Entrée chaude') + ' : ' + entryItem);
-  } else if(ch.entryFroides && ch.entryChaudes){
-    var ef = getRadioVal('cz-ef-item');
-    var ec = getRadioVal('cz-ec-item');
-    if(!ef || !ec){ document.getElementById('cz-err').style.display='block'; return; }
-    parts.push('Entrée froide : ' + ef);
-    parts.push('Entrée chaude : ' + ec);
-  }
-  // Viande
-  if(ch.meatType === 'choice'){
-    var meatType = getRadioVal('cz-meat');
-    var meatItem = getRadioVal('cz-meat-item');
-    if(!meatItem){ document.getElementById('cz-err').style.display='block'; return; }
-    parts.push(meatItem);
-  } else if(ch.viandesRouges){
-    var meatItem = getRadioVal('cz-meat-item');
-    if(!meatItem){ document.getElementById('cz-err').style.display='block'; return; }
-    parts.push(meatItem);
-  }
-  // Garnitures
-  if(ch.garnitures){
-    var garns = [];
-    document.querySelectorAll('#cz-garn .cz-chip input:checked').forEach(function(cb){ garns.push(cb.value); });
-    if(garns.length < 1){ document.getElementById('cz-err').style.display='block'; return; }
-    parts.push(garns.join(', '));
-  }
-  // Dessert
-  if(ch.dessert){
-    var dess = getRadioVal('cz-dessert-item');
-    if(!dess){ document.getElementById('cz-err').style.display='block'; return; }
-    parts.push(dess);
-  }
-  var qty = parseInt(document.getElementById('cz-qty').value) || 10;
-  LINES.push({nom: c.nom, qty: qty, pu: c.prix, comp: parts.join(' · ')});
-  saveLines();
-  closeOv('ov-customize');
-  updateCartBadge();
-  toast('✓ ' + c.nom + ' ajouté au panier (' + qty + ' × ' + fmt(c.prix) + ')');
-}
 function openCompo(i){
   var c = COFFRETS[i];
   document.getElementById('cp-titre').textContent = c.nom;
@@ -1065,88 +889,37 @@ function openCompo(i){
 }
 function startOrder(){ orderCof(2); } /* standard par defaut */
 var PENDING = null;
+var ORD_COF = null;
 function orderCof(i){
-  CZ_I = i;
+  ORD_COF = i;
   PENDING = (typeof i === 'number') ? i : null;
   if(!USER){ openOv('ov-auth'); return; }
   var c = COFFRETS[i];
   if(!c.prix){
-    // Sur demande → WhatsApp
     window.open('https://wa.me/213770371909?text=' + encodeURIComponent('Bonjour Erriane Foods, je souhaite un devis pour : ' + c.nom + '.'), '_blank');
     return;
   }
-  if(!c.choices){
-    // Pas de choix (Lunch Bag) → ajout direct
-    quickAdd(i);
-    return;
-  }
-  openCustomize(i);
+  openOrderForm(i);
 }
-function openCart(){
-  renderCart();
-  openOv('ov-cart');
-}
-function renderCart(){
-  var el = document.getElementById('cart-lines');
-  if(!LINES.length){
-    el.innerHTML = '<div style="color:var(--muted);font-size:.86rem;padding:20px 0;text-align:center">Votre panier est vide.</div>';
-    document.getElementById('cart-total').textContent = '0 DA';
-    updateCartBadge();
-    return;
-  }
-  var h = '';
-  LINES.forEach(function(l,i){
-    h += '<div class="ln" style="flex-direction:column;align-items:stretch;gap:6px">' +
-      '<div style="display:flex;justify-content:space-between;align-items:center">' +
-        '<div><b>' + esc(l.nom) + '</b>' + (l.comp ? '<span class="comp">' + esc(l.comp) + '</span>' : '') + '</div>' +
-        '<span class="x" onclick="rmLine(' + i + ')" title="Retirer">✕</span>' +
-      '</div>' +
-      '<div style="display:flex;align-items:center;gap:10px;font-size:.88rem">' +
-        '<span style="color:var(--muted)">' + fmt(l.pu) + ' / unité</span>' +
-        '<span style="margin-left:auto;display:flex;align-items:center;gap:6px">' +
-          '<button class="qty-btn" onclick="changeQty(' + i + ',-1)">−</button>' +
-          '<b style="min-width:24px;text-align:center">' + l.qty + '</b>' +
-          '<button class="qty-btn" onclick="changeQty(' + i + ',1)">+</button>' +
-        '</span>' +
-        '<b style="min-width:90px;text-align:right">' + fmt(l.qty * l.pu) + '</b>' +
-      '</div>' +
-    '</div>';
-  });
-  el.innerHTML = h;
-  var tot = LINES.reduce(function(s,l){return s+l.qty*l.pu;},0);
-  document.getElementById('cart-total').textContent = fmt(tot);
-  updateCartBadge();
-}
-function changeQty(i, delta){
-  LINES[i].qty = Math.max(1, LINES[i].qty + delta);
-  renderCart();
-  saveLines();
-}
-function updateCartBadge(){
-  var count = LINES.reduce(function(s,l){return s+l.qty;},0);
-  var badge = document.getElementById('cart-badge');
-  if(count > 0){ badge.style.display=''; document.getElementById('cart-count').textContent=count; }
-  else { badge.style.display='none'; }
-}
-function openCheckout(){
-  if(!LINES.length){ toast('Votre panier est vide'); return; }
-  closeOv('ov-cart');
-  document.getElementById('c-date').min = new Date().toISOString().split('T')[0];
-  openOv('ov-checkout');
-}
-function quickAdd(i){
+function openOrderForm(i){
   var c = COFFRETS[i];
-  if(!c || !c.prix) return;
-  if(c.choices){
-    CZ_I = i;
-    closeOv('ov-cart');
-    openCustomize(i);
-    return;
-  }
-  LINES.push({nom:c.nom, qty:10, pu:c.prix});
-  saveLines();
-  updateCartBadge();
-  toast('✓ ' + c.nom + ' ajouté au panier (10 × ' + fmt(c.prix) + ')');
+  document.getElementById('ord-title').textContent = c.nom;
+  document.getElementById('ord-preview').innerHTML =
+    '<div style="display:flex;justify-content:space-between;align-items:center">' +
+      '<div><b>' + esc(c.nom) + '</b><br><span style="color:var(--muted);font-size:.85rem">' + (c.compo ? c.compo.slice(0,2).join(' · ') : '') + '</span></div>' +
+      '<div style="text-align:right"><span style="font-family:\'Anton\';font-size:1.2rem;color:var(--red)">' + fmt(c.prix) + '</span><br><span style="color:var(--muted);font-size:.8rem">/ coffret</span></div>' +
+    '</div>';
+  document.getElementById('c-qty').value = 10;
+  document.getElementById('c-date').min = new Date().toISOString().split('T')[0];
+  document.getElementById('c-err').style.display = 'none';
+  updateOrdTotal();
+  openOv('ov-order');
+}
+function updateOrdTotal(){
+  if(ORD_COF === null) return;
+  var c = COFFRETS[ORD_COF];
+  var qty = parseInt(document.getElementById('c-qty').value) || 0;
+  document.getElementById('ord-total').textContent = fmt(qty * c.prix);
 }
 
 /* ================== AUTH ================== */
@@ -1168,7 +941,7 @@ function enterAs(u){
   USER = u;
   save('err_user', USER); refreshChip(); closeOv('ov-auth');
   if(PENDING !== null){ var tmp = PENDING; PENDING = null; orderCof(tmp); }
-  else { goV('client'); goPane('mes'); }
+  else { goV('profil'); }
 }
 function loginAs(email){
   var c = clientsList().filter(function(x){ return x.email===email; })[0];
@@ -1193,12 +966,14 @@ function register(){
 }
 
 /* ================== CLIENT : commande ================== */
-var LINES = load('err_lines', []);
-function saveLines(){ save('err_lines', LINES); updateCartBadge(); }
-function renderClient(){
-  document.getElementById('cl-hello').textContent = USER ? (USER.nom + ' · ' + USER.etab + ' · ' + USER.tel + ' · ' + USER.email) : '';
-  var d = document.getElementById('c-date'); d.min = new Date().toISOString().split('T')[0];
-  renderBal(); renderLines(); renderMes(); renderPays();
+function renderProfil(){
+  var info = USER ? (USER.nom + ' · ' + USER.etab + ' · ' + USER.tel + ' · ' + USER.email) : '';
+  document.getElementById('cl-hello').textContent = info;
+  renderBal();
+}
+function renderCommandes(){
+  document.getElementById('cl-hello2').textContent = USER ? (USER.nom + ' · ' + USER.etab) : '';
+  renderMes();
 }
 function renderBal(){
   var el = document.getElementById('cl-bal');
@@ -1213,6 +988,7 @@ function renderBal(){
   }
 }
 function renderPays(){
+  if(document.getElementById('cl-hello3')) document.getElementById('cl-hello3').textContent = USER ? (USER.nom + ' · ' + USER.etab) : '';
   if(!USER) return;
   var due = dueFor(USER.email), paid = paidFor(USER.email), b = due - paid;
   document.getElementById('cl-pay-sum').innerHTML =
@@ -1228,42 +1004,31 @@ function renderPays(){
       '<td><span class="stp2 ' + x.st + '">' + PAY_ST[x.st] + '</span></td></tr>';
   }).join('') : '<tr><td colspan="4" style="padding:16px;text-align:center;color:var(--muted)">Aucun versement enregistré pour l\'instant.</td></tr>';
 }
-function renderLines(){
-  // Conservé pour compatibilité (panneau client) : le panier vit désormais dans ov-cart (renderCart).
-  var el = document.getElementById('c-lines');
-  if(!el) return;
-  if(!LINES.length){ el.innerHTML = '<div style="color:var(--muted);font-size:.86rem">Votre panier est vide.</div>'; var t = document.getElementById('c-total'); if(t) t.textContent = '0 DA'; return; }
-  var h = '';
-  LINES.forEach(function(l,i){
-    h += '<div class="ln"><div><b>'+esc(l.nom)+'</b> × '+l.qty+'<br>'+fmt(l.pu)+' / unité'+(l.comp ? '<span class="comp">'+esc(l.comp)+'</span>' : '')+'</div><span class="x" onclick="rmLine('+i+')">✕</span></div>';
-  });
-  el.innerHTML = h;
-  var tot = LINES.reduce(function(s,l){return s+l.qty*l.pu;},0);
-  var t2 = document.getElementById('c-total'); if(t2) t2.textContent = fmt(tot);
-}
-function rmLine(i){ LINES.splice(i,1); renderCart(); updateCartBadge(); saveLines(); }
 function submitOrder(){
-  var date = document.getElementById('c-date').value,
+  if(ORD_COF === null) return;
+  var c = COFFRETS[ORD_COF];
+  var qty = parseInt(document.getElementById('c-qty').value) || 0,
+      date = document.getElementById('c-date').value,
       heure = document.getElementById('c-heure').value,
       lieu = document.getElementById('c-lieu').value.trim(),
       tel = document.getElementById('c-tel').value.trim();
-  if(!LINES.length || !date || !heure || !lieu || !tel){ document.getElementById('c-err').style.display='block'; return; }
+  if(!qty || !date || !heure || !lieu || !tel){ document.getElementById('c-err').style.display='block'; return; }
   document.getElementById('c-err').style.display='none';
   var o = {
     ref: 'ERR-' + Math.floor(1000 + Math.random()*9000),
     client: USER,
-    lignes: LINES.slice(),
-    total: LINES.reduce(function(s,l){return s + l.qty*l.pu;}, 0),
+    lignes: [{nom: c.nom, qty: qty, pu: c.prix}],
+    total: qty * c.prix,
     date: date, heure: heure, lieu: lieu, tel: tel,
     note: document.getElementById('c-note').value.trim(),
     st: 'attente', rep: null, prep: {dessert:'', boisson:'', livreur:''}
   };
   ORDERS.unshift(o); save('err_orders', ORDERS);
-  LINES = []; saveLines();
   document.getElementById('c-lieu').value=''; document.getElementById('c-note').value=''; document.getElementById('c-tel').value='';
-  closeOv('ov-checkout');
-  updateCartBadge();
-  goV('client'); goPane('mes');
+  closeOv('ov-order');
+  ORD_COF = null;
+  toast('✓ Commande ' + o.ref + ' envoyée !');
+  goV('commandes');
 }
 var ST_LABEL = {attente:'En attente', confirmee:'Confirmée', annulee:'Annulée', reportee:'Autre date proposée'};
 function ordHtml(o, admin){
@@ -1291,6 +1056,7 @@ function ordHtml(o, admin){
   return h;
 }
 function renderMes(){
+  if(document.getElementById('cl-hello2')) document.getElementById('cl-hello2').textContent = USER ? (USER.nom + ' · ' + USER.etab) : '';
   var mine = ORDERS.filter(function(o){return USER && o.client.email === USER.email;});
   document.getElementById('mes-list').innerHTML = mine.length
     ? mine.map(function(o){return ordHtml(o, false);}).join('')
