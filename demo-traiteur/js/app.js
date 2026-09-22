@@ -80,7 +80,16 @@ if(!ORDERS){
   ];
   save('err_orders', ORDERS);
 }
-ORDERS.forEach(function(o){ if(!o.prep) o.prep = {dessert:'', boisson:'', livreur:''}; });
+ORDERS.forEach(function(o){
+  if(!o.prep) o.prep = {dessert:'', boisson:'', livreur:''};
+  /* Migration : l'ancien choix dessert/boisson par commande devient le détail par ligne */
+  if(!o.detailLines && (o.prep.dessert || o.prep.boisson)){
+    o.detailLines = o.lignes.map(function(){
+      return {entree:'', viande:'', garnitures:'', dessert:o.prep.dessert||'', boisson:o.prep.boisson||''};
+    });
+  }
+});
+save('err_orders', ORDERS);
 var PAYMENTS = load('err_pays', null);
 if(!PAYMENTS){
   PAYMENTS = [{id:'P-1001', email:'a.z@merinal.dz', etab:'Merinal Laboratoires', montant:40000, type:'Virement', date:'2026-09-20', st:'enc'}];
@@ -516,17 +525,20 @@ function renderAdmin(){
     } else {
       acts += '<button class="abtn neutral xs" title="Remettre en attente" onclick="setSt(\''+o.ref+'\',\'attente\')">↩</button>';
     }
+    acts += '<button class="abtn neutral xs" title="Détails" onclick="openDetail(\''+o.ref+'\')">Détails</button>';
+    var dst = detailStatus(o);
+    var detailCell = '<span class="' + (dst.done ? 'detail-ok' : 'detail-warn') + '">' +
+      (dst.done ? '✓ Détaillé' : '⚠ À détailler') + '</span>' + histLineDetail(o);
     return '<tr>' +
       '<td><b>'+o.ref+'</b><br><span class="st '+o.st+'">'+ST_LABEL[o.st]+'</span>'+(o.rep?'<div class="mini">📆 '+o.rep+'</div>':'')+'</td>' +
       '<td><b>'+o.date.split('-').reverse().join('/')+'</b><br>'+o.heure+'<div class="mini">'+o.lieu+'</div>'+(o.tel?'<div class="mini">📞 '+o.tel+'</div>':'')+'</td>' +
       '<td class="cl"><b>'+o.client.nom+'</b><small>'+o.client.etab+'<br>'+o.client.tel+'</small></td>' +
       '<td>'+lignes+'<div class="mini">'+fmt(o.total)+' HT</div></td>' +
-      '<td>'+selHtml(o.ref,'dessert',DESSERTS,o.prep.dessert)+histLine(o,'dessert')+'</td>' +
-      '<td>'+selHtml(o.ref,'boisson',BOISSONS,o.prep.boisson)+histLine(o,'boisson')+'</td>' +
+      '<td>'+detailCell+'</td>' +
       '<td>'+selHtml(o.ref,'livreur',LIVREURS,o.prep.livreur)+'</td>' +
       '<td><div class="aact">'+acts+'</div></td></tr>';
   }).join('');
-  document.getElementById('adm-rows').innerHTML = rows || '<tr><td colspan="8" style="padding:22px;text-align:center;color:var(--muted)">Aucune commande pour ce filtre.</td></tr>';
+  document.getElementById('adm-rows').innerHTML = rows || '<tr><td colspan="7" style="padding:22px;text-align:center;color:var(--muted)">Aucune commande pour ce filtre.</td></tr>';
   document.getElementById('afb-list').innerHTML = FBS.length
     ? FBS.map(function(f){return '<div class="fbk">« '+f.txt.replace(/</g,'&lt;')+' »<small>'+f.de+' · '+f.quand+'</small></div>';}).join('')
     : '<div class="panel" style="color:var(--muted)">Aucun message privé.</div>';
@@ -575,20 +587,274 @@ function filterLabel(){
   if(F.liv !== 'all') t += ' · Livreur : ' + (F.liv==='none' ? 'non affecté' : F.liv);
   return t;
 }
+function getDetailForLine(o, i){
+  if(!o.detailLines || !o.detailLines[i]) return null;
+  return o.detailLines[i];
+}
+function detailStatus(o){
+  if(!o.detailLines || o.detailLines.length !== o.lignes.length) return {done:false};
+  var done = o.detailLines.every(function(d){
+    if(!d) return false;
+    return d.entree && d.viande && d.garnitures && d.dessert && d.boisson;
+  });
+  return {done:!!done};
+}
+function histLineDetail(o){
+  var vals = [];
+  sameClientOrders(o).forEach(function(x){
+    if(x.date !== o.date) return;
+    (x.detailLines || []).forEach(function(d){
+      if(d && d.dessert) vals.push(d.dessert);
+      if(d && d.boisson) vals.push(d.boisson);
+    });
+  });
+  if(vals.length){
+    return '<div class="hist">Déjà envoyé ce jour : <b>' + esc(vals.join(', ')) + '</b></div>';
+  }
+  return '';
+}
+function findCof(nom){
+  return COFFRETS.find(function(c){return c.nom === nom;}) || null;
+}
+function openDetail(ref){
+  var o = ORDERS.find(function(x){return x.ref===ref;});
+  if(!o) return;
+  document.getElementById('d-title').textContent = 'Détails — ' + o.ref;
+  document.getElementById('d-sub').textContent = o.client.etab + ' · ' + o.date.split('-').reverse().join('/') + ' à ' + o.heure;
+  var html = '';
+  o.lignes.forEach(function(l, i){
+    var cof = findCof(l.nom);
+    var ch = cof ? cof.choices : null;
+    var existing = getDetailForLine(o, i);
+    var name = 'd_' + i + '_';
+    html += '<div class="detail-section">';
+    html += '<h4>' + esc(l.nom) + ' — ' + l.qty + ' ×</h4>';
+    /* Entrée */
+    html += '<label style="font-size:.78rem;font-weight:700;margin-bottom:5px;display:block">Entrée</label>';
+    var entryTypes = [];
+    if(ch){
+      if(ch.entryFroides) entryTypes.push('froide');
+      if(ch.entryChaudes) entryTypes.push('chaude');
+      if(ch.entryFroides && ch.entryChaudes) entryTypes.push('froide', 'chaude');
+      entryTypes = entryTypes.filter(function(v,i,a){return a.indexOf(v)===i;});
+    }
+    if(!entryTypes.length) entryTypes = ['froide','chaude'];
+    var prevEntType = '';
+    if(existing && existing.entree){
+      if(ch && ch.entryFroides && ch.entryFroides.indexOf(existing.entree)>=0) prevEntType = 'froide';
+      else if(ch && ch.entryChaudes && ch.entryChaudes.indexOf(existing.entree)>=0) prevEntType = 'chaude';
+    }
+    html += '<div class="detail-radio">';
+    entryTypes.forEach(function(t){
+      html += '<label><input type="radio" name="'+name+'ent" value="'+t+'"'+(t===prevEntType?' checked':'')+' onchange="toggleEntType(\''+name+'\',\''+t+'\')"> '+esc(t==='froide'?'Froide':'Chaude')+'</label>';
+    });
+    html += '</div>';
+    var entryOptions = [];
+    if(prevEntType==='froide' && ch && ch.entryFroides) entryOptions = ch.entryFroides;
+    else if(prevEntType==='chaude' && ch && ch.entryChaudes) entryOptions = ch.entryChaudes;
+    else if(ch){
+      entryOptions = (ch.entryFroides||[]).concat(ch.entryChaudes||[]);
+    }
+    html += '<div class="detail-radio" id="'+name+'entries">';
+    entryOptions.forEach(function(e){
+      html += '<label><input type="radio" name="'+name+'entv" value="'+esc(e)+'"'+((existing && existing.entree===e)?' checked':'')+' onchange="clearField(\''+name+'ent\')"> '+esc(e)+'</label>';
+    });
+    html += '</div>';
+    if(!entryOptions.length){
+      html += '<div style="font-size:.76rem;color:var(--muted)">Ce coffret n\'a pas d\'entrées spécifiques à définir.</div>';
+    }
+    /* Viande */
+    html += '<label style="font-size:.78rem;font-weight:700;margin-bottom:5px;display:block;margin-top:10px">Viande</label>';
+    if(ch){
+      var meatTypes = [];
+      if(ch.meatType){
+        if(ch.meatType==='choice') meatTypes = ['blanche','rouge'];
+        else if(ch.meatType==='fixed_rouge') meatTypes = ['rouge'];
+        else if(ch.meatType==='fixed_poisson') meatTypes = ['poisson'];
+      }
+      var prevMeatType = '';
+      if(existing && existing.viande){
+        if(ch.viandesBlanches && ch.viandesBlanches.indexOf(existing.viande)>=0) prevMeatType = 'blanche';
+        else if(ch.viandesRouges && ch.viandesRouges.indexOf(existing.viande)>=0) prevMeatType = meatTypes.length && meatTypes[0]==='poisson'?'poisson':'rouge';
+        else prevMeatType = 'rouge';
+      }
+      html += '<div class="detail-radio">';
+      meatTypes.forEach(function(t){
+        html += '<label><input type="radio" name="'+name+'meat" value="'+t+'"'+(t===prevMeatType?' checked':'')+' onchange="toggleMeatType(\''+name+'\',\''+t+'\')"> '+esc(t)+'</label>';
+      });
+      html += '</div>';
+      var meatOptions = [];
+      if(prevMeatType==='blanche') meatOptions = ch.viandesBlanches||[];
+      else if(prevMeatType==='rouge') meatOptions = ch.viandesRouges||[];
+      else if(prevMeatType==='poisson') meatOptions = ch.viandesRouges||[];
+      else if(ch.viandesRouges) meatOptions = ch.viandesRouges;
+      else if(ch.viandesBlanches) meatOptions = ch.viandesBlanches;
+      html += '<div class="detail-radio" id="'+name+'meats">';
+      meatOptions.forEach(function(m){
+        html += '<label><input type="radio" name="'+name+'meatv" value="'+esc(m)+'"'+((existing && existing.viande===m)?' checked':'')+' onchange="clearField(\''+name+'meat\')"> '+esc(m)+'</label>';
+      });
+      html += '</div>';
+    } else {
+      html += '<div style="font-size:.76rem;color:var(--muted)">Ce coffret n\'a pas de viande spécifique à définir.</div>';
+    }
+    /* Garnitures */
+    if(ch && ch.garnitures){
+      var maxG = ch.maxGarnitures || 3;
+      var prevG = (existing && existing.garnitures) ? existing.garnitures.split(', ').filter(function(g){return g;}) : [];
+      html += '<label style="font-size:.78rem;font-weight:700;margin-bottom:5px;display:block;margin-top:10px">Garnitures (max. '+maxG+')</label>';
+      html += '<div class="detail-chips" id="'+name+'garn">';
+      ch.garnitures.forEach(function(g){
+        html += '<span class="detail-chip'+(prevG.indexOf(g)>=0?' on':'')+'" onclick="toggleGarn(this,\''+name+'garn\','+maxG+')">'+esc(g)+'<input type="hidden" value="'+esc(g)+'"></span>';
+      });
+      html += '</div>';
+      html += '<div class="detail-chip-count" id="'+name+'garn-c" style="font-size:.74rem;color:var(--muted);margin-top:4px">'+prevG.length+' / '+maxG+'</div>';
+    }
+    /* Dessert */
+    html += '<label style="font-size:.78rem;font-weight:700;margin-bottom:5px;display:block;margin-top:10px">Dessert</label>';
+    html += '<div class="detail-radio">';
+    DESSERTS.forEach(function(d){
+      html += '<label><input type="radio" name="'+name+'des" value="'+esc(d)+'"'+((existing && existing.dessert===d)?' checked':'')+'>'+esc(d)+'</label>';
+    });
+    html += '</div>';
+    /* Boisson */
+    html += '<label style="font-size:.78rem;font-weight:700;margin-bottom:5px;display:block;margin-top:10px">Boisson</label>';
+    html += '<div class="detail-radio">';
+    BOISSONS.forEach(function(b){
+      html += '<label><input type="radio" name="'+name+'boi" value="'+esc(b)+'"'+((existing && existing.boisson===b)?' checked':'')+'>'+esc(b)+'</label>';
+    });
+    html += '</div>';
+    html += '</div>';
+  });
+  document.getElementById('d-lines').innerHTML = html;
+  document.getElementById('d-save').onclick = function(){ saveDetail(ref); };
+  openOv('ov-detail');
+}
+function toggleEntType(name, type){
+  var ch = null;
+  document.getElementById(name+'entries').innerHTML = '';
+  var o = ORDERS.find(function(x){return x.ref===document.getElementById('d-title').textContent.replace('Détails — ','');});
+  if(!o) return;
+  var idx = parseInt(name.split('_')[1]);
+  var cof = findCof(o.lignes[idx].nom);
+  ch = cof ? cof.choices : null;
+  var options = [];
+  if(type==='froide' && ch && ch.entryFroides) options = ch.entryFroides;
+  else if(type==='chaude' && ch && ch.entryChaudes) options = ch.entryChaudes;
+  var el = document.getElementById(name+'entries');
+  el.innerHTML = options.map(function(e){
+    return '<label><input type="radio" name="'+name+'entv" value="'+esc(e)+'" onchange="clearField(\''+name+'ent\')"> '+esc(e)+'</label>';
+  }).join('');
+}
+function toggleMeatType(name, type){
+  var o = ORDERS.find(function(x){return x.ref===document.getElementById('d-title').textContent.replace('Détails — ','');});
+  if(!o) return;
+  var idx = parseInt(name.split('_')[1]);
+  var cof = findCof(o.lignes[idx].nom);
+  var ch = cof ? cof.choices : null;
+  var options = [];
+  if(type==='blanche' && ch && ch.viandesBlanches) options = ch.viandesBlanches;
+  else if(type==='rouge' && ch && ch.viandesRouges) options = ch.viandesRouges;
+  else if(type==='poisson' && ch && ch.viandesRouges) options = ch.viandesRouges;
+  document.getElementById(name+'meats').innerHTML = options.map(function(m){
+    return '<label><input type="radio" name="'+name+'meatv" value="'+esc(m)+'" onchange="clearField(\''+name+'meat\')"> '+esc(m)+'</label>';
+  }).join('');
+}
+function clearField(name){ /* just to trigger re-render if needed */ }
+function toggleGarn(el, containerId, max){
+  var container = document.getElementById(containerId);
+  var on = container.querySelectorAll('.detail-chip.on');
+  if(el.classList.contains('on')){
+    el.classList.remove('on');
+  } else {
+    if(on.length >= max) return;
+    el.classList.add('on');
+  }
+  var count = container.querySelectorAll('.detail-chip.on').length;
+  var counter = document.getElementById(containerId + '-c');
+  if(counter) counter.textContent = count + ' / ' + max;
+}
+function saveDetail(ref){
+  var o = ORDERS.find(function(x){return x.ref===ref;});
+  if(!o) return;
+  o.detailLines = o.lignes.map(function(l, i){
+    var name = 'd_' + i + '_';
+    var ent = '';
+    var entEl = document.querySelector('input[name="'+name+'entv"]:checked');
+    if(entEl) ent = entEl.value;
+    else {
+      var entTypeEl = document.querySelector('input[name="'+name+'ent"]:checked');
+      if(entTypeEl && !ent){
+        /* nothing selected yet */
+      }
+    }
+    var meat = '';
+    var meatEl = document.querySelector('input[name="'+name+'meatv"]:checked');
+    if(meatEl) meat = meatEl.value;
+    var garn = [];
+    var garnContainer = document.getElementById(name+'garn');
+    if(garnContainer){
+      garnContainer.querySelectorAll('.detail-chip.on').forEach(function(c){
+        var val = c.querySelector('input');
+        if(val) garn.push(val.value);
+      });
+    }
+    var des = '';
+    var desEl = document.querySelector('input[name="'+name+'des"]:checked');
+    if(desEl) des = desEl.value;
+    var boi = '';
+    var boiEl = document.querySelector('input[name="'+name+'boi"]:checked');
+    if(boiEl) boi = boiEl.value;
+    return {
+      cofRef: i,
+      entree: ent,
+      viande: meat,
+      garnitures: garn.join(', '),
+      dessert: des,
+      boisson: boi
+    };
+  });
+  /* Sync first detail's dessert/boisson to prep for backwards compat */
+  if(o.detailLines.length && o.detailLines[0]){
+    o.prep.dessert = o.detailLines[0].dessert || '';
+    o.prep.boisson = o.detailLines[0].boisson || '';
+  }
+  save('err_orders', ORDERS);
+  closeOv('ov-detail');
+  toast('✓ Détails enregistrés pour ' + o.ref);
+  renderAdmin();
+}
 function openSheet(){
   var list = filtered().slice().sort(function(a,b){ return (a.date+a.heure).localeCompare(b.date+b.heure); });
   document.getElementById('s-sub').textContent = filterLabel() + ' — ' + list.length + ' commande(s)';
   document.getElementById('s-emis').textContent = 'Émise le ' + new Date().toLocaleDateString('fr-FR') + ' à ' + new Date().toTimeString().slice(0,5);
   document.getElementById('s-rows').innerHTML = list.length ? list.map(function(o){
-    var lignes = o.lignes.map(function(l){return esc(l.nom) + ' × ' + l.qty;}).join('<br>');
+    var cofs = o.lignes.map(function(l){return esc(l.nom) + ' × ' + l.qty;}).join('<br>');
     function cell(v){ return v ? '<td>' + esc(v) + '</td>' : '<td class="todo-cell">à définir</td>'; }
+    var contenus = o.lignes.map(function(l, i){
+      var d = getDetailForLine(o, i);
+      if(!d || (!d.entree && !d.viande && !d.garnitures)) return '';
+      return [d.entree, d.viande, d.garnitures].filter(function(x){return x;}).join(' · ');
+    });
+    var desserts = o.lignes.map(function(l, i){
+      var d = getDetailForLine(o, i);
+      return (d && d.dessert) ? d.dessert : '';
+    });
+    var boissons = o.lignes.map(function(l, i){
+      var d = getDetailForLine(o, i);
+      return (d && d.boisson) ? d.boisson : '';
+    });
+    function cells(arr){
+      if(!arr.length) return '<td class="todo-cell">à définir</td>';
+      if(arr.every(function(v){return !v;})) return '<td class="todo-cell">à définir</td>';
+      return '<td>' + arr.map(function(v){return esc(v || 'à définir');}).join('<br>') + '</td>';
+    }
     return '<tr><td><b>' + o.date.split('-').reverse().join('/') + '</b><br>' + o.heure + '</td>' +
       '<td><b>' + esc(o.client.etab) + '</b></td>' +
       '<td>' + esc(o.lieu) + '</td>' +
-      '<td>' + lignes + '</td>' +
-      cell(o.prep.dessert) + cell(o.prep.boisson) + cell(o.prep.livreur) +
+      '<td>' + cofs + '</td>' +
+      cells(contenus) + cells(desserts) + cells(boissons) + cell(o.prep.livreur) +
       '<td>' + esc(o.note || '—') + '</td></tr>';
-  }).join('') : '<tr><td colspan="8" style="text-align:center;padding:18px;color:#999">Aucune commande pour ce filtre.</td></tr>';
+  }).join('') : '<tr><td colspan="9" style="text-align:center;padding:18px;color:#999">Aucune commande pour ce filtre.</td></tr>';
   openOv('ov-sheet');
 }
 function doPrintSheet(){

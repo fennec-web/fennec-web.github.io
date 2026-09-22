@@ -206,10 +206,10 @@
         <button class="btn sm red" onclick="openSheet()">🖨️ Feuille équipe</button>
       </div>
       <div class="tblwrap"><table class="adm">
-        <thead><tr><th>Réf / Statut</th><th>Livraison</th><th>Client</th><th>Contenu (prédéfini)</th><th>Dessert *</th><th>Boisson *</th><th>Livreur *</th><th>Actions</th></tr></thead>
+        <thead><tr><th>Réf / Statut</th><th>Livraison</th><th>Client</th><th>Contenu (prédéfini)</th><th>Détail</th><th>Livreur *</th><th>Actions</th></tr></thead>
         <tbody id="adm-rows"></tbody>
       </table></div>
-      <p style="font-size:.76rem;color:var(--muted);margin-top:10px">* Champs à compléter par le traiteur avant génération du bon de commande. Les champs en jaune restent à définir.</p>
+      <p style="font-size:.76rem;color:var(--muted);margin-top:10px">* Livreur à affecter par le traiteur avant génération de la feuille équipe. Le bouton Détails précise le contenu de chaque ligne (entrées, viandes, garnitures, desserts, boissons). Les champs en jaune restent à définir.</p>
     </div>
 
     <div class="pane" id="p-apay">
@@ -395,6 +395,15 @@
 </div></div>
 
 
+<!-- ===== MODALE DETAILS COMMANDE (feuille de route, traiteur) ===== -->
+<div class="ov" id="ov-detail"><div class="md" style="max-width:640px">
+  <button class="x" onclick="closeOv('ov-detail')">✕</button>
+  <h3 id="d-title">Détails</h3>
+  <div class="s" id="d-sub">Précisez le contenu de chaque ligne avant envoi en cuisine.</div>
+  <div id="d-lines"></div>
+  <button class="btn red" style="width:100%;padding:14px;margin-top:14px" id="d-save">Enregistrer</button>
+</div></div>
+
 <!-- ===== FEUILLE EQUIPE (production & livraison, HT) ===== -->
 <div class="ov" id="ov-sheet"><div class="sheet printable" id="sheet">
   <button class="x" onclick="closeOv('ov-sheet')" style="position:absolute;top:12px;right:16px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:#999">✕</button>
@@ -403,7 +412,7 @@
     <div class="n"><b>Feuille de production & livraison</b><span id="s-sub"></span><br><span id="s-emis"></span></div>
   </div>
   <table>
-    <thead><tr><th>Heure</th><th>Client</th><th>Lieu</th><th>Contenu</th><th>Dessert</th><th>Boisson</th><th>Livreur</th><th>Remarques</th></tr></thead>
+    <thead><tr><th>Heure</th><th>Client</th><th>Lieu</th><th>Coffret</th><th>Contenu</th><th>Dessert</th><th>Boisson</th><th>Livreur</th><th>Remarques</th></tr></thead>
     <tbody id="s-rows"></tbody>
   </table>
   <div class="sbtns"><button class="btn red" onclick="doPrintSheet()">🖨️ Imprimer la feuille</button></div>
