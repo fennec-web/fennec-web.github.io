@@ -95,7 +95,7 @@ if(!PAYMENTS){
   PAYMENTS = [{id:'P-1001', email:'a.z@merinal.dz', etab:'Merinal Laboratoires', montant:40000, type:'Virement', date:'2026-09-20', st:'enc'}];
   save('err_pays', PAYMENTS);
 }
-function fTTC(o){ return Math.round(o.total * (1 + TVA)); }
+function fTTC(o){ return o.total; }
 function dueFor(email){
   return ORDERS.filter(function(o){return o.client.email===email && o.st==='confirmee';})
     .reduce(function(t,o){return t + fTTC(o);}, 0);
@@ -511,8 +511,8 @@ function renderAdmin(){
   document.getElementById('kpis').innerHTML =
     '<div class="kpi"><b>'+att+'</b><span>commande(s) en attente</span></div>' +
     '<div class="kpi"><b>'+conf+'</b><span>confirmée(s)</span></div>' +
-    '<div class="kpi"><b>'+fmt(ca)+'</b><span>chiffre confirmé (HT)</span></div>' +
-    '<div class="kpi"><b class="'+(reste>0?'bal-neg':'bal-pos')+'" style="color:inherit">'+fmt(reste)+'</b><span>reste à encaisser (TTC)</span></div>';
+    '<div class="kpi"><b>'+fmt(ca)+'</b><span>chiffre confirmé</span></div>' +
+    '<div class="kpi"><b class="'+(reste>0?'bal-neg':'bal-pos')+'" style="color:inherit">'+fmt(reste)+'</b><span>reste à encaisser</span></div>';
   var fl = document.getElementById('f-liv');
   var cur = F.liv;
   fl.innerHTML = '<option value="all">Tous</option>' +
@@ -1023,10 +1023,11 @@ function openInv(ref){
   document.getElementById('i-lines').innerHTML = o.lignes.map(function(l){
     return '<tr><td>'+l.nom+'</td><td>'+l.qty+'</td><td>'+fmt(l.pu)+'</td><td style="text-align:right">'+fmt(l.qty*l.pu)+'</td></tr>';
   }).join('');
-  var tva = Math.round(o.total * TVA);
-  document.getElementById('i-ht').textContent = fmt(o.total);
+  var ht = Math.round(o.total / (1 + TVA));
+  var tva = o.total - ht;
+  document.getElementById('i-ht').textContent = fmt(ht);
   document.getElementById('i-tva').textContent = fmt(tva);
-  document.getElementById('i-total').textContent = fmt(o.total + tva);
+  document.getElementById('i-total').textContent = fmt(o.total);
   var body = 'Bonjour,%0D%0AVeuillez trouver la facture ' + o.ref + ' — total TTC ' + fmt(Math.round(o.total*(1+TVA))) + '.%0D%0AErriane Foods';
   document.getElementById('i-mail').href = 'mailto:' + o.client.email + '?subject=Facture ' + o.ref + ' — Erriane Foods&body=' + body;
   openOv('ov-inv');
