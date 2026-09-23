@@ -487,6 +487,9 @@ function filtered(){
     if(F.t==='today' && o.date !== isoShift(0)) return false;
     if(F.t==='tomorrow' && o.date !== isoShift(1)) return false;
     if(F.t==='date' && o.date !== document.getElementById('f-date').value) return false;
+    if(F.t==='attente' && o.st !== 'attente') return false;
+    if(F.t==='confirmee' && o.st !== 'confirmee') return false;
+    if(F.t==='annulee' && o.st !== 'annulee') return false;
     if(F.liv !== 'all'){
       if(F.liv==='none' && o.prep.livreur) return false;
       if(F.liv!=='none' && o.prep.livreur !== F.liv) return false;
