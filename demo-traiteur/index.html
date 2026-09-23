@@ -196,18 +196,24 @@
     </div>
     <div class="pane on" id="p-acmd">
       <div class="filters">
-        <button class="fbtn on" data-ft="all" onclick="setFT('all')">Toutes</button>
-        <button class="fbtn" data-ft="today" onclick="setFT('today')">Aujourd'hui</button>
-        <button class="fbtn" data-ft="tomorrow" onclick="setFT('tomorrow')">Demain</button>
-        <input type="date" id="f-date" onchange="setFT('date')" title="Date précise">
-        <span style="width:1px;height:20px;background:var(--line);margin:0 4px"></span>
-        <button class="fbtn" data-ft="attente" onclick="setFT('attente')">En attente</button>
-        <button class="fbtn" data-ft="confirmee" onclick="setFT('confirmee')">Confirmées</button>
-        <button class="fbtn" data-ft="annulee" onclick="setFT('annulee')">Annulées</button>
-        <span style="flex:1"></span>
-        <label style="font-size:.78rem;font-weight:700">Livreur :</label>
-        <select id="f-liv" onchange="F.liv=this.value;renderAdmin()"></select>
-        <button class="btn sm red" onclick="openSheet()">🖨️ Feuille équipe</button>
+        <div class="filters-row">
+          <label>Date</label>
+          <button class="fbtn on" data-ft="all" onclick="setFT('all')">Toutes</button>
+          <button class="fbtn" data-ft="today" onclick="setFT('today')">Aujourd'hui</button>
+          <button class="fbtn" data-ft="tomorrow" onclick="setFT('tomorrow')">Demain</button>
+          <input type="date" id="f-date" onchange="setFT('date')">
+          <span style="flex:1"></span>
+          <label>Livreur</label>
+          <select id="f-liv" onchange="F.liv=this.value;renderAdmin()"></select>
+        </div>
+        <div class="filters-row">
+          <label>Statut</label>
+          <button class="fbtn on" data-ft="all" onclick="setFT('all')">Toutes</button>
+          <button class="fbtn" data-ft="attente" onclick="setFT('attente')">En attente</button>
+          <button class="fbtn" data-ft="confirmee" onclick="setFT('confirmee')">Confirmées</button>
+          <button class="fbtn" data-ft="annulee" onclick="setFT('annulee')">Annulées</button>
+          <span style="flex:1"></span>
+          <button class="btn sm red" onclick="openSheet()">Feuille équipe</button>
       </div>
       <div class="tblwrap"><table class="adm">
         <thead><tr><th>Réf / Statut</th><th>Livraison</th><th>Client</th><th>Contenu (prédéfini)</th><th>Détail</th><th>Livreur *</th><th>Actions</th></tr></thead>

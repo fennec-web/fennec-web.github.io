@@ -225,10 +225,14 @@
 
 
   /* ===== TABLEAU ADMIN ===== */
-  .filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
-  .filters .fbtn{border:1.5px solid var(--ink);background:#fff;border-radius:999px;padding:7px 16px;font-size:.8rem;font-weight:700;cursor:pointer;font-family:inherit}
-  .filters .fbtn.on{background:var(--ink);color:var(--peach)}
-  .filters input[type=date],.filters select{padding:7px 10px;border:1.5px solid var(--line);border-radius:9px;font-family:inherit;font-size:.82rem;background:#fff}
+  .filters{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+  .filters-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+  .filters-row label{font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-right:4px}
+  .fbtn{border:1.5px solid var(--line);background:#fff;border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s;color:var(--muted)}
+  .fbtn:hover{border-color:var(--ink);color:var(--ink)}
+  .fbtn.on{background:var(--ink);color:var(--peach);border-color:var(--ink)}
+  .filters input[type=date]{padding:6px 10px;border:1.5px solid var(--line);border-radius:8px;font-family:inherit;font-size:.78rem;background:#fff}
+  .filters select{padding:6px 10px;border:1.5px solid var(--line);border-radius:8px;font-family:inherit;font-size:.78rem;background:#fff}
   .tblwrap{overflow-x:auto;background:#fff;border:2px solid var(--ink);border-radius:14px}
   table.adm{width:100%;border-collapse:collapse;font-size:.82rem}
   table.adm th{background:var(--ink);color:var(--peach);text-align:left;padding:10px 10px;font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
