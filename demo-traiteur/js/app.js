@@ -515,7 +515,7 @@ function renderAdmin(){
     '<div class="kpi"><b class="'+(reste>0?'bal-neg':'bal-pos')+'" style="color:inherit">'+fmt(reste)+'</b><span>reste à encaisser (TTC)</span></div>';
   var fl = document.getElementById('f-liv');
   var cur = F.liv;
-  fl.innerHTML = '<option value="all">Tous</option><option value="none">Non affecté</option>' +
+  fl.innerHTML = '<option value="all">Tous</option>' +
     LIVREURS.map(function(l){return '<option'+(l===cur?' selected':'')+'>'+l+'</option>';}).join('');
   fl.value = cur;
   var rows = filtered().map(function(o){
