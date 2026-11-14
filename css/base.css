@@ -1,0 +1,139 @@
+/* Fennec Web · base : couleurs du pack logo, typographie, en-tête, boutons, pied */
+
+:root {
+  --creme: #F7F4EE;
+  --beige: #EFEDE8;
+  --encre: #2B2B33;
+  --encre-douce: #55555F;
+  --orange: #E8722A;
+  --orange-texte: #B04A14;
+  --trait: rgba(43, 43, 51, .16);
+  --rouge: #A3231B;
+  --rouge-fond: #FAE9E6;
+  --vert: #1C6637;
+  --vert-fond: #E4F1E8;
+  --sans: 'Noto Sans', system-ui, sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, Consolas, monospace;
+  --rayon: 3px;
+  --largeur: 1120px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--encre);
+  background: var(--creme);
+}
+
+img { max-width: 100%; height: auto; display: block; }
+
+a { color: inherit; }
+
+h1, h2, h3 { line-height: 1.1; font-weight: 800; letter-spacing: -.02em; }
+
+section[id] { scroll-margin-top: 84px; }
+
+:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
+
+.cadre { max-width: var(--largeur); margin: 0 auto; padding: 0 24px; }
+
+.mono {
+  font-family: var(--mono);
+  font-size: .82rem;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--encre-douce);
+}
+
+/* Boutons */
+.bouton {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 20px;
+  border: 1.5px solid var(--encre);
+  border-radius: var(--rayon);
+  background: var(--encre);
+  color: var(--creme);
+  font: 600 .95rem var(--sans);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.bouton:hover { background: #000; border-color: #000; }
+.bouton svg { width: 18px; height: 18px; flex-shrink: 0; }
+.bouton--clair { background: transparent; color: var(--encre); }
+.bouton--clair:hover { background: var(--encre); color: var(--creme); }
+.bouton--petit { padding: 11px 14px; font-size: .88rem; }
+
+/* En-tête */
+.entete {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--creme);
+  border-bottom: 1px solid var(--trait);
+}
+.entete__dedans {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  height: 68px;
+}
+.marque {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 1.3rem;
+  letter-spacing: -.02em;
+}
+.marque img { width: 40px; height: 40px; }
+.marque i { font-style: normal; color: var(--orange); }
+
+.nav { display: flex; align-items: center; gap: 26px; font-size: .95rem; font-weight: 500; }
+.nav a:not(.bouton) { text-decoration: none; padding: 6px 0; border-bottom: 2px solid transparent; }
+.nav a:not(.bouton):hover { border-bottom-color: var(--orange); }
+
+.entete__menu-bouton {
+  display: none;
+  background: none;
+  border: 1.5px solid var(--encre);
+  border-radius: var(--rayon);
+  padding: 11px 14px;
+  font: 600 .9rem var(--sans);
+  color: var(--encre);
+  cursor: pointer;
+}
+
+@media (max-width: 860px) {
+  .entete__menu-bouton { display: block; }
+  .nav {
+    display: none;
+    position: absolute;
+    top: 68px;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 8px 24px 20px;
+    background: var(--creme);
+    border-bottom: 1px solid var(--trait);
+  }
+  .entete[data-ouvert="true"] .nav { display: flex; }
+  .nav a:not(.bouton) { padding: 14px 0; border-bottom: 1px solid var(--trait); }
+  .nav .bouton { margin-top: 16px; justify-content: center; }
+}
+
+/* Pied */
+.pied { border-top: 1px solid var(--trait); padding: 28px 0 40px; font-size: .9rem; color: var(--encre-douce); }
+.pied__dedans { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
+.pied a { display: inline-block; padding: 11px 0; }

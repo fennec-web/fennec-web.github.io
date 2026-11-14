@@ -10,3 +10,6 @@ Thumbs.db
 
 # Config locale de session
 .claude/
+
+# Pack logo source : la page utilise les copies legeres de img/
+assets/Fennec-Web-Logo/
