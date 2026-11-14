@@ -19,6 +19,7 @@
 .planche__traits .point { fill: var(--orange); stroke: var(--creme); stroke-width: 3; transition: r .15s; }
 .planche__traits .halo { fill: none; stroke: var(--orange); stroke-width: 1.5; opacity: 0; }
 .planche__traits a { cursor: pointer; }
+.planche__traits .tactile, .planche__traits .puce, .planche__traits .puce__num { display: none; }
 
 .reperes { list-style: none; }
 .repere { position: absolute; width: 21%; }
@@ -70,17 +71,27 @@
   60%, 100% { r: 22; opacity: 0; }
 }
 
-/* Sous 900 px : la tête seule, puis les repères en liste. Pas de survol sur un téléphone. */
+/* Sous 900 px : pas de survol sur un téléphone. Les traits et les étiquettes partent, les
+   points restent sur la tête, numérotés et cliquables au doigt ; la liste dessous sert de légende. */
 @media (max-width: 900px) {
   .planche { aspect-ratio: auto; margin-top: 28px; }
-  .planche__dessin { position: static; }
-  .planche__dessin img { position: static; width: min(72%, 320px); margin: 0 auto; }
-  .planche__traits, .planche__legende { display: none; }
-  .reperes { margin-top: 20px; border-top: 1px solid var(--trait); }
+  .planche__dessin { position: relative; width: min(78%, 340px); aspect-ratio: 1; margin: 0 auto; overflow: hidden; }
+  .planche__dessin img { position: static; width: 100%; }
+  /* Le dessin fait 1000 x 600 et la tête en occupe le carré central de 500 : on cale ce carré sur l'image. */
+  .planche__traits { left: -50%; top: -10%; width: 200%; height: 120%; }
+  .planche__traits line, .planche__traits .point, .planche__traits .halo { display: none; }
+  .planche__traits .tactile { display: block; fill: transparent; }
+  .planche__traits .puce { display: block; fill: var(--orange); stroke: var(--creme); stroke-width: 5; }
+  .planche__traits .puce__num { display: block; font: 700 30px var(--sans); fill: #fff; text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+  .planche__legende { display: none; }
+  .reperes { margin-top: 16px; border-top: 1px solid var(--trait); }
   .repere, .repere--1, .repere--2 { position: static; width: auto; text-align: left; }
   .repere { border-bottom: 1px solid var(--trait); }
   .repere a { padding: 14px 0; }
   .repere__texte { opacity: 1; transform: none; }
+  /* La liste suit l'ordre des numéros : 01 Le site, 02 L'outil, 03 Les prix, 04 La méthode. */
+  .reperes { display: flex; flex-direction: column; }
+  .repere--1 { order: 4; }
 }
 
 /* Sections : titre à gauche, contenu à droite */
@@ -111,27 +122,6 @@
 
 .note { margin-top: 20px; font-size: .95rem; color: var(--encre-douce); }
 .note strong { color: var(--encre); }
-
-/* Exemple de solde */
-.solde { border: 1.5px solid var(--encre); border-radius: var(--rayon); background: #fff; }
-.solde__tete { display: flex; justify-content: space-between; gap: 12px; padding: 10px 16px; border-bottom: 1px solid var(--trait); }
-.solde__bande { padding: 16px; font-weight: 700; font-size: 1.1rem; background: var(--rouge-fond); color: var(--rouge); }
-.solde__bande[data-etat="ok"] { background: var(--vert-fond); color: var(--vert); }
-.solde__liste { list-style: none; }
-.solde__ligne {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 4px 16px;
-  align-items: center;
-  padding: 14px 16px;
-  border-top: 1px solid var(--trait);
-}
-.solde__client { font-weight: 700; }
-.solde__detail { grid-column: 1; font-size: .9rem; color: var(--encre-douce); }
-.solde__action { grid-column: 2; grid-row: 1 / span 2; }
-.solde__ajour { font-size: .9rem; font-weight: 700; color: var(--vert); }
-.solde__pied { padding: 2px 16px; border-top: 1px solid var(--trait); }
-.solde__pied button { background: none; border: 0; font: 500 .9rem var(--sans); color: var(--encre); text-decoration: underline; cursor: pointer; padding: 11px 0; }
 
 /* Formules */
 .formules { border-top: 1.5px solid var(--encre); }
