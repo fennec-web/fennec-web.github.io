@@ -19,7 +19,7 @@
 .planche__traits .point { fill: var(--orange); stroke: var(--creme); stroke-width: 3; transition: r .15s; }
 .planche__traits .halo { fill: none; stroke: var(--orange); stroke-width: 1.5; opacity: 0; }
 .planche__traits a { cursor: pointer; }
-.planche__traits .tactile, .planche__traits .puce, .planche__traits .puce__num { display: none; }
+.planche__traits .tactile, .planche__traits .lueur, .planche__traits .eclat { display: none; }
 
 .reperes { list-style: none; }
 .repere { position: absolute; width: 21%; }
@@ -66,13 +66,29 @@
   .planche__traits [data-n="3"] .halo { animation-delay: 1.4s; }
   .planche__traits [data-n="4"] .halo { animation-delay: 2.1s; }
 }
+@media (prefers-reduced-motion: no-preference) and (max-width: 900px) {
+  .planche__traits .lueur { animation: lueur 3.6s ease-in-out infinite; }
+  .planche__traits .eclat { animation: eclat 3.6s ease-in-out infinite; }
+  .planche__traits [data-n="2"] .lueur, .planche__traits [data-n="2"] .eclat { animation-delay: .9s; }
+  .planche__traits [data-n="3"] .lueur, .planche__traits [data-n="3"] .eclat { animation-delay: 1.8s; }
+  .planche__traits [data-n="4"] .lueur, .planche__traits [data-n="4"] .eclat { animation-delay: 2.7s; }
+}
+@keyframes lueur {
+  0%, 100% { opacity: .12; transform: scale(.85); }
+  50% { opacity: .6; transform: scale(1.05); }
+}
+@keyframes eclat {
+  0%, 100% { opacity: .15; }
+  50% { opacity: .75; }
+}
 @keyframes halo {
   0% { r: 7; opacity: .7; }
   60%, 100% { r: 22; opacity: 0; }
 }
 
 /* Sous 900 px : pas de survol sur un téléphone. Les traits et les étiquettes partent, les
-   points restent sur la tête, numérotés et cliquables au doigt ; la liste dessous sert de légende. */
+   quatre endroits de la tête brillent, sans numéro, et se touchent au doigt ; la liste dessous
+   dit où chacun mène. */
 @media (max-width: 900px) {
   .planche { aspect-ratio: auto; margin-top: 28px; }
   .planche__dessin { position: relative; width: min(78%, 340px); aspect-ratio: 1; margin: 0 auto; overflow: hidden; }
@@ -81,8 +97,8 @@
   .planche__traits { left: -50%; top: -10%; width: 200%; height: 120%; }
   .planche__traits line, .planche__traits .point, .planche__traits .halo { display: none; }
   .planche__traits .tactile { display: block; fill: transparent; }
-  .planche__traits .puce { display: block; fill: var(--orange); stroke: var(--creme); stroke-width: 5; }
-  .planche__traits .puce__num { display: block; font: 700 30px var(--sans); fill: #fff; text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+  .planche__traits .lueur { display: block; fill: url(#lueur); opacity: .45; transform-box: fill-box; transform-origin: center; pointer-events: none; }
+  .planche__traits .eclat { display: block; fill: #fff; opacity: .6; pointer-events: none; }
   .planche__legende { display: none; }
   .reperes { margin-top: 16px; border-top: 1px solid var(--trait); }
   .repere, .repere--1, .repere--2 { position: static; width: auto; text-align: left; }
