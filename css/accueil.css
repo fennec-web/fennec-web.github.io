@@ -117,41 +117,38 @@
 .lignes > li { padding: 18px 0; border-bottom: 1px solid var(--trait); }
 .lignes h3 { font-size: 1.1rem; letter-spacing: -.01em; }
 .lignes p { margin-top: 4px; color: var(--encre-douce); }
-.lignes--etapes { counter-reset: etape; }
-.lignes--etapes > li { counter-increment: etape; display: grid; grid-template-columns: 44px 1fr; }
-.lignes--etapes > li::before {
-  content: counter(etape, decimal-leading-zero);
-  font-family: var(--mono);
-  font-size: .85rem;
-  color: var(--orange-texte);
-  padding-top: 3px;
-}
 
 .note { margin-top: 20px; font-size: .95rem; color: var(--encre-douce); }
 .note strong { color: var(--encre); }
 
-/* Formules */
-.formules { border-top: 1.5px solid var(--encre); }
-.formule { display: grid; grid-template-columns: 1fr auto; gap: 6px 24px; padding: 22px 0; border-bottom: 1px solid var(--trait); }
-.formule h3 { font-size: 1.35rem; }
-.formule__prix { font-weight: 800; font-size: 1.35rem; text-align: right; white-space: nowrap; }
-.formule__delai { grid-column: 2; text-align: right; font-size: .9rem; color: var(--encre-douce); }
-.formule ul { grid-column: 1; grid-row: 2 / span 2; list-style: none; color: var(--encre-douce); }
-.formule li { padding-left: 16px; position: relative; }
-.formule li::before { content: ""; position: absolute; left: 0; top: .72em; width: 7px; height: 1.5px; background: var(--orange); }
-@media (max-width: 560px) {
-  .formule { grid-template-columns: 1fr; }
-  .formule__prix, .formule__delai { text-align: left; grid-column: 1; }
-  .formule ul { grid-row: auto; }
+/* Contact : le texte à gauche, l'aperçu du message WhatsApp à droite */
+.contact__grille { display: grid; grid-template-columns: 1.1fr 1fr; gap: 40px 72px; align-items: center; }
+.contact__grille > * { min-width: 0; }
+.contact h2 { font-size: clamp(2rem, 4vw, 3rem); margin-top: 10px; max-width: 14ch; }
+.contact__etapes { list-style: none; counter-reset: c; margin-top: 26px; border-top: 1px solid var(--trait); max-width: 460px; }
+.contact__etapes li { counter-increment: c; display: grid; grid-template-columns: 40px 1fr; padding: 11px 0; border-bottom: 1px solid var(--trait); color: var(--encre-douce); }
+.contact__etapes li::before { content: counter(c, decimal-leading-zero); font-family: var(--mono); font-size: .85rem; color: var(--orange-texte); padding-top: 2px; }
+
+.apercu { background: #fff; border: 1.5px solid var(--encre); border-radius: var(--rayon); box-shadow: 8px 8px 0 var(--beige); }
+.apercu__tete { display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--trait); }
+.apercu__tete img { width: 44px; height: 44px; border-radius: 50%; background: var(--beige); }
+.apercu__tete b { display: block; font-size: 1.05rem; }
+.apercu__tete .mono { text-transform: none; letter-spacing: .02em; }
+.apercu__fil { display: flex; flex-direction: column; align-items: flex-end; padding: 28px 18px 20px; background: var(--creme); border-bottom: 1px solid var(--trait); }
+.apercu__bulle {
+  max-width: 85%;
+  padding: 11px 14px;
+  background: #FCE6D6;
+  border: 1px solid #F2C9AA;
+  border-radius: 8px 8px 2px 8px;
+  font-size: .98rem;
 }
+.apercu__aide { margin-top: 10px; text-align: right; font-size: .85rem; color: var(--encre-douce); }
+.apercu__bouton { display: flex; justify-content: center; margin: 18px 18px 0; }
+.apercu__autre { padding: 12px 18px 16px; text-align: center; font-size: .92rem; color: var(--encre-douce); }
+.apercu__autre a { display: inline-block; padding: 8px 2px; color: var(--encre); font-weight: 600; }
 
-.options { width: 100%; border-collapse: collapse; margin-top: 36px; font-size: .95rem; }
-.options caption { text-align: left; padding-bottom: 10px; }
-.options td { padding: 11px 0; border-top: 1px solid var(--trait); vertical-align: top; }
-.options td:last-child { text-align: right; white-space: nowrap; font-weight: 700; padding-left: 16px; }
-.options small { display: block; color: var(--encre-douce); font-size: .88rem; }
-
-/* Contact */
-.contact h2 { max-width: 20ch; }
-.contact__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
-.contact__numero { margin-top: 18px; }
+@media (max-width: 860px) {
+  .contact__grille { grid-template-columns: 1fr; }
+  .apercu { box-shadow: none; }
+}

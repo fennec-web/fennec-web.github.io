@@ -1,0 +1,76 @@
+/* Fennec Web · section Exemples : choix du prototype, scène, cadres téléphone et navigateur.
+   Chaque prototype a sa propre feuille (proto-table, proto-gestion, proto-sport). */
+
+.protos__tete { display: grid; grid-template-columns: 1fr 1fr; gap: 24px 64px; align-items: end; }
+.protos__tete h2 { font-size: clamp(1.9rem, 3.4vw, 2.6rem); margin-top: 10px; max-width: 18ch; }
+
+.protos__choix { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 40px; border-top: 1.5px solid var(--encre); }
+.protos__choix button {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 18px 20px 20px 0;
+  border: 0;
+  border-bottom: 1px solid var(--trait);
+  background: none;
+  text-align: left;
+  font: inherit;
+  color: var(--encre-douce);
+  cursor: pointer;
+  box-shadow: inset 0 3px 0 transparent;
+}
+.protos__choix button + button { padding-left: 20px; border-left: 1px solid var(--trait); }
+.protos__choix b { font-size: 1.2rem; color: var(--encre); letter-spacing: -.01em; }
+.protos__choix small { font-size: .9rem; }
+.protos__choix button:hover b { text-decoration: underline; text-decoration-color: var(--orange); text-underline-offset: 4px; }
+.protos__choix button[aria-selected="true"] { box-shadow: inset 0 4px 0 var(--orange); color: var(--encre); }
+.protos__choix button[aria-selected="true"] .mono { color: var(--orange-texte); }
+
+/* Scène : l'appareil à gauche, ce qu'il montre à droite */
+.scene { display: grid; grid-template-columns: auto 1fr; gap: 56px; align-items: center; margin-top: 40px; }
+.scene--large { grid-template-columns: 1fr; gap: 28px; }
+.scene--large .scene__texte { display: grid; grid-template-columns: 1fr 1.6fr; gap: 8px 48px; align-items: start; max-width: none; }
+.scene--large .scene__texte ul { margin-top: 0; }
+.scene--large .scene__zero { grid-column: 2; }
+.scene__texte { max-width: 440px; }
+.scene__texte h3 { font-size: 1.5rem; }
+.scene__texte ul { list-style: none; margin-top: 18px; border-top: 1px solid var(--trait); }
+.scene__texte li { padding: 12px 0 12px 22px; border-bottom: 1px solid var(--trait); color: var(--encre-douce); position: relative; }
+.scene__texte li::before { content: ""; position: absolute; left: 0; top: 1.4em; width: 10px; height: 1.5px; background: var(--orange); }
+.scene__zero { margin-top: 14px; background: none; border: 0; padding: 10px 0; font: 500 .92rem var(--sans); color: var(--encre); text-decoration: underline; cursor: pointer; }
+
+.protos__note { margin-top: 32px; }
+
+/* Cadres */
+.appareil { background: #fff; min-width: 0; }
+.appareil--tel {
+  width: 372px;
+  padding: 10px;
+  border-radius: 34px;
+  background: #1A1A1F;
+  box-shadow: 0 1px 0 #000, 0 24px 48px -28px rgba(0, 0, 0, .45);
+}
+.appareil--tel .appareil__ecran { height: 700px; border-radius: 25px; overflow: hidden auto; overscroll-behavior: contain; position: relative; }
+.appareil--nav { border: 1.5px solid var(--encre); border-radius: var(--rayon); overflow: hidden; }
+.appareil__barre { display: flex; justify-content: space-between; gap: 12px; padding: 9px 16px; background: var(--encre); color: #CFCBC3; font-size: .74rem; }
+.appareil__ecran { position: relative; }
+
+.proto-cache { display: none !important; }
+
+@media (max-width: 960px) {
+  .protos__tete { grid-template-columns: 1fr; }
+  .scene { grid-template-columns: 1fr; gap: 28px; justify-items: center; }
+  .scene__texte { max-width: 560px; justify-self: stretch; }
+  .scene--large .scene__texte { grid-template-columns: 1fr; }
+  .scene--large .scene__zero { grid-column: auto; }
+  .scene--large { justify-items: stretch; }
+}
+
+/* Sur un téléphone, le cadre disparaît : le prototype prend l'écran, à sa hauteur naturelle. */
+@media (max-width: 560px) {
+  .protos__choix { grid-template-columns: 1fr; }
+  .protos__choix button, .protos__choix button + button { padding: 14px 0 14px 16px; border-left: 0; box-shadow: inset 4px 0 0 transparent; }
+  .protos__choix button[aria-selected="true"] { box-shadow: inset 4px 0 0 var(--orange); }
+  .appareil--tel { width: 100%; padding: 0; border-radius: var(--rayon); background: none; box-shadow: none; border: 1.5px solid var(--encre); }
+  .appareil--tel .appareil__ecran { height: auto; border-radius: 0; }
+}

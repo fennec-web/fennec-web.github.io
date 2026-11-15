@@ -1,0 +1,79 @@
+/* Fennec Web · les prix (trois formules, options) et la méthode (frise en quatre étapes) */
+
+.tete-section { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 64px; align-items: end; }
+.tete-section h2 { font-size: clamp(1.9rem, 3.4vw, 2.6rem); margin-top: 10px; max-width: 16ch; }
+
+/* Formules : une feuille de tarifs en trois colonnes, la formule conseillée en encre pleine */
+.tarifs { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 44px; border: 1.5px solid var(--encre); border-radius: var(--rayon); background: #fff; }
+.tarif { display: flex; flex-direction: column; padding: 30px 28px 28px; position: relative; }
+.tarif + .tarif { border-left: 1px solid var(--trait); }
+.tarif h3 { font-size: 1.5rem; }
+.tarif__pour { margin-top: 6px; color: var(--encre-douce); min-height: 3.2em; }
+.tarif__prix { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--trait); font-size: 1.1rem; font-weight: 700; }
+.tarif__prix b { font-size: 2.6rem; letter-spacing: -.03em; line-height: 1; }
+.tarif__prix small { display: block; font-size: .85rem; font-weight: 500; color: var(--encre-douce); margin-bottom: 4px; }
+.tarif__delai { margin-top: 8px; }
+.tarif ul { list-style: none; margin: 22px 0 26px; flex: 1; }
+.tarif li { position: relative; padding: 7px 0 7px 26px; border-top: 1px solid var(--trait); font-size: .95rem; }
+.tarif li::before { content: ""; position: absolute; left: 2px; top: .95em; width: 11px; height: 6px; border-left: 2px solid var(--orange); border-bottom: 2px solid var(--orange); transform: rotate(-45deg); }
+.tarif .bouton { justify-content: center; }
+.tarif__lien { margin: -16px 0 12px; padding: 8px 0; font-size: .9rem; font-weight: 600; }
+
+.tarif--conseil { background: var(--encre); color: var(--creme); margin: -1.5px 0; border-radius: var(--rayon); box-shadow: 0 0 0 1.5px var(--encre); }
+.tarif--conseil + .tarif { border-left: 0; }
+.tarif--conseil .tarif__pour, .tarif--conseil .tarif__delai { color: #C9C6BF; }
+.tarif--conseil .tarif__prix, .tarif--conseil li { border-color: rgba(247, 244, 238, .18); }
+.tarif--conseil .bouton { background: var(--orange); border-color: var(--orange); color: #1A1A1F; }
+.tarif--conseil .bouton:hover { background: #F08A48; border-color: #F08A48; }
+.tarif__marque { position: absolute; top: -13px; left: 28px; padding: 3px 9px; background: var(--orange); color: #1A1A1F; font-size: .72rem; font-weight: 500; }
+
+/* Options : six lignes de tarif, nom à gauche, prix aligné à droite */
+.options { margin-top: 56px; }
+.options__grille { display: grid; grid-template-columns: 1fr 1fr; column-gap: 56px; margin-top: 12px; border-top: 1.5px solid var(--encre); }
+.options__grille > div { display: grid; grid-template-columns: 1fr auto; gap: 2px 20px; padding: 14px 0; border-bottom: 1px solid var(--trait); }
+.options__grille dt { font-weight: 700; }
+.options__grille dd { grid-column: 1; font-size: .9rem; color: var(--encre-douce); }
+.options__grille .options__prix { grid-column: 2; grid-row: 1 / span 2; align-self: center; text-align: right; font-size: .98rem; font-weight: 700; color: var(--encre); white-space: nowrap; }
+
+/* Méthode : une frise, un trait qui relie les quatre étapes, les deux paiements posés dessus */
+.frise { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0 28px; margin-top: 64px; position: relative; }
+.frise::before { content: ""; position: absolute; left: 0; right: 0; top: 7px; height: 2px; background: var(--encre); }
+.frise li { position: relative; padding-top: 34px; }
+.frise li::before { content: ""; position: absolute; left: 0; top: 0; width: 16px; height: 16px; background: var(--beige); border: 2px solid var(--encre); }
+.frise li:first-child::before, .frise li:last-child::before { background: var(--orange); border-color: var(--orange); }
+.frise li[data-jalon]::after {
+  content: attr(data-jalon);
+  position: absolute;
+  left: 0;
+  top: -34px;
+  padding: 3px 8px;
+  border: 1.5px solid var(--encre);
+  background: #fff;
+  font: 500 .74rem var(--mono);
+  letter-spacing: .03em;
+  white-space: nowrap;
+}
+.frise__num { display: block; font: 500 2.4rem/1 var(--mono); color: var(--orange-texte); letter-spacing: -.04em; }
+.frise h3 { margin-top: 12px; font-size: 1.15rem; }
+.frise p { margin-top: 6px; font-size: .95rem; color: var(--encre-douce); }
+
+@media (max-width: 960px) {
+  .tete-section { grid-template-columns: 1fr; }
+  .tarifs { grid-template-columns: 1fr; border: 0; background: none; gap: 18px; }
+  .tarif { background: #fff; border: 1.5px solid var(--encre); border-radius: var(--rayon); }
+  .tarif + .tarif { border-left: 1.5px solid var(--encre); }
+  .tarif--conseil { margin: 8px 0 0; background: var(--encre); }
+  .tarif--conseil + .tarif { border-left: 1.5px solid var(--encre); }
+  .tarif__pour { min-height: 0; }
+  .options__grille { grid-template-columns: 1fr; }
+
+  /* La frise devient verticale : le trait à gauche, les étapes à droite. */
+  .frise { grid-template-columns: 1fr; margin-top: 40px; padding-left: 40px; }
+  .frise::before { left: 7px; right: auto; top: 0; bottom: 0; width: 2px; height: auto; }
+  .frise li { padding: 0 0 30px; }
+  .frise li::before { left: -40px; top: 4px; }
+  .frise li[data-jalon] { padding-top: 40px; }
+  .frise li[data-jalon]::after { top: 0; }
+  .frise__num { display: inline; font-size: 1rem; margin-right: 10px; }
+  .frise h3 { display: inline; margin: 0; }
+}

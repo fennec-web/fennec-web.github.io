@@ -1,4 +1,4 @@
-/* Fennec Web · accueil : menu et planche du fennec. Les exemples sont dans exemples.js */
+/* Fennec Web · accueil : menu et planche du fennec. Les prototypes sont dans protos.js et proto-*.js */
 
 /* Menu sur téléphone : la valeur "true" est écrite, le CSS teste cette valeur. */
 function basculerMenu() {

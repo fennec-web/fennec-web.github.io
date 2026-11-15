@@ -1,0 +1,91 @@
+/* Prototype 03 · abonnement à une salle de sport. Identité propre : noir, citron vif, Oswald. */
+
+.sp {
+  --sp-noir: #111214;
+  --sp-gris: #1D1F23;
+  --sp-filet: #2E3137;
+  --sp-texte: #F2F2EF;
+  --sp-doux: #A2A5AB;
+  --sp-citron: #D4F54A;
+  --sp-titre: 'Oswald', 'Arial Narrow', sans-serif;
+  min-height: 100%;
+  background: var(--sp-noir);
+  color: var(--sp-texte);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.sp-tete { position: sticky; top: 0; z-index: 2; display: flex; justify-content: space-between; align-items: center; padding: 20px 20px 16px; background: var(--sp-noir); border-bottom: 1px solid var(--sp-filet); }
+.sp-marque { font: 600 1.35rem var(--sp-titre); text-transform: uppercase; letter-spacing: .04em; }
+.sp-marque::after { content: ""; display: inline-block; width: 9px; height: 9px; margin-left: 6px; background: var(--sp-citron); }
+.sp-pas { font: 500 .8rem var(--mono); color: var(--sp-doux); }
+
+.sp-corps { padding: 24px 20px 28px; }
+.sp-sur { font: 500 .78rem var(--mono); text-transform: uppercase; letter-spacing: .08em; color: var(--sp-citron); }
+.sp-titre { font: 600 2rem/1.05 var(--sp-titre); text-transform: uppercase; letter-spacing: .01em; margin-top: 6px; }
+.sp-label { margin: 22px 0 8px; font: 500 .74rem var(--mono); text-transform: uppercase; letter-spacing: .08em; color: var(--sp-doux); }
+.sp-label:first-child { margin-top: 0; }
+.sp-aide { margin-top: 14px; font-size: .85rem; color: var(--sp-doux); }
+
+.sp-formules { display: grid; gap: 10px; margin-top: 20px; }
+.sp-formule {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2px 12px;
+  padding: 16px;
+  border: 1.5px solid var(--sp-filet);
+  border-radius: 3px;
+  background: var(--sp-gris);
+  color: var(--sp-texte);
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+.sp-formule:hover { border-color: var(--sp-citron); }
+.sp-formule__nom { font: 600 1.5rem var(--sp-titre); text-transform: uppercase; }
+.sp-formule__prix { font: 600 1.25rem var(--sp-titre); text-align: right; align-self: center; white-space: nowrap; }
+.sp-formule__mois { grid-column: 2; text-align: right; font-size: .8rem; color: var(--sp-citron); white-space: nowrap; }
+.sp-formule__inclus { grid-column: 1; grid-row: 2 / span 2; font-size: .84rem; color: var(--sp-doux); }
+.sp-formule__aller { grid-column: 1 / -1; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--sp-filet); font-weight: 600; font-size: .9rem; color: var(--sp-citron); }
+.sp-formule__aller::after { content: " →"; }
+
+.sp-rappel { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 11px 20px; background: var(--sp-citron); color: var(--sp-noir); font-weight: 700; font-size: .9rem; }
+.sp-rappel button { background: none; border: 0; padding: 8px 0; font: 700 .88rem var(--sans); color: var(--sp-noir); text-decoration: underline; cursor: pointer; }
+
+.sp-creneaux, .sp-paiements { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.sp-creneaux button, .sp-paiements button {
+  padding: 13px 12px;
+  border: 1.5px solid var(--sp-filet);
+  border-radius: 3px;
+  background: var(--sp-gris);
+  color: var(--sp-texte);
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  min-height: 72px;
+}
+.sp-creneaux b, .sp-paiements b { display: block; font: 600 1.05rem var(--sp-titre); text-transform: uppercase; letter-spacing: .02em; }
+.sp-creneaux small, .sp-paiements small { display: block; margin-top: 2px; font-size: .78rem; color: var(--sp-doux); line-height: 1.35; }
+.sp-creneaux button:hover, .sp-paiements button:hover { border-color: #5A5E66; }
+.sp-creneaux button[aria-pressed="true"], .sp-paiements button[aria-pressed="true"] { border-color: var(--sp-citron); box-shadow: inset 0 0 0 1px var(--sp-citron); }
+.sp-creneaux button[aria-pressed="true"] b, .sp-paiements button[aria-pressed="true"] b { color: var(--sp-citron); }
+
+.sp-demo { margin-top: 12px; padding: 10px 12px; border: 1.5px dashed #F0B43C; color: #F7D48A; font-size: .82rem; }
+.sp-demo b { display: inline-block; margin-right: 6px; padding: 1px 6px; background: #F0B43C; color: var(--sp-noir); font: 700 .74rem var(--mono); letter-spacing: .06em; }
+
+.sp-bouton { display: block; width: 100%; margin-top: 24px; padding: 15px; border: 1.5px solid var(--sp-citron); border-radius: 3px; background: var(--sp-citron); color: var(--sp-noir); font: 600 1.05rem var(--sp-titre); text-transform: uppercase; letter-spacing: .04em; cursor: pointer; }
+.sp-bouton:hover:not(:disabled) { background: #E2FA7A; }
+.sp-bouton:disabled { background: transparent; color: var(--sp-doux); border-color: var(--sp-filet); cursor: default; }
+.sp-bouton--clair { background: transparent; color: var(--sp-citron); }
+.sp-bouton--clair:hover:not(:disabled) { background: var(--sp-citron); color: var(--sp-noir); }
+
+/* Carte de membre */
+.sp-carte { margin-top: 20px; padding: 18px; background: #F2F2EF; color: var(--sp-noir); border-radius: 6px; border-top: 8px solid var(--sp-citron); }
+.sp-carte__haut { display: flex; justify-content: space-between; font: 600 .95rem var(--sp-titre); text-transform: uppercase; letter-spacing: .05em; }
+.sp-carte__haut span + span { font: 500 .74rem var(--mono); padding: 3px 7px; background: var(--sp-noir); color: var(--sp-citron); }
+.sp-carte__formule { margin-top: 14px; font: 600 1.6rem/1.1 var(--sp-titre); text-transform: uppercase; }
+.sp-carte__fin { font-weight: 600; margin-top: 4px; }
+.sp-carte__creneau { font-size: .85rem; color: #4A4D53; }
+.sp-code { display: block; width: 150px; height: 150px; margin: 16px auto 4px; fill: var(--sp-noir); }
+.sp-carte__etat { margin-top: 12px; padding: 8px 10px; text-align: center; font-weight: 700; font-size: .88rem; background: #DDEFC9; color: #24521A; }
+.sp-carte__etat--du { background: #FFE9C2; color: #7A4A00; }
