@@ -15,11 +15,12 @@
 .planche__dessin { position: absolute; inset: 0; transition: transform .25s ease-out; }
 .planche__dessin img { position: absolute; left: 25%; top: 8.33%; width: 50%; }
 .planche__traits { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-.planche__traits line { stroke: var(--encre); stroke-width: 1.5; opacity: .35; transition: opacity .15s; }
-.planche__traits .point { fill: var(--orange); stroke: var(--creme); stroke-width: 3; transition: r .15s; }
-.planche__traits .halo { fill: none; stroke: var(--orange); stroke-width: 1.5; opacity: 0; }
+/* Rien n'est posé sur le dessin : les oreilles, les yeux et la truffe sont des zones invisibles.
+   Au survol, la partie s'éclaire à peine, le trait apparaît et la description se lit à côté. */
+.planche__traits line { stroke: var(--encre); stroke-width: 1.5; opacity: 0; transition: opacity .15s; pointer-events: none; }
+.planche__traits .zone { fill: #fff; fill-opacity: 0; transition: fill-opacity .18s; }
 .planche__traits a { cursor: pointer; }
-.planche__traits .tactile, .planche__traits .lueur, .planche__traits .eclat { display: none; }
+.planche__traits .point, .planche__traits .halo, .planche__traits .tactile, .planche__traits .lueur, .planche__traits .eclat { display: none; }
 
 .reperes { list-style: none; }
 .repere { position: absolute; width: 21%; }
@@ -53,19 +54,13 @@
 .planche[data-actif="3"] [data-n="3"] line,
 .planche[data-actif="4"] [data-n="4"] line { opacity: 1; }
 
-.planche[data-actif="1"] [data-n="1"] .point,
-.planche[data-actif="2"] [data-n="2"] .point,
-.planche[data-actif="3"] [data-n="3"] .point,
-.planche[data-actif="4"] [data-n="4"] .point { r: 11; }
+.planche[data-actif="1"] [data-n="1"] .zone,
+.planche[data-actif="2"] [data-n="2"] .zone,
+.planche[data-actif="3"] [data-n="3"] .zone,
+.planche[data-actif="4"] [data-n="4"] .zone { fill-opacity: .22; }
 
 .planche__legende { position: absolute; left: 0; right: 0; bottom: 0; text-align: center; }
 
-@media (prefers-reduced-motion: no-preference) {
-  .planche__traits .halo { animation: halo 2.8s ease-out infinite; }
-  .planche__traits [data-n="2"] .halo { animation-delay: .7s; }
-  .planche__traits [data-n="3"] .halo { animation-delay: 1.4s; }
-  .planche__traits [data-n="4"] .halo { animation-delay: 2.1s; }
-}
 @media (prefers-reduced-motion: no-preference) and (max-width: 900px) {
   .planche__traits .lueur { animation: lueur 3.6s ease-in-out infinite; }
   .planche__traits .eclat { animation: eclat 3.6s ease-in-out infinite; }
@@ -81,10 +76,6 @@
   0%, 100% { opacity: .15; }
   50% { opacity: .75; }
 }
-@keyframes halo {
-  0% { r: 7; opacity: .7; }
-  60%, 100% { r: 22; opacity: 0; }
-}
 
 /* Sous 900 px : pas de survol sur un téléphone. Les traits et les étiquettes partent, les
    quatre endroits de la tête brillent, sans numéro, et se touchent au doigt ; la liste dessous
@@ -95,7 +86,7 @@
   .planche__dessin img { position: static; width: 100%; }
   /* Le dessin fait 1000 x 600 et la tête en occupe le carré central de 500 : on cale ce carré sur l'image. */
   .planche__traits { left: -50%; top: -10%; width: 200%; height: 120%; }
-  .planche__traits line, .planche__traits .point, .planche__traits .halo { display: none; }
+  .planche__traits line, .planche__traits .zone { display: none; }
   .planche__traits .tactile { display: block; fill: transparent; }
   .planche__traits .lueur { display: block; fill: url(#lueur); opacity: .45; transform-box: fill-box; transform-origin: center; pointer-events: none; }
   .planche__traits .eclat { display: block; fill: #fff; opacity: .6; pointer-events: none; }
